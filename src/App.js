@@ -4,7 +4,7 @@ import db from "./config/firebase";
 import { useFetch } from "./hooks/useFetch";
 
 function App() {
-  const url = "https://www.balldontlie.io//api/v1/players";
+  const url = "https://www.balldontlie.io/api/v1/players";
   const [result, error, isLoading] = useFetch(url);
   console.log(result, error);
 
