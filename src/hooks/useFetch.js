@@ -1,7 +1,7 @@
-import { useState, useEFfect } from "react";
+import { useState, useEffect } from "react";
 
-export const useFetchHook = () => {
-  const { result, setResult } = useState(null);
+export const useFetch = (url) => {
+  const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -14,9 +14,12 @@ export const useFetchHook = () => {
         setResult(data);
       } catch (error) {
         console.error("Error fetching data");
-        setError.error.message;
+        setError(error.message);
       }
       setIsLoading(false);
     }
+    getData();
   }, []);
+
+  return [result, error, isLoading];
 };
