@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import { firebaseApp, auth } from "../config/firebase";
-import { Redirect } from "react-router-dom";
+import { Redirect, Link } from "react-router-dom";
 
 function Home() {
   const emailRef = useRef(null);
@@ -61,10 +61,7 @@ function Home() {
         <input ref={passwordRef} type="password" />
         <button onClick={signIn}>Sign in </button>
         <h6>
-          Not yet register?{" "}
-          <span onClick={signUp} className="signin__link">
-            Sign up
-          </span>
+          Not yet registered? <Link to="/signup">Create Account</Link>
         </h6>
       </form>
     </div>

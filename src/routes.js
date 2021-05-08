@@ -5,6 +5,7 @@ import About from "./components/About";
 import Dashboard from "./components/Dashboard";
 import Home from "./components/Home";
 import Profile from "./components/Profile";
+import SignUp from "./components/SignUp";
 
 export const UnauthenticatedRoutes = () => {
   return (
@@ -30,6 +31,9 @@ export const UnauthenticatedRoutes = () => {
 
           <Route path="/" exact>
             <Home />
+          </Route>
+          <Route path="/signup">
+            <SignUp />
           </Route>
         </Switch>
       </div>
