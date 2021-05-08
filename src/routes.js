@@ -28,7 +28,7 @@ export const UnauthenticatedRoutes = () => {
             <About />
           </Route>
 
-          <Route path="/">
+          <Route path="/" exact>
             <Home />
           </Route>
         </Switch>
@@ -40,28 +40,33 @@ export const UnauthenticatedRoutes = () => {
 export const AuthenticatedRoutes = () => {
   return (
     <Router>
-      <ul>
-        <li>
-          <Link to="/">Home</Link>
-        </li>
-        <li>
-          <Link to="/dashboard">Dashboard</Link>
-        </li>
-        <li>
-          <Link to="/profile">Profile</Link>
-        </li>
-      </ul>
-      <Switch>
-        <Route path="/">
-          <Home />
-        </Route>
-        <Route path="/dashboard">
-          <Dashboard />
-        </Route>
-        <Route path="/profile">
-          <Profile />
-        </Route>
-      </Switch>
+      <div>
+        <nav>
+          <ul>
+            <li>
+              <Link to="/">Home</Link>
+            </li>
+            <li>
+              <Link to="/dashboard">Dashboard</Link>
+            </li>
+            <li>
+              <Link to="/profile">Profile</Link>
+            </li>
+          </ul>
+        </nav>
+
+        <Switch>
+          <Route path="/" exact>
+            <Home />
+          </Route>
+          <Route path="/dashboard">
+            <Dashboard />
+          </Route>
+          <Route path="/profile">
+            <Profile />
+          </Route>
+        </Switch>
+      </div>
     </Router>
   );
 };
