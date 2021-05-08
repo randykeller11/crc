@@ -6,6 +6,7 @@ import Dashboard from "./components/Dashboard";
 import Home from "./components/Home";
 import Profile from "./components/Profile";
 import SignUp from "./components/SignUp";
+import Onboarding from "./components/Onboarding";
 
 export const UnauthenticatedRoutes = () => {
   return (
@@ -68,6 +69,9 @@ export const AuthenticatedRoutes = () => {
           </Route>
           <Route path="/profile">
             <Profile />
+          </Route>
+          <Route path="/signup">
+            <Onboarding />
           </Route>
         </Switch>
       </div>
