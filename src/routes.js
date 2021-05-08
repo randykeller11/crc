@@ -42,6 +42,9 @@ export const AuthenticatedRoutes = () => {
     <Router>
       <ul>
         <li>
+          <Link to="/">Home</Link>
+        </li>
+        <li>
           <Link to="/dashboard">Dashboard</Link>
         </li>
         <li>
@@ -49,6 +52,9 @@ export const AuthenticatedRoutes = () => {
         </li>
       </ul>
       <Switch>
+        <Route path="/">
+          <Home />
+        </Route>
         <Route path="/dashboard">
           <Dashboard />
         </Route>
