@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./App.css";
 import db from "./config/firebase";
 import { useFetch } from "./hooks/useFetch";
+import LandingPage from "./components/LandingPage";
 
 function App() {
   const url = "https://www.balldontlie.io/api/v1/players";
@@ -28,8 +29,8 @@ function App() {
   return (
     //BEM
     <div className="app">
-      <h1>connected</h1>
-      {error && <h1>error ocurred</h1>}
+      <LandingPage />
+      {/* {error && <h1>error ocurred</h1>}
       {result &&
         result.data.map((player) => {
           return (
@@ -38,7 +39,7 @@ function App() {
               <h1>{player.last_name}</h1>
             </div>
           );
-        })}
+        })} */}
     </div>
   );
 }
