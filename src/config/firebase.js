@@ -1,15 +1,6 @@
 import firebase from "firebase";
 import "firebase/auth";
 
-const {
-  REACT_APP_FIREBASE_APIKEY,
-  REACT_APP_FIREBASE_AUTHDOMAIN,
-  REACT_APP_FIREBASE_PROJECTID,
-  REACT_APP_FIREBASE_STORAGEBUCKET,
-  REACT_APP_FIREBASE_MESSAGINGSENDERID,
-  REACT_APP_FIREBASE_APPID,
-} = process.env;
-
 const firebaseConfig = {
   apiKey: "AIzaSyCBmgyzT21hqjbLVG8m8KSND4WrfwaipK4",
   authDomain: "community-record-club.firebaseapp.com",
