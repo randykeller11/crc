@@ -1,32 +1,64 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../auth-context";
 import db from "../config/firebase";
+import { Redirect } from "react-router-dom";
 
 function Onboarding() {
   const { currentUser } = useAuth();
-  const [userAdded, setUserAdded] = useState(false);
-  const [userData, setUserData] = useState([]);
+
+  //onboard mode
+  //1 no user in db so trigger upload
+  //2 user is already in db so check the onboard state in document
+  const [onboardMode, setOnboardMode] = useState(0);
+  const [userData, setUserData] = useState(null);
 
   useEffect(() => {
-    if (currentUser) {
-      const observer = db.collection("users").doc("W5XlKyw5am14A9Alna3R");
+    //check if user is in database
+    async function checkUser() {
+      const userRef = db.collection("users").doc(`${currentUser.uid}`);
+      const doc = await userRef.get();
+      if (!doc.exists) {
+        setOnboardMode(1);
+        console.log("No such document!");
+      } else {
+        //if user exists attach the listener
+        setOnboardMode(2);
+      }
+    }
 
-      observer.onSnapshot((snapshot) => {
-        console.log(snapshot.data());
-        setUserData(snapshot.data());
-      });
+    if (currentUser) {
+      checkUser();
     }
   }, [currentUser]);
 
-  return (
+  //add user to database if not already added
+
+  useEffect(() => {
+    async function addUserToDb() {
+      const data = {
+        id: currentUser.uid,
+        onboardStatus: 0,
+        test: "🍩🏆",
+      };
+      // Add a new document in collection "users" with ID of userID
+      const res = await db
+        .collection("users")
+        .doc(`${currentUser.uid}`)
+        .set(data);
+    }
+
+    //logic for adding user
+    if (onboardMode === 1) {
+      addUserToDb();
+      setOnboardMode(2);
+    }
+  }, [onboardMode]);
+
+  return onboardMode === 2 ? (
+    <Redirect to="/profile" />
+  ) : (
     <div>
-      <h2>Profile</h2>
-      {currentUser && (
-        <div>
-          <h2>{currentUser.email}</h2>
-          <h2>{currentUser.uid}</h2>
-        </div>
-      )}
+      <h1>onboarding you to the platform!</h1>
     </div>
   );
 }
