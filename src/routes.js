@@ -70,7 +70,7 @@ export const AuthenticatedRoutes = () => {
           <Route path="/profile">
             <Profile />
           </Route>
-          <Route path="/signup">
+          <Route path="/onboard">
             <Onboarding />
           </Route>
         </Switch>

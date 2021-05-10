@@ -1,5 +1,6 @@
 import React, { useRef, useState } from "react";
 import { firebaseApp, auth } from "../config/firebase";
+import { Redirect } from "react-router-dom";
 
 function SignUp() {
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -21,7 +22,7 @@ function SignUp() {
   };
 
   return isSubmitted ? (
-    <div>submitted</div>
+    <Redirect to="/onboard" />
   ) : (
     <div className="signUp_form">
       <form action="">

@@ -5,20 +5,7 @@ import { Redirect, Link } from "react-router-dom";
 function Home() {
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
-  const signUp = (e) => {
-    e.preventDefault();
-    auth
-      .createUserWithEmailAndPassword(
-        emailRef.current.value,
-        passwordRef.current.value
-      )
-      .then((user) => {
-        console.log(user);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+
   const signIn = (e) => {
     e.preventDefault();
     auth
