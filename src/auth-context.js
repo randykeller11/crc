@@ -1,26 +1,21 @@
-import React, { createContext, useEffect, useState } from "react";
-
-const sleep = (milliseconds) => {
-  return new Promise((resolve) => setTimeout(resolve, milliseconds));
-};
+import React, { createContext, useState, useEffect } from "react";
+import { firebaseApp } from "./config/firebase";
 
 const AuthContext = createContext({});
 
 const AuthProvider = (props) => {
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [user, setUser] = useState();
 
-  const login = () => {
-    sleep(2000).then(() => setLoggedIn(true));
-  };
-  const logout = () => {
-    sleep(2000).then(() => setLoggedIn(false));
-  };
+  useEffect(() => {
+    firebaseApp.auth().onAuthStateChanged(setUser);
+  }, []);
 
   const authContextValue = {
-    login,
-    loggedIn,
-    logout,
+    signin: (e, p) => firebaseApp.auth().signInWithEmailAndPassword(e, p),
+    currentUser: user,
+    signout: () => firebaseApp.auth().signOut(),
   };
+
   return <AuthContext.Provider value={authContextValue} {...props} />;
 };
 
