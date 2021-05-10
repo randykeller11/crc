@@ -38,7 +38,7 @@ function Onboarding() {
       const data = {
         id: currentUser.uid,
         onboardStatus: 0,
-        test: "🍩🏆",
+        test: "🔑",
       };
       // Add a new document in collection "users" with ID of userID
       const res = await db
