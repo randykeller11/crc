@@ -55,7 +55,7 @@ function Onboarding() {
   }, [onboardMode]);
 
   return onboardMode === 2 ? (
-    <Redirect to="/profile" />
+    <Redirect to={`/profile/${currentUser.uid}/watchlist`} />
   ) : (
     <div>
       <h1>onboarding you to the platform!</h1>

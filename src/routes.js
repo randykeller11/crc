@@ -1,12 +1,12 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import { useAuth } from "./auth-context";
 import About from "./components/About";
 import Dashboard from "./components/Dashboard";
 import Home from "./components/Home";
 import Profile from "./components/Profile";
 import SignUp from "./components/SignUp";
 import Onboarding from "./components/Onboarding";
+import Watchlist from "./components/Watchlist";
 
 export const UnauthenticatedRoutes = () => {
   return (
@@ -67,8 +67,11 @@ export const AuthenticatedRoutes = () => {
           <Route path="/dashboard">
             <Dashboard />
           </Route>
-          <Route path="/profile">
+          <Route path="/profile" exact>
             <Profile />
+          </Route>
+          <Route path="/profile/:uid/watchlist">
+            <Watchlist />
           </Route>
           <Route path="/onboard">
             <Onboarding />
