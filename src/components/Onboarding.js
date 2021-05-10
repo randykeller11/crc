@@ -9,13 +9,12 @@ function Onboarding() {
 
   useEffect(() => {
     if (currentUser) {
-      //   db.collection("test")
-      //     .doc("W5XlKyw5am14A9Alna3R")
-      //     .onSnapshot((snapshot) => {
-      //       setUserData(snapshot);
-      //     });
-      // }
-      setUserData(currentUser);
+      const observer = db.collection("users").doc("W5XlKyw5am14A9Alna3R");
+
+      observer.onSnapshot((snapshot) => {
+        console.log(snapshot.data());
+        setUserData(snapshot.data());
+      });
     }
   }, [currentUser]);
 
