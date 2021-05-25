@@ -29,12 +29,23 @@ function Watchlist() {
 
   const { currentUser } = useAuth();
   const [watchlistAlbums, setWatchlistAlbums] = useState([]);
-  const url = "http://localhost:4000/album/183133172/";
+  const url = "http://localhost:4000/album/184480112/";
   const [result, error, isLoading] = useFetch(url);
 
+  useEffect(() => {
+    if (result) {
+      console.log(result.cover);
+    }
+  }, [result]);
+
   return (
-    <div>
-      <h2>watchlist connected</h2>
+    <div className="watchlist">
+      {result && (
+        <div className="watchlist__card">
+          <h1>{result.title}</h1>
+          <img src={`${result.cover_big}`} />
+        </div>
+      )}
     </div>
   );
 }
