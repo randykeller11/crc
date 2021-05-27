@@ -1,12 +1,14 @@
 import React, { useEffect } from "react";
 import { useAuth } from "../auth-context";
-import FetchTest from "./FetchTest";
+import { Link } from "react-router-dom";
 
 function Profile() {
+  const { currentUser } = useAuth();
+
   return (
     <div>
       <h2>Profile</h2>
-      <FetchTest />
+      <Link to={`/profile/${currentUser.uid}/watchlist`}>Watchlist</Link>
     </div>
   );
 }
