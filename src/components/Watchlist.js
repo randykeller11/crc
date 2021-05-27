@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import db from "../config/firebase";
 import { useAuth } from "../auth-context";
-import { useFetch } from "../hooks/useFetch";
+import SearchTest from "./SearchTest";
 
 function Watchlist() {
   const albums = [
@@ -28,24 +28,53 @@ function Watchlist() {
   ];
 
   const { currentUser } = useAuth();
-  const [watchlistAlbums, setWatchlistAlbums] = useState([]);
-  const url = "http://localhost:4000/album/184480112/";
-  const [result, error, isLoading] = useFetch(url);
+  const [watchlistAlbums, setWatchlistAlbums] = useState(albums);
+  const [watchlistData, setWatchListData] = useState([]);
+  const [result, setResult] = useState(null);
+  const [error, setError] = useState(null);
+  const [loadStatus, setLoadStatus] = useState(0);
 
   useEffect(() => {
+    const retrievalFunction = async (album) => {
+      try {
+        const response = await fetch(`http://localhost:4000/album/${album.id}`);
+        const data = await response.json();
+        const albumObject = { id: album.id, albumData: data };
+        setResult(albumObject);
+      } catch (error) {
+        console.error("error from fetch: ", error);
+        setError(error.message);
+      }
+    };
+    const getData = () => {
+      setLoadStatus(1);
+      watchlistAlbums.forEach((album) => {
+        console.log(album);
+        retrievalFunction(album);
+      });
+    };
+    getData();
+  }, []);
+
+  useEffect(() => {
+    console.log(result, "🏆🍩");
     if (result) {
-      console.log(result.cover);
+      const localArray = [...watchlistData];
+      localArray.push(result);
+      setWatchListData(localArray);
     }
   }, [result]);
 
   return (
     <div className="watchlist">
-      {result && (
-        <div className="watchlist__card">
-          <h1>{result.title}</h1>
-          <img src={`${result.cover_big}`} />
-        </div>
-      )}
+      <h1>welcome to the watchlist</h1>
+      {watchlistData.length === watchlistAlbums.length &&
+        watchlistData.map((_album) => (
+          <div>
+            <h1>{_album.albumData.title}</h1>
+            <img src={`${_album.albumData.cover_big}`} />
+          </div>
+        ))}
     </div>
   );
 }
