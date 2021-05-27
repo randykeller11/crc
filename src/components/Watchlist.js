@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import db from "../config/firebase";
 import { useAuth } from "../auth-context";
-import SearchTest from "SearchTest";
+import SearchTest from "./SearchTest";
 
 function Watchlist() {
   //   const albums = [
