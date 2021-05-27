@@ -11,6 +11,7 @@ export const useFetch = (url) => {
       try {
         const response = await fetch(url);
         const data = await response.json();
+        console.log(data);
         setResult(data);
       } catch (error) {
         console.error("Error fetching data");

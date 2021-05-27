@@ -7,6 +7,7 @@ import Profile from "./components/Profile";
 import SignUp from "./components/SignUp";
 import Onboarding from "./components/Onboarding";
 import Watchlist from "./components/Watchlist";
+import SearchTest from "./components/SearchTest";
 
 export const UnauthenticatedRoutes = () => {
   return (
@@ -57,6 +58,9 @@ export const AuthenticatedRoutes = () => {
             <li>
               <Link to="/profile">Profile</Link>
             </li>
+            <li>
+              <Link to="/search">Search</Link>
+            </li>
           </ul>
         </nav>
 
@@ -75,6 +79,9 @@ export const AuthenticatedRoutes = () => {
           </Route>
           <Route path="/onboard">
             <Onboarding />
+          </Route>
+          <Route path="/search">
+            <SearchTest />
           </Route>
         </Switch>
       </div>
