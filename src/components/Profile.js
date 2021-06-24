@@ -8,8 +8,8 @@ function Profile() {
 
   return (
     <div>
-      <h1>{profileData && profileData.value}</h1>
       <h2>Profile</h2>
+      {profileData && <h3>{profileData.posts[0].text}</h3>}
       {loadedUID && (
         <Link to={`/profile/${loadedUID}/watchlist`}>Watchlist</Link>
       )}

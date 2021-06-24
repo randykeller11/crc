@@ -4,7 +4,7 @@ import db from "../config/firebase";
 
 export const useProfileData = () => {
   const { currentUser } = useAuth();
-  const [profileData, setProfileData] = useState([]);
+  const [profileData, setProfileData] = useState(null);
   const [loadedUID, setLoadedUID] = useState(null);
   const [componentState, setComponentState] = useState(0);
 
@@ -24,6 +24,7 @@ export const useProfileData = () => {
         .get()
         .then((doc) => {
           if (doc.exists) {
+            setComponentState(2);
             setProfileData(doc.data());
             console.log("Document data:", doc.data());
           } else {
@@ -46,9 +47,32 @@ export const useProfileData = () => {
       db.collection("test")
         .doc(`${loadedUID}`)
         .set({
-          value: "🏆",
+          posts: [{ date: "11/09/2022", text: "man I love this app!" }],
+          watchlist: [
+            {
+              index: 0,
+              id: 183133172,
+            },
+            {
+              index: 1,
+              id: 128447202,
+            },
+            {
+              index: 2,
+              id: 212686712,
+            },
+            {
+              index: 3,
+              id: 8835801,
+            },
+            {
+              index: 4,
+              id: 8114238,
+            },
+          ],
         })
         .then(function () {
+          setComponentState(2);
           console.log("Value successfully written!");
         })
         .catch(function (error) {
