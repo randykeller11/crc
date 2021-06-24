@@ -71,7 +71,7 @@ export const AuthenticatedRoutes = () => {
           <Route path="/dashboard">
             <Dashboard />
           </Route>
-          <Route path="/profile" exact>
+          <Route path="/profile/:uid" exact>
             <Profile />
           </Route>
           <Route path="/profile/:uid/watchlist">
