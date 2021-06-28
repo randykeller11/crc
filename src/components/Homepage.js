@@ -1,5 +1,6 @@
 import React from "react";
 import { auth } from "../config/firebase";
+import UploadForm from "./UploadForm";
 
 const signOutFunction = () => {
   auth
@@ -16,10 +17,10 @@ const signOutFunction = () => {
 function Homepage() {
   return (
     <div>
-      <h2>
-        Welcome to Community Record Club a record club for the 21st century!
-      </h2>
+      <h1>Welcome to Community Record Club</h1>
+      <h3>Support local record stores!</h3>
       <button onClick={signOutFunction}>Logout</button>
+      <UploadForm />
     </div>
   );
 }
