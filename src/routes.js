@@ -8,6 +8,7 @@ import SignUp from "./components/SignUp";
 import Onboarding from "./components/Onboarding";
 import Watchlist from "./components/Watchlist";
 import SearchTest from "./components/SearchTest";
+import ProfileReroute from "./components/ProfileReroute";
 
 export const UnauthenticatedRoutes = () => {
   return (
@@ -70,6 +71,9 @@ export const AuthenticatedRoutes = () => {
           </Route>
           <Route path="/dashboard">
             <Dashboard />
+          </Route>
+          <Route path="/profile" exact>
+            <ProfileReroute />
           </Route>
           <Route path="/profile/:uid" exact>
             <Profile />

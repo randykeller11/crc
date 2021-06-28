@@ -1,38 +1,19 @@
 import React, { useState, useEffect } from "react";
-import db from "../config/firebase";
-import { useAuth } from "../auth-context";
-import SearchTest from "./SearchTest";
+import { useProfileData } from "../hooks/useProfileData";
 
 function Watchlist() {
-  const albums = [
-    {
-      index: 0,
-      id: 183133172,
-    },
-    {
-      index: 1,
-      id: 128447202,
-    },
-    {
-      index: 2,
-      id: 212686712,
-    },
-    {
-      index: 3,
-      id: 8835801,
-    },
-    {
-      index: 4,
-      id: 8114238,
-    },
-  ];
-
-  const { currentUser } = useAuth();
-  const [watchlistAlbums, setWatchlistAlbums] = useState(albums);
+  const [profileData, componentState, loadedUID] = useProfileData();
+  const [watchlistAlbums, setWatchlistAlbums] = useState([]);
   const [watchlistData, setWatchListData] = useState([]);
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
   const [loadStatus, setLoadStatus] = useState(0);
+
+  useEffect(() => {
+    if (profileData) {
+      setWatchlistAlbums(profileData.watchlist);
+    }
+  }, [profileData]);
 
   useEffect(() => {
     const retrievalFunction = async (album) => {
@@ -53,8 +34,10 @@ function Watchlist() {
         retrievalFunction(album);
       });
     };
-    getData();
-  }, []);
+    if (watchlistAlbums) {
+      getData();
+    }
+  }, [watchlistAlbums]);
 
   useEffect(() => {
     console.log(result, "🏆🍩");
