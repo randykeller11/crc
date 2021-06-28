@@ -48,6 +48,7 @@ export const AuthenticatedRoutes = () => {
   return (
     <Router>
       <div>
+        <h4>Community Record Club</h4>
         <nav>
           <ul>
             <li>

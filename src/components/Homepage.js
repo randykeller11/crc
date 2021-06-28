@@ -17,8 +17,7 @@ const signOutFunction = () => {
 function Homepage() {
   return (
     <div>
-      <h1>Welcome to Community Record Club</h1>
-      <h3>Support local record stores!</h3>
+      <h1>Homepage</h1>
       <button onClick={signOutFunction}>Logout</button>
       <UploadForm />
     </div>
