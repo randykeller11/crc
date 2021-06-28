@@ -1,6 +1,7 @@
 import React, { useRef } from "react";
 import { firebaseApp, auth } from "../config/firebase";
 import { Redirect, Link } from "react-router-dom";
+import Homepage from "./Homepage";
 
 function Home() {
   const emailRef = useRef(null);
@@ -21,25 +22,8 @@ function Home() {
       });
   };
 
-  const signOutFunction = () => {
-    auth
-      .signOut()
-      .then(function () {
-        // Sign-out successful.
-        console.log("signed out");
-      })
-      .catch(function (error) {
-        // An error happened.
-      });
-  };
-
   return auth.currentUser ? (
-    <div>
-      <h2>
-        Welcome to Community Record Club a record club for the 21st century!
-      </h2>
-      <button onClick={signOutFunction}>Logout</button>
-    </div>
+    <Homepage />
   ) : (
     <div className="signin">
       <form action="">
