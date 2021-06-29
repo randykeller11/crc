@@ -43,6 +43,26 @@ export const useProfileData = () => {
 
   //add document to firestore if user does not have storage
   useEffect(() => {
+    async function checkForStorage() {
+      var docRef = db.collection("test").doc(`${loadedUID}`);
+
+      docRef
+        .get()
+        .then((doc) => {
+          if (doc.exists) {
+            setComponentState(2);
+            setProfileData(doc.data());
+            console.log("Document data:", doc.data());
+          } else {
+            setComponentState(1);
+            console.log("No such document!");
+          }
+        })
+        .catch(function (error) {
+          console.log("Error getting document:", error);
+        });
+    }
+
     async function addUserToFirestore() {
       db.collection("test")
         .doc(`${loadedUID}`)
@@ -72,8 +92,8 @@ export const useProfileData = () => {
           ],
         })
         .then(function () {
-          setComponentState(2);
           console.log("Value successfully written!");
+          checkForStorage();
         })
         .catch(function (error) {
           console.error("Error writing Value: ", error);
