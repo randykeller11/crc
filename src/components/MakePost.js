@@ -11,7 +11,6 @@ function MakePost({ uid }) {
   useEffect(() => {
     async function loadPreviousPosts() {
       var docRef = db.collection("test").doc(`${uid}`);
-
       docRef
         .get()
         .then((doc) => {
