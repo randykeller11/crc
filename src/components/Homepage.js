@@ -2,6 +2,7 @@ import React from "react";
 import { auth } from "../config/firebase";
 import UploadForm from "./UploadForm";
 import MakePost from "./MakePost";
+import { useProfileData } from "../hooks/useProfileData";
 
 const signOutFunction = () => {
   auth
@@ -16,10 +17,12 @@ const signOutFunction = () => {
 };
 
 function Homepage() {
+  const [profileData, componentState, loadedUID] = useProfileData();
+
   return (
     <div>
       <h1>Homepage</h1>
-      <MakePost />
+      <MakePost uid={loadedUID} profileData={profileData} />
       <button onClick={signOutFunction}>Logout</button>
     </div>
   );
