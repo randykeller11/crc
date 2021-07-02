@@ -1,6 +1,7 @@
 import React from "react";
 import { auth } from "../config/firebase";
 import UploadForm from "./UploadForm";
+import MakePost from "./MakePost";
 
 const signOutFunction = () => {
   auth
@@ -18,8 +19,8 @@ function Homepage() {
   return (
     <div>
       <h1>Homepage</h1>
+      <MakePost />
       <button onClick={signOutFunction}>Logout</button>
-      <UploadForm />
     </div>
   );
 }
