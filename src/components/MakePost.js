@@ -9,9 +9,7 @@ function MakePost({ uid }) {
 
   useEffect(() => {
     async function addPostToFirestore(_newPost) {
-      db.collection("test")
-        .doc(`${uid}`)
-        .collection("posts")
+      db.collection("posts")
         .add(_newPost)
         .then(function () {
           setIsSubmitted(false);
@@ -23,7 +21,13 @@ function MakePost({ uid }) {
     }
 
     if (isSubmitted) {
-      let newPost = { type: postType, text: postText, timeStamp: Date() };
+      let newPost = {
+        creatorID: uid,
+        type: postType,
+        text: postText,
+        timeStamp: Date(),
+        followers: ["XlyJbOBWdlbHil6anHybSDyFJC12"],
+      };
       addPostToFirestore(newPost);
       setPostText("");
       setIsSubmitted(false);
@@ -80,7 +84,11 @@ function MakePost({ uid }) {
           }}
         />
         <div
-          className="makePost__textInput__submit"
+          className={
+            isSubmitted
+              ? "makePost__textInput__submit__active"
+              : "makePost__textInput__submit"
+          }
           onClick={() => setIsSubmitted(true)}
         >
           <h3>Submit</h3>

@@ -35,6 +35,10 @@
   border: 2px solid black;
 }
 
+.makePost__textInput__submit__active {
+  background-color: gold;
+}
+
 .makePost__textInput > input {
   width: 99.1%;
   border: 2px solid black;
