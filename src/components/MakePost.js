@@ -6,32 +6,13 @@ function MakePost({ uid }) {
   const [postType, setPostType] = useState(0);
   const [postText, setPostText] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [previousPosts, setPreviousPosts] = useState(null);
-  const [isFirstPost, setIsFirstPost] = useState(null);
 
   useEffect(() => {
-    async function loadPreviousPosts() {
-      var docRef = db.collection("posts").doc(`${uid}`);
-      docRef
-        .get()
-        .then((doc) => {
-          if (doc.exists) {
-            setPreviousPosts(doc.data());
-            console.log("Document data:", doc.data());
-          } else {
-            setIsFirstPost(true);
-            console.log("No such document!");
-          }
-        })
-        .catch(function (error) {
-          console.log("Error getting document:", error);
-        });
-    }
-
     async function addPostToFirestore(_newPost) {
-      db.collection("posts")
+      db.collection("test")
         .doc(`${uid}`)
-        .set({ ...previousPosts, posts: [...previousPosts.posts, _newPost] })
+        .collection("posts")
+        .add(_newPost)
         .then(function () {
           setIsSubmitted(false);
           console.log("Value successfully written!");
@@ -41,37 +22,13 @@ function MakePost({ uid }) {
         });
     }
 
-    async function firstPost(_newPost) {
-      db.collection("posts")
-        .doc(`${uid}`)
-        .set({ posts: [_newPost] })
-        .then(function () {
-          setIsSubmitted(false);
-          console.log("Value successfully written!");
-        })
-        .catch(function (error) {
-          console.error("Error writing Value: ", error);
-        });
-    }
-
-    if (!isSubmitted && uid) {
-      loadPreviousPosts();
-    }
-
-    if (isSubmitted && isFirstPost) {
-      let newPost = { type: postType, text: postText, timeStamp: Date() };
-      firstPost(newPost);
-      setPostText("");
-      setIsSubmitted(false);
-    }
-
-    if (isSubmitted && previousPosts) {
+    if (isSubmitted) {
       let newPost = { type: postType, text: postText, timeStamp: Date() };
       addPostToFirestore(newPost);
       setPostText("");
       setIsSubmitted(false);
     }
-  }, [isSubmitted, uid]);
+  }, [isSubmitted]);
 
   return (
     <div className="makePost">
