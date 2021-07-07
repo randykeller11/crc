@@ -6,6 +6,7 @@ function MakePost({ uid }) {
   const [postType, setPostType] = useState(0);
   const [postText, setPostText] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isAddingAlbum, setIsAddingAlbum] = useState(false);
 
   useEffect(() => {
     async function addPostToFirestore(_newPost) {
@@ -33,6 +34,12 @@ function MakePost({ uid }) {
       setIsSubmitted(false);
     }
   }, [isSubmitted]);
+
+  useEffect(() => {
+    if (isAddingAlbum) {
+      console.log("logic for adding album goes here 🏆");
+    }
+  }, [isAddingAlbum]);
 
   return (
     <div className="makePost">
@@ -95,10 +102,19 @@ function MakePost({ uid }) {
         </div>
       </div>
       <div className="makePost__bottom">
-        <div className="makePost__bottom__option">
+        <div
+          onClick={() => {
+            setIsAddingAlbum(true);
+          }}
+          className={
+            isAddingAlbum
+              ? "makePost__bottom__option__active"
+              : "makePost__bottom__option"
+          }
+        >
           <h3>add album</h3>
         </div>
-        <div className="makePost__bottom__option__active">
+        <div className="makePost__bottom__option">
           <h3>add photos</h3>
         </div>
       </div>
