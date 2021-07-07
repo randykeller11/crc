@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { auth } from "../config/firebase";
 import UploadForm from "./UploadForm";
 import MakePost from "./MakePost";
-import { useProfileData } from "../hooks/useProfileData";
+import { useAuth } from "../auth-context";
 
 const signOutFunction = () => {
   auth
@@ -17,12 +17,12 @@ const signOutFunction = () => {
 };
 
 function Homepage() {
-  const [profileData, componentState, loadedUID] = useProfileData();
+  const { currentUser } = useAuth();
 
   return (
     <div>
       <h1>Homepage</h1>
-      <MakePost uid={loadedUID} profileData={profileData} />
+      {currentUser && <MakePost uid={currentUser.uid} />}
       <button onClick={signOutFunction}>Logout</button>
     </div>
   );

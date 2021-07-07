@@ -18,7 +18,7 @@ export const useProfileData = () => {
   //check if user has a document
   useEffect(() => {
     async function checkForStorage() {
-      var docRef = db.collection("watchlists").doc(`${loadedUID}`);
+      var docRef = db.collection("test").doc(`${loadedUID}`).collection();
 
       docRef
         .get()
@@ -64,31 +64,12 @@ export const useProfileData = () => {
     }
 
     async function addUserToFirestore() {
-      db.collection("watchlists")
+      db.collection("test")
         .doc(`${loadedUID}`)
-        .set({
-          watchlist: [
-            {
-              index: 0,
-              id: 183133172,
-            },
-            {
-              index: 1,
-              id: 128447202,
-            },
-            {
-              index: 2,
-              id: 212686712,
-            },
-            {
-              index: 3,
-              id: 8835801,
-            },
-            {
-              index: 4,
-              id: 8114238,
-            },
-          ],
+        .collection("watchlist")
+        .add({
+          index: 0,
+          id: 183133172,
         })
         .then(function () {
           console.log("Value successfully written!");
