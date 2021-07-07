@@ -7,10 +7,11 @@ function MakePost({ uid }) {
   const [postText, setPostText] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [previousPosts, setPreviousPosts] = useState(null);
+  const [isFirstPost, setIsFirstPost] = useState(null);
 
   useEffect(() => {
     async function loadPreviousPosts() {
-      var docRef = db.collection("test").doc(`${uid}`);
+      var docRef = db.collection("posts").doc(`${uid}`);
       docRef
         .get()
         .then((doc) => {
@@ -18,6 +19,7 @@ function MakePost({ uid }) {
             setPreviousPosts(doc.data());
             console.log("Document data:", doc.data());
           } else {
+            setIsFirstPost(true);
             console.log("No such document!");
           }
         })
@@ -27,9 +29,22 @@ function MakePost({ uid }) {
     }
 
     async function addPostToFirestore(_newPost) {
-      db.collection("test")
+      db.collection("posts")
         .doc(`${uid}`)
         .set({ ...previousPosts, posts: [...previousPosts.posts, _newPost] })
+        .then(function () {
+          setIsSubmitted(false);
+          console.log("Value successfully written!");
+        })
+        .catch(function (error) {
+          console.error("Error writing Value: ", error);
+        });
+    }
+
+    async function firstPost(_newPost) {
+      db.collection("posts")
+        .doc(`${uid}`)
+        .set({ posts: [_newPost] })
         .then(function () {
           setIsSubmitted(false);
           console.log("Value successfully written!");
@@ -42,6 +57,14 @@ function MakePost({ uid }) {
     if (!isSubmitted && uid) {
       loadPreviousPosts();
     }
+
+    if (isSubmitted && isFirstPost) {
+      let newPost = { type: postType, text: postText, timeStamp: Date() };
+      firstPost(newPost);
+      setPostText("");
+      setIsSubmitted(false);
+    }
+
     if (isSubmitted && previousPosts) {
       let newPost = { type: postType, text: postText, timeStamp: Date() };
       addPostToFirestore(newPost);

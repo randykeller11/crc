@@ -18,7 +18,7 @@ export const useProfileData = () => {
   //check if user has a document
   useEffect(() => {
     async function checkForStorage() {
-      var docRef = db.collection("test").doc(`${loadedUID}`);
+      var docRef = db.collection("watchlists").doc(`${loadedUID}`);
 
       docRef
         .get()
@@ -44,7 +44,7 @@ export const useProfileData = () => {
   //add document to firestore if user does not have storage
   useEffect(() => {
     async function checkForStorage() {
-      var docRef = db.collection("test").doc(`${loadedUID}`);
+      var docRef = db.collection("watchlists").doc(`${loadedUID}`);
 
       docRef
         .get()
@@ -64,10 +64,9 @@ export const useProfileData = () => {
     }
 
     async function addUserToFirestore() {
-      db.collection("test")
+      db.collection("watchlists")
         .doc(`${loadedUID}`)
         .set({
-          posts: [{ date: "11/09/2022", text: "man I love this app!" }],
           watchlist: [
             {
               index: 0,
