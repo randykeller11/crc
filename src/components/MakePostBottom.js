@@ -74,8 +74,9 @@ function MakePostBottom({
                 setIsAddingAlbum(false);
               }}
             >
+              <img src={album.cover} />
               <h3>
-                album: {album.title} artist: {album.artist} id: {album.id}
+                {album.title} - {album.artist} - {album.id}
               </h3>
             </div>
           );
@@ -115,12 +116,16 @@ function MakePostBottom({
       let localArray = [];
       result.data.map((track, index) => {
         if (
-          localArray.filter((album) => album.id === track.album.id).length === 0
+          localArray.filter((album) => album.id === track.album.id).length ===
+            0 &&
+          localArray.filter((album) => album.title === track.album.title)
+            .length === 0
         ) {
           localArray.push({
             id: track.album.id,
             title: track.album.title,
             artist: track.artist.name,
+            cover: track.album.cover_small,
           });
         }
       });
