@@ -41,8 +41,7 @@ function MakePost({ uid }) {
 
   const postInput = (
     <div className="makePost__textInput">
-      <input
-        type="text"
+      <textarea
         placeholder="Check this out..."
         value={postText}
         onChange={(e) => {
@@ -107,6 +106,21 @@ function MakePost({ uid }) {
     <div className="makePost">
       {!isAddingAlbum && postTypeSelect}
       {!isAddingAlbum && postInput}
+      {!isAddingAlbum && taggedAlbums.length > 0 && (
+        <div className="makePost__albumTagDisplay">
+          {taggedAlbums.map((album) => {
+            return (
+              <div className="makePost__albumTagDisplay__card">
+                <img src={album.cover} />
+                <div className="makePost__albumTagDisplay__card__info">
+                  <h3>{album.title}</h3>
+                  <h4>{album.artist}</h4>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
 
       <MakePostBottom
         setTaggedAlbums={setTaggedAlbums}

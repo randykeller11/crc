@@ -49,16 +49,25 @@ function MakePostBottom({
             type="text"
             placeholder="ATLiens"
             value={query}
+            onKeyPress={(e) => {
+              if (e.charCode === 13) {
+                console.log("you pressed enter my boi");
+                setIsSearching(true);
+              }
+            }}
             onChange={(e) => {
               setQuery(e.target.value);
+              if (query.length < 5) {
+                setIsSearching(false);
+                setSortedData([]);
+                setResult(null);
+              }
+              if (query.length >= 5) {
+                setIsSearching(false);
+                setIsSearching(true);
+              }
             }}
           />
-          <div
-            className="makePost__textInput__submit"
-            onClick={() => setIsSearching(true)}
-          >
-            <h3>Submit</h3>
-          </div>
         </div>
       </div>
       {sortedData &&
@@ -68,8 +77,11 @@ function MakePostBottom({
               className="bottom__result"
               key={`${index}`}
               onClick={() => {
-                setTaggedAlbums([...taggedAlbums, album.id]);
+                setTaggedAlbums([...taggedAlbums, album]);
                 setIsAddingAlbum(false);
+                setSortedData([]);
+                setResult(null);
+                setQuery("");
               }}
             >
               <img src={album.cover} />
@@ -110,7 +122,6 @@ function MakePostBottom({
   //sort the data for matching artists
   useEffect(() => {
     if (result) {
-      console.log("this function ran like it was supposed to", result.data);
       let localArray = [];
       result.data.map((track, index) => {
         if (
