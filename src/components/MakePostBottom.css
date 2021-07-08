@@ -42,6 +42,14 @@
   border: 2px solid black;
 }
 
+.makePost__bottom__option__inactive {
+  background: lightgray;
+  height: 100%;
+  width: 100%;
+  text-align: center;
+  border: 2px solid black;
+}
+
 .bottom__result {
   display: flex;
   height: 5vh;

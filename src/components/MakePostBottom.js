@@ -21,25 +21,35 @@ function MakePostBottom({
   //logic for when user clicks add album
 
   //normal bottom of the post component
-  const normalCompBottom = (
-    <div className="makePost__bottom">
-      <div
-        onClick={() => {
-          setIsAddingAlbum(true);
-        }}
-        className={
-          isAddingAlbum
-            ? "makePost__bottom__option__active"
-            : "makePost__bottom__option"
-        }
-      >
-        <h3>add album</h3>
+  const normalCompBottom =
+    taggedAlbums.length === 5 ? (
+      <div className="makePost__bottom">
+        <div className="makePost__bottom__option__inactive">
+          <h3>max albums tagged</h3>
+        </div>
+        <div className="makePost__bottom__option">
+          <h3>add photos</h3>
+        </div>
       </div>
-      <div className="makePost__bottom__option">
-        <h3>add photos</h3>
+    ) : (
+      <div className="makePost__bottom">
+        <div
+          onClick={() => {
+            setIsAddingAlbum(true);
+          }}
+          className={
+            isAddingAlbum
+              ? "makePost__bottom__option__active"
+              : "makePost__bottom__option"
+          }
+        >
+          <h3>add album</h3>
+        </div>
+        <div className="makePost__bottom__option">
+          <h3>add photos</h3>
+        </div>
       </div>
-    </div>
-  );
+    );
 
   const addAlbumPostBottom = (
     <div className="bottom">
