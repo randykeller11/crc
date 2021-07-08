@@ -17,6 +17,7 @@
   width: 100%;
   text-align: center;
   border: 2px solid black;
+  cursor: pointer;
 }
 
 .makePost__typeSelect__option__active {
@@ -25,6 +26,7 @@
   height: 100%;
   width: 100%;
   text-align: center;
+  cursor: pointer;
 }
 
 .makePost__textInput {
@@ -34,6 +36,7 @@
 .makePost__textInput__submit {
   border: 2px solid black;
   padding-top: 10px;
+  cursor: pointer;
 }
 
 .makePost__textInput__submit__active {
@@ -59,6 +62,11 @@
   border-right: 2px solid black;
   padding: 4px;
   justify-content: space-evenly;
+}
+
+.makePost__albumTagDisplay__card > h3 {
+  cursor: pointer;
+  color: darkred;
 }
 
 .makePost__albumTagDisplay__card__info {

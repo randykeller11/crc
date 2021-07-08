@@ -33,6 +33,7 @@
   width: 100%;
   text-align: center;
   border: 2px solid black;
+  cursor: pointer;
 }
 .makePost__bottom__option__active {
   background: gold;
@@ -60,4 +61,9 @@
 
 .bottom__result:hover {
   background-color: lightgray;
+}
+
+.terminateSearch {
+  cursor: pointer;
+  color: darkred;
 }

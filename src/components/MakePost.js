@@ -44,6 +44,11 @@ function MakePost({ uid }) {
       <textarea
         placeholder="Check this out..."
         value={postText}
+        onKeyPress={(e) => {
+          if (e.charCode === 13) {
+            setIsSubmitted(true);
+          }
+        }}
         onChange={(e) => {
           setPostText(e.target.value);
         }}
@@ -102,6 +107,10 @@ function MakePost({ uid }) {
     </div>
   );
 
+  const handleRemove = () => {
+    console.log("time to remove an album");
+  };
+
   return (
     <div className="makePost">
       {!isAddingAlbum && postTypeSelect}
@@ -116,6 +125,7 @@ function MakePost({ uid }) {
                   <h3>{album.title}</h3>
                   <h4>{album.artist}</h4>
                 </div>
+                <h3 onClick={handleRemove}>x</h3>
               </div>
             );
           })}
