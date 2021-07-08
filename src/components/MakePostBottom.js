@@ -50,8 +50,8 @@ function MakePostBottom({
             placeholder="ATLiens"
             value={query}
             onKeyPress={(e) => {
+              console.log(e.charCode);
               if (e.charCode === 13) {
-                console.log("you pressed enter my boi");
                 setIsSearching(true);
               }
             }}
@@ -68,6 +68,17 @@ function MakePostBottom({
               }
             }}
           />
+          <div
+            className="terminateSearch"
+            onClick={() => {
+              setIsAddingAlbum(false);
+              setSortedData([]);
+              setResult(null);
+              setQuery("");
+            }}
+          >
+            <h4>x</h4>
+          </div>
         </div>
       </div>
       {sortedData &&
