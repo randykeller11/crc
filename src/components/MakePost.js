@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from "react";
 import "./MakePost.css";
 import db from "../config/firebase";
+import MakePostBottom from "./MakePostBottom";
 
 function MakePost({ uid }) {
   const [postType, setPostType] = useState(0);
   const [postText, setPostText] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [taggedAlbums, setTaggedAlbums] = useState([]);
   const [isAddingAlbum, setIsAddingAlbum] = useState(false);
 
+  //logic to add post when user presses submit
   useEffect(() => {
     async function addPostToFirestore(_newPost) {
       db.collection("posts")
@@ -28,6 +31,7 @@ function MakePost({ uid }) {
         text: postText,
         timeStamp: Date(),
         followers: ["XlyJbOBWdlbHil6anHybSDyFJC12"],
+        taggedAlbums: taggedAlbums,
       };
       addPostToFirestore(newPost);
       setPostText("");
@@ -35,11 +39,28 @@ function MakePost({ uid }) {
     }
   }, [isSubmitted]);
 
-  useEffect(() => {
-    if (isAddingAlbum) {
-      console.log("logic for adding album goes here 🏆");
-    }
-  }, [isAddingAlbum]);
+  const postInput = (
+    <div className="makePost__textInput">
+      <input
+        type="text"
+        placeholder="Check this out..."
+        value={postText}
+        onChange={(e) => {
+          setPostText(e.target.value);
+        }}
+      />
+      <div
+        className={
+          isSubmitted
+            ? "makePost__textInput__submit__active"
+            : "makePost__textInput__submit"
+        }
+        onClick={() => setIsSubmitted(true)}
+      >
+        <h3>Submit</h3>
+      </div>
+    </div>
+  );
 
   return (
     <div className="makePost">
@@ -81,43 +102,14 @@ function MakePost({ uid }) {
           <h3>Misc</h3>
         </div>
       </div>
-      <div className="makePost__textInput">
-        <input
-          type="text"
-          placeholder="Check this out..."
-          value={postText}
-          onChange={(e) => {
-            setPostText(e.target.value);
-          }}
-        />
-        <div
-          className={
-            isSubmitted
-              ? "makePost__textInput__submit__active"
-              : "makePost__textInput__submit"
-          }
-          onClick={() => setIsSubmitted(true)}
-        >
-          <h3>Submit</h3>
-        </div>
-      </div>
-      <div className="makePost__bottom">
-        <div
-          onClick={() => {
-            setIsAddingAlbum(true);
-          }}
-          className={
-            isAddingAlbum
-              ? "makePost__bottom__option__active"
-              : "makePost__bottom__option"
-          }
-        >
-          <h3>add album</h3>
-        </div>
-        <div className="makePost__bottom__option">
-          <h3>add photos</h3>
-        </div>
-      </div>
+      {!isAddingAlbum && postInput}
+
+      <MakePostBottom
+        setTaggedAlbums={setTaggedAlbums}
+        taggedAlbums={taggedAlbums}
+        isAddingAlbum={isAddingAlbum}
+        setIsAddingAlbum={setIsAddingAlbum}
+      />
     </div>
   );
 }

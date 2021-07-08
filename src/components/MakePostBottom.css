@@ -1,0 +1,42 @@
+.bottom {
+  display: flex;
+  width: 100%;
+}
+
+.makePost__textInput {
+  display: flex;
+  width: 100%;
+}
+
+.makePost__textInput__submit {
+  border: 2px solid black;
+}
+
+.makePost__textInput__submit__active {
+  background-color: gold;
+}
+
+.makePost__textInput > input {
+  width: 99.1%;
+  border: 2px solid black;
+  outline: none;
+  height: 25px;
+}
+
+.makePost__bottom {
+  display: flex;
+}
+
+.makePost__bottom__option {
+  height: 100%;
+  width: 100%;
+  text-align: center;
+  border: 2px solid black;
+}
+.makePost__bottom__option__active {
+  background: gold;
+  height: 100%;
+  width: 100%;
+  text-align: center;
+  border: 2px solid black;
+}
