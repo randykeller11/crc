@@ -68,9 +68,7 @@ function MakePostBottom({
               className="bottom__result"
               key={`${index}`}
               onClick={() => {
-                console.log(album);
-                let localArray = [...taggedAlbums];
-                setTaggedAlbums([...localArray, album.id]);
+                setTaggedAlbums([...taggedAlbums, album.id]);
                 setIsAddingAlbum(false);
               }}
             >
