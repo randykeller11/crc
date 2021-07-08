@@ -17,19 +17,6 @@ function App() {
     });
   }, []);
 
-  // useEffect(() => {
-  //   if (!user) return;
-
-  //   const userRef = firebaseApp.firestore().collection("users").doc(user.uid);
-  //   userRef.get().then((doc) => {
-  //     if (!doc.exists) {
-  //       console.log("No such document!");
-  //     } else {
-  //       console.log("Document data:", doc.data());
-  //     }
-  //   });
-  // }, [user]);
-
   return user ? <AuthenticatedRoutes /> : <UnauthenticatedRoutes />;
 }
 

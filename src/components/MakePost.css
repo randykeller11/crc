@@ -1,0 +1,74 @@
+.makePost {
+  width: 70vw;
+  margin-left: 15vw;
+  margin-right: 15vw;
+  display: flex;
+  flex-flow: column;
+  justify-content: space-evenly;
+}
+
+.makePost__typeSelect {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.makePost__typeSelect__option {
+  height: 100%;
+  width: 100%;
+  text-align: center;
+  border: 2px solid black;
+  cursor: pointer;
+}
+
+.makePost__typeSelect__option__active {
+  border: 2px solid black;
+  background-color: gold;
+  height: 100%;
+  width: 100%;
+  text-align: center;
+  cursor: pointer;
+}
+
+.makePost__textInput {
+  display: flex;
+}
+
+.makePost__textInput__submit {
+  border: 2px solid black;
+  padding-top: 10px;
+  cursor: pointer;
+}
+
+.makePost__textInput__submit__active {
+  background-color: gold;
+}
+
+.makePost__textInput > textarea {
+  width: 95%;
+  height: 50px;
+  border: 2px solid black;
+  outline: none;
+}
+
+.makePost__albumTagDisplay {
+  display: flex;
+  border-left: 2px solid black;
+  border-right: 2px solid black;
+}
+
+.makePost__albumTagDisplay__card {
+  display: flex;
+  width: 14vw;
+  border-right: 2px solid black;
+  padding: 4px;
+  justify-content: space-evenly;
+}
+
+.makePost__albumTagDisplay__card > h3 {
+  cursor: pointer;
+  color: darkred;
+}
+
+.makePost__albumTagDisplay__card__info {
+  text-align: center;
+}

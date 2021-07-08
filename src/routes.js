@@ -9,21 +9,25 @@ import Onboarding from "./components/Onboarding";
 import Watchlist from "./components/Watchlist";
 import SearchTest from "./components/SearchTest";
 import ProfileReroute from "./components/ProfileReroute";
+import "./routes.css";
 
 export const UnauthenticatedRoutes = () => {
   return (
     <Router>
-      <div>
-        <nav>
-          <ul>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/about">About</Link>
-            </li>
-          </ul>
-        </nav>
+      <div className="app">
+        <div className="header">
+          <h4>Community Record Club</h4>
+          <nav>
+            <ul className="header__nav">
+              <li>
+                <Link to="/">Home</Link>
+              </li>
+              <li>
+                <Link to="/about">About</Link>
+              </li>
+            </ul>
+          </nav>
+        </div>
 
         {/* A <Switch> looks through its children <Route>s and
                 renders the first one that matches the current URL. */}
@@ -47,24 +51,26 @@ export const UnauthenticatedRoutes = () => {
 export const AuthenticatedRoutes = () => {
   return (
     <Router>
-      <div>
-        <h4>Community Record Club</h4>
-        <nav>
-          <ul>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/dashboard">Dashboard</Link>
-            </li>
-            <li>
-              <Link to="/profile">Profile</Link>
-            </li>
-            <li>
-              <Link to="/search">Search</Link>
-            </li>
-          </ul>
-        </nav>
+      <div className="app">
+        <div className="header">
+          <h4>Community Record Club</h4>
+          <nav>
+            <ul id="header__nav">
+              <li>
+                <Link to="/">Home</Link>
+              </li>
+              <li>
+                <Link to="/dashboard">Dashboard</Link>
+              </li>
+              <li>
+                <Link to="/profile">Profile</Link>
+              </li>
+              <li>
+                <Link to="/search">Search</Link>
+              </li>
+            </ul>
+          </nav>
+        </div>
 
         <Switch>
           <Route path="/" exact>
