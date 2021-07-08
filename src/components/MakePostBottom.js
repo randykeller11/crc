@@ -57,12 +57,12 @@ function MakePostBottom({
             }}
             onChange={(e) => {
               setQuery(e.target.value);
-              if (query.length < 5) {
+              if (query.length < 7) {
                 setIsSearching(false);
                 setSortedData([]);
                 setResult(null);
               }
-              if (query.length >= 5) {
+              if (query.length >= 7) {
                 setIsSearching(false);
                 setIsSearching(true);
               }
