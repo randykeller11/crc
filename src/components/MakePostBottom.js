@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import "./MakePostBottom.css";
 
 function MakePostBottom({
   setTaggedAlbums,
@@ -57,11 +58,14 @@ function MakePostBottom({
             <h3>Submit</h3>
           </div>
         </div>
-
-        <div className="makePost__bottom__option">
-          <h3>search results go here 🏆</h3>
-        </div>
       </div>
+      {taggedAlbums.map((album) => {
+        return (
+          <div className="bottom__result">
+            <h3>search result card goes here 🏆</h3>
+          </div>
+        );
+      })}
     </div>
   );
 

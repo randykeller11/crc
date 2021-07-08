@@ -1,5 +1,6 @@
 .bottom {
   display: flex;
+  flex-flow: column;
   width: 100%;
 }
 
@@ -37,6 +38,13 @@
   background: gold;
   height: 100%;
   width: 100%;
+  text-align: center;
+  border: 2px solid black;
+}
+
+.bottom__result {
+  height: 5vh;
+  width: 99.5%;
   text-align: center;
   border: 2px solid black;
 }
