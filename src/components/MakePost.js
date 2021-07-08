@@ -62,46 +62,50 @@ function MakePost({ uid }) {
     </div>
   );
 
+  const postTypeSelect = (
+    <div className="makePost__typeSelect">
+      <div
+        className={
+          postType === 0
+            ? "makePost__typeSelect__option__active"
+            : "makePost__typeSelect__option"
+        }
+        onClick={() => {
+          setPostType(0);
+        }}
+      >
+        <h3>Today's Hall</h3>
+      </div>
+      <div
+        className={
+          postType === 1
+            ? "makePost__typeSelect__option__active"
+            : "makePost__typeSelect__option"
+        }
+        onClick={() => {
+          setPostType(1);
+        }}
+      >
+        <h3>Now Spinning</h3>
+      </div>
+      <div
+        className={
+          postType === 2
+            ? "makePost__typeSelect__option__active"
+            : "makePost__typeSelect__option"
+        }
+        onClick={() => {
+          setPostType(2);
+        }}
+      >
+        <h3>Misc</h3>
+      </div>
+    </div>
+  );
+
   return (
     <div className="makePost">
-      <div className="makePost__typeSelect">
-        <div
-          className={
-            postType === 0
-              ? "makePost__typeSelect__option__active"
-              : "makePost__typeSelect__option"
-          }
-          onClick={() => {
-            setPostType(0);
-          }}
-        >
-          <h3>Today's Hall</h3>
-        </div>
-        <div
-          className={
-            postType === 1
-              ? "makePost__typeSelect__option__active"
-              : "makePost__typeSelect__option"
-          }
-          onClick={() => {
-            setPostType(1);
-          }}
-        >
-          <h3>Now Spinning</h3>
-        </div>
-        <div
-          className={
-            postType === 2
-              ? "makePost__typeSelect__option__active"
-              : "makePost__typeSelect__option"
-          }
-          onClick={() => {
-            setPostType(2);
-          }}
-        >
-          <h3>Misc</h3>
-        </div>
-      </div>
+      {!isAddingAlbum && postTypeSelect}
       {!isAddingAlbum && postInput}
 
       <MakePostBottom

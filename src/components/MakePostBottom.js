@@ -9,11 +9,12 @@ function MakePostBottom({
 }) {
   const [query, setQuery] = useState("");
   const [searchType, setSearchType] = useState(0);
-  const url = `http://localhost:4000/search/?q=artist:"${query}"`;
+  const url = `http://localhost:4000/search/?q=album:"${query}"`;
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
   const [isSearching, setIsSearching] = useState(false);
   const [sortedData, setSortedData] = useState([]);
+  const [componentState, setComponentState] = useState(0);
 
   //-----------------------logic and JSX for adding an album--------------
 
@@ -60,17 +61,22 @@ function MakePostBottom({
           </div>
         </div>
       </div>
-      {result &&
-        result.data.map((album) => {
+      {sortedData &&
+        sortedData.map((album, index) => {
           return (
             <div
               className="bottom__result"
+              key={`${index}`}
               onClick={() => {
+                console.log(album);
                 let localArray = [...taggedAlbums];
                 setTaggedAlbums([...localArray, album.id]);
+                setIsAddingAlbum(false);
               }}
             >
-              <h3>{album.title}</h3>
+              <h3>
+                album: {album.title} artist: {album.artist} id: {album.id}
+              </h3>
             </div>
           );
         })}
@@ -81,7 +87,6 @@ function MakePostBottom({
 
   useEffect(() => {
     if (isSearching) {
-      console.log("logic for adding album goes here 🏆");
       async function getData() {
         try {
           const response = await fetch(url);
@@ -106,12 +111,20 @@ function MakePostBottom({
   //sort the data for matching artists
   useEffect(() => {
     if (result) {
-      console.log(result.data);
-      result.data.map((track) => {
-        if (track.artist.name.toLowerCase() === query.toLowerCase()) {
-          sortedData.push(track);
+      console.log("this function ran like it was supposed to", result.data);
+      let localArray = [];
+      result.data.map((track, index) => {
+        if (
+          localArray.filter((album) => album.id === track.album.id).length === 0
+        ) {
+          localArray.push({
+            id: track.album.id,
+            title: track.album.title,
+            artist: track.artist.name,
+          });
         }
       });
+      setSortedData(localArray);
     }
   }, [result]);
 
