@@ -1,0 +1,45 @@
+.albumSearch__console {
+  display: flex;
+  width: 99.6%;
+  border-bottom: 2px solid black;
+  border-left: 2px solid black;
+  border-right: 2px solid black;
+}
+
+.albumSearch__console > input {
+  width: 79.6%;
+}
+
+.albumSearch__console__toggle {
+  width: 15%;
+  border-left: 1px solid black;
+  border-right: 1px solid black;
+  text-align: center;
+  cursor: pointer;
+}
+
+.albumSearch__console__toggleActive {
+  width: 15%;
+  border-left: 1px solid black;
+  border-right: 1px solid black;
+  text-align: center;
+  cursor: pointer;
+  background-color: gold;
+}
+
+.albumSearch__result {
+  display: flex;
+  height: 5vh;
+  width: 99.5%;
+  text-align: center;
+  border: 2px solid black;
+}
+
+.albumSearch__result:hover {
+  background-color: lightgray;
+}
+
+.terminateSearch {
+  cursor: pointer;
+  color: darkred;
+}

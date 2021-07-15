@@ -3,7 +3,6 @@ import "./AlbumSearch.css";
 
 function AlbumSearch({ _taggedAlbums, _setTaggedAlbums, _setIsAddingAlbum }) {
   const [sortedData, setSortedData] = useState([]);
-  const [componentState, setComponentState] = useState(0);
   const [query, setQuery] = useState("");
   const [searchType, setSearchType] = useState(0);
   const url = `http://localhost:4000/search/?q=album:"${query}"`;
@@ -60,67 +59,65 @@ function AlbumSearch({ _taggedAlbums, _setTaggedAlbums, _setIsAddingAlbum }) {
   }, [result]);
 
   return (
-    <div>
-      <div className="bottom">
-        <div className="bottom__textInput">
-          <div className="makePost__textInput">
-            <input
-              type="text"
-              placeholder="ATLiens"
-              value={query}
-              onKeyPress={(e) => {
-                if (e.charCode === 13) {
-                  setIsSearching(true);
-                }
-              }}
-              onChange={(e) => {
-                setQuery(e.target.value);
-                if (query.length < 7) {
-                  setIsSearching(false);
-                  setSortedData([]);
-                  setResult(null);
-                }
-                if (query.length >= 7) {
-                  setIsSearching(false);
-                  setIsSearching(true);
-                }
-              }}
-            />
+    <div className="albumSearch">
+      <div className="albumSearch__console">
+        <input
+          type="text"
+          placeholder="ATLiens"
+          value={query}
+          onKeyPress={(e) => {
+            if (e.charCode === 13) {
+              setIsSearching(true);
+            }
+          }}
+          onChange={(e) => {
+            setQuery(e.target.value);
+            if (query.length < 7) {
+              setIsSearching(false);
+              setSortedData([]);
+              setResult(null);
+            }
+            if (query.length >= 7) {
+              setIsSearching(false);
+              setIsSearching(true);
+            }
+          }}
+        />
+        <div className="albumSearch__console__toggleActive">Album</div>
+        <div className="albumSearch__console__toggle">Artist</div>
+        <div
+          className="terminateSearch"
+          onClick={() => {
+            _setIsAddingAlbum(false);
+            setSortedData([]);
+            setResult(null);
+            setQuery("");
+          }}
+        >
+          <h4>x</h4>
+        </div>
+      </div>
+      {sortedData &&
+        sortedData.map((album, index) => {
+          return (
             <div
-              className="terminateSearch"
+              className="albumSearch__result"
+              key={`${index}`}
               onClick={() => {
+                _setTaggedAlbums([..._taggedAlbums, album]);
                 _setIsAddingAlbum(false);
                 setSortedData([]);
                 setResult(null);
                 setQuery("");
               }}
             >
-              <h4>x</h4>
+              <img src={album.cover} />
+              <h3>
+                {album.title} - {album.artist} - {album.id}
+              </h3>
             </div>
-          </div>
-        </div>
-        {sortedData &&
-          sortedData.map((album, index) => {
-            return (
-              <div
-                className="bottom__result"
-                key={`${index}`}
-                onClick={() => {
-                  _setTaggedAlbums([..._taggedAlbums, album]);
-                  _setIsAddingAlbum(false);
-                  setSortedData([]);
-                  setResult(null);
-                  setQuery("");
-                }}
-              >
-                <img src={album.cover} />
-                <h3>
-                  {album.title} - {album.artist} - {album.id}
-                </h3>
-              </div>
-            );
-          })}
-      </div>
+          );
+        })}
     </div>
   );
 }
