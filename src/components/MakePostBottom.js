@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./MakePostBottom.css";
+import AlbumSearch from "./AlbumSearch";
 
 function MakePostBottom({
   setTaggedAlbums,
@@ -7,14 +8,13 @@ function MakePostBottom({
   isAddingAlbum,
   setIsAddingAlbum,
 }) {
+  const [sortedData, setSortedData] = useState([]);
+  const [componentState, setComponentState] = useState(0);
   const [query, setQuery] = useState("");
   const [searchType, setSearchType] = useState(0);
   const url = `http://localhost:4000/search/?q=album:"${query}"`;
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
-  const [isSearching, setIsSearching] = useState(false);
-  const [sortedData, setSortedData] = useState([]);
-  const [componentState, setComponentState] = useState(0);
 
   //-----------------------logic and JSX for adding an album--------------
 
@@ -51,119 +51,15 @@ function MakePostBottom({
       </div>
     );
 
-  const addAlbumPostBottom = (
-    <div className="bottom">
-      <div className="bottom__textInput">
-        <div className="makePost__textInput">
-          <input
-            type="text"
-            placeholder="ATLiens"
-            value={query}
-            onKeyPress={(e) => {
-              console.log(e.charCode);
-              if (e.charCode === 13) {
-                setIsSearching(true);
-              }
-            }}
-            onChange={(e) => {
-              setQuery(e.target.value);
-              if (query.length < 7) {
-                setIsSearching(false);
-                setSortedData([]);
-                setResult(null);
-              }
-              if (query.length >= 7) {
-                setIsSearching(false);
-                setIsSearching(true);
-              }
-            }}
-          />
-          <div
-            className="terminateSearch"
-            onClick={() => {
-              setIsAddingAlbum(false);
-              setSortedData([]);
-              setResult(null);
-              setQuery("");
-            }}
-          >
-            <h4>x</h4>
-          </div>
-        </div>
-      </div>
-      {sortedData &&
-        sortedData.map((album, index) => {
-          return (
-            <div
-              className="bottom__result"
-              key={`${index}`}
-              onClick={() => {
-                setTaggedAlbums([...taggedAlbums, album]);
-                setIsAddingAlbum(false);
-                setSortedData([]);
-                setResult(null);
-                setQuery("");
-              }}
-            >
-              <img src={album.cover} />
-              <h3>
-                {album.title} - {album.artist} - {album.id}
-              </h3>
-            </div>
-          );
-        })}
-    </div>
+  return isAddingAlbum ? (
+    <AlbumSearch
+      _taggedAlbums={taggedAlbums}
+      _setTaggedAlbums={setTaggedAlbums}
+      _setIsAddingAlbum={setIsAddingAlbum}
+    />
+  ) : (
+    normalCompBottom
   );
-
-  //---------------------------logic for search--------------------------
-
-  useEffect(() => {
-    if (isSearching) {
-      async function getData() {
-        try {
-          const response = await fetch(url);
-          const data = await response.json();
-          setResult(data);
-        } catch (error) {
-          console.error("error from fetch: ", error);
-          setError(error.message);
-        }
-      }
-
-      //get data if user is searching
-      if (isSearching) {
-        setSortedData([]);
-        setResult(null);
-        getData(url);
-        setIsSearching(false);
-      }
-    }
-  }, [isSearching]);
-
-  //sort the data for matching artists
-  useEffect(() => {
-    if (result) {
-      let localArray = [];
-      result.data.map((track, index) => {
-        if (
-          localArray.filter((album) => album.id === track.album.id).length ===
-            0 &&
-          localArray.filter((album) => album.title === track.album.title)
-            .length === 0
-        ) {
-          localArray.push({
-            id: track.album.id,
-            title: track.album.title,
-            artist: track.artist.name,
-            cover: track.album.cover_small,
-          });
-        }
-      });
-      setSortedData(localArray);
-    }
-  }, [result]);
-
-  return isAddingAlbum ? addAlbumPostBottom : normalCompBottom;
 }
 
 export default MakePostBottom;
