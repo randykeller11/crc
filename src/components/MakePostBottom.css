@@ -1,9 +1,3 @@
-.bottom {
-  display: flex;
-  flex-flow: column;
-  width: 100%;
-}
-
 .makePost__textInput {
   display: flex;
   width: 100%;
@@ -49,21 +43,4 @@
   width: 100%;
   text-align: center;
   border: 2px solid black;
-}
-
-.bottom__result {
-  display: flex;
-  height: 5vh;
-  width: 99.5%;
-  text-align: center;
-  border: 2px solid black;
-}
-
-.bottom__result:hover {
-  background-color: lightgray;
-}
-
-.terminateSearch {
-  cursor: pointer;
-  color: darkred;
 }

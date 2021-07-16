@@ -113,9 +113,9 @@ function MakePost({ uid }) {
 
   return (
     <div className="makePost">
-      {!isAddingAlbum && postTypeSelect}
-      {!isAddingAlbum && postInput}
-      {!isAddingAlbum && taggedAlbums.length > 0 && (
+      {postTypeSelect}
+      {postInput}
+      {taggedAlbums.length > 0 && (
         <div className="makePost__albumTagDisplay">
           {taggedAlbums.map((album) => {
             return (
