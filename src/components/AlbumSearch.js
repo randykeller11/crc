@@ -8,23 +8,24 @@ function AlbumSearch({ _taggedAlbums, _setTaggedAlbums, _setIsAddingAlbum }) {
   const [result, setResult] = useState(null);
   const [isSearching, setIsSearching] = useState(false);
   const [error, setError] = useState(null);
-  const [artistSearch, setArtistSearch] = useState(false);
+  const [artistURL, setArtistURL] = useState(null);
+  const [artistAlbums, setArtistAlbums] = useState([]);
 
   //urls for different search modes 0 === album search 1 === artist search
 
   //---------------------------logic for search--------------------------
-  async function getData(url) {
-    try {
-      const response = await fetch(url);
-      const data = await response.json();
-      setResult(data);
-    } catch (error) {
-      console.error("error from fetch: ", error);
-      setError(error.message);
-    }
-  }
 
   useEffect(() => {
+    async function getData(url) {
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+        setResult(data);
+      } catch (error) {
+        console.error("error from fetch: ", error);
+        setError(error.message);
+      }
+    }
     if (isSearching) {
       //get data if user is searching
       if (isSearching) {
@@ -60,6 +61,7 @@ function AlbumSearch({ _taggedAlbums, _setTaggedAlbums, _setIsAddingAlbum }) {
         }
       });
       setSortedData(localArray);
+      setResult(null);
     } else if (result && searchType === 1) {
       let localArray = [];
       result.data.map((track, index) => {
@@ -78,8 +80,31 @@ function AlbumSearch({ _taggedAlbums, _setTaggedAlbums, _setIsAddingAlbum }) {
         }
       });
       setSortedData(localArray);
+      setResult(null);
     }
   }, [result]);
+
+  //use effect to gather artist album data when user clicks on an artist
+
+  useEffect(() => {
+    async function getArtistAlbums(url) {
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+        setArtistAlbums(data);
+      } catch (error) {
+        console.error("error from fetch: ", error);
+        setError(error.message);
+      }
+    }
+    if (artistURL) {
+      getArtistAlbums(
+        artistURL
+          .replace("https://www.deezer.com", "http://localhost:4000")
+          .concat("/albums")
+      );
+    }
+  }, [artistURL]);
 
   return (
     <div className="albumSearch">
@@ -171,13 +196,14 @@ function AlbumSearch({ _taggedAlbums, _setTaggedAlbums, _setIsAddingAlbum }) {
             <div
               className="albumSearch__result"
               key={`${index}`}
-              // onClick={() => {
-              //   _setTaggedAlbums([..._taggedAlbums, album]);
-              //   _setIsAddingAlbum(false);
-              //   setSortedData([]);
-              //   setResult(null);
-              //   setQuery("");
-              // }}
+              onClick={() => {
+                setArtistURL(artist.deezerURL);
+                // _setTaggedAlbums([..._taggedAlbums, album]);
+                // _setIsAddingAlbum(false);
+                // setSortedData([]);
+                // setResult(null);
+                // setQuery("");
+              }}
             >
               <img src={artist.picture} />
               <h3>{artist.name}</h3>
