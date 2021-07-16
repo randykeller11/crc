@@ -9,7 +9,7 @@ function AlbumSearch({ _taggedAlbums, _setTaggedAlbums, _setIsAddingAlbum }) {
   const [isSearching, setIsSearching] = useState(false);
   const [error, setError] = useState(null);
   const [artistURL, setArtistURL] = useState(null);
-  const [artistAlbums, setArtistAlbums] = useState([]);
+  const [artistAlbums, setArtistAlbums] = useState(null);
 
   //urls for different search modes 0 === album search 1 === artist search
 
@@ -63,6 +63,7 @@ function AlbumSearch({ _taggedAlbums, _setTaggedAlbums, _setIsAddingAlbum }) {
       setSortedData(localArray);
       setResult(null);
     } else if (result && searchType === 1) {
+      setArtistAlbums(null);
       let localArray = [];
       result.data.map((track, index) => {
         if (
@@ -121,11 +122,13 @@ function AlbumSearch({ _taggedAlbums, _setTaggedAlbums, _setIsAddingAlbum }) {
           onChange={(e) => {
             setQuery(e.target.value);
             if (query.length < 7) {
+              setArtistAlbums(null);
               setIsSearching(false);
               setSortedData([]);
               setResult(null);
             }
             if (query.length >= 7) {
+              setArtistAlbums(null);
               setIsSearching(false);
               setIsSearching(true);
             }
@@ -194,19 +197,44 @@ function AlbumSearch({ _taggedAlbums, _setTaggedAlbums, _setIsAddingAlbum }) {
         sortedData.map((artist, index) => {
           return (
             <div
-              className="albumSearch__result"
+              className={
+                artistAlbums
+                  ? "albumSearch__result__active"
+                  : "albumSearch__result"
+              }
               key={`${index}`}
               onClick={() => {
                 setArtistURL(artist.deezerURL);
-                // _setTaggedAlbums([..._taggedAlbums, album]);
-                // _setIsAddingAlbum(false);
-                // setSortedData([]);
-                // setResult(null);
-                // setQuery("");
               }}
             >
               <img src={artist.picture} />
               <h3>{artist.name}</h3>
+            </div>
+          );
+        })}
+      {artistAlbums &&
+        artistAlbums.data.map((album) => {
+          return (
+            <div
+              className="albumSearch__result"
+              onClick={() => {
+                _setTaggedAlbums([
+                  ..._taggedAlbums,
+                  {
+                    id: album.id,
+                    title: album.title,
+                    artist: sortedData[0].name,
+                    cover: album.cover_small,
+                  },
+                ]);
+                _setIsAddingAlbum(false);
+                setSortedData([]);
+                setResult(null);
+                setQuery("");
+              }}
+            >
+              <img src={album.cover_small} />
+              <h3>{album.title}</h3>
             </div>
           );
         })}

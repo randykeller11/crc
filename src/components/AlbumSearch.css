@@ -38,6 +38,14 @@
 .albumSearch__result:hover {
   background-color: lightgray;
 }
+.albumSearch__result__active {
+  display: flex;
+  height: 5vh;
+  width: 99.5%;
+  text-align: center;
+  border: 2px solid black;
+  background-color: lightgray;
+}
 
 .terminateSearch {
   cursor: pointer;
