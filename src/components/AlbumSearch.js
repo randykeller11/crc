@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./AlbumSearch.css";
 
-function AlbumSearch({ _taggedAlbums, _setTaggedAlbums, _setIsAddingAlbum }) {
+function AlbumSearch({ _albumList, _setAlbumList, _setIsAddingAlbum }) {
   const [sortedData, setSortedData] = useState([]);
   const [query, setQuery] = useState("");
   const [searchType, setSearchType] = useState(0);
@@ -178,7 +178,7 @@ function AlbumSearch({ _taggedAlbums, _setTaggedAlbums, _setIsAddingAlbum }) {
               className="albumSearch__result"
               key={`${index}`}
               onClick={() => {
-                _setTaggedAlbums([..._taggedAlbums, album]);
+                _setAlbumList([..._albumList, album]);
                 _setIsAddingAlbum(false);
                 setSortedData([]);
                 setResult(null);
@@ -218,8 +218,8 @@ function AlbumSearch({ _taggedAlbums, _setTaggedAlbums, _setIsAddingAlbum }) {
             <div
               className="albumSearch__result"
               onClick={() => {
-                _setTaggedAlbums([
-                  ..._taggedAlbums,
+                _setAlbumList([
+                  ..._albumList,
                   {
                     id: album.id,
                     title: album.title,

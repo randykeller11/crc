@@ -53,8 +53,8 @@ function MakePostBottom({
 
   return isAddingAlbum ? (
     <AlbumSearch
-      _taggedAlbums={taggedAlbums}
-      _setTaggedAlbums={setTaggedAlbums}
+      _albumList={taggedAlbums}
+      _setAlbumList={setTaggedAlbums}
       _setIsAddingAlbum={setIsAddingAlbum}
     />
   ) : (
