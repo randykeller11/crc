@@ -14,6 +14,9 @@ function ProgressBar({
   useEffect(() => {
     if (url) {
       console.log(url);
+      let localArray = [..._loadedPhotos];
+      localArray.push(url);
+      _setLoadedPhotos(localArray);
       _setIsAddingPhoto(false);
     }
   }, [url]);
