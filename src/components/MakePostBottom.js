@@ -51,15 +51,17 @@ function MakePostBottom({
       </div>
     );
 
-  return isAddingAlbum ? (
-    <AlbumSearch
-      _albumList={taggedAlbums}
-      _setAlbumList={setTaggedAlbums}
-      _setIsAddingAlbum={setIsAddingAlbum}
-    />
-  ) : (
-    normalCompBottom
-  );
+  if (isAddingAlbum) {
+    return (
+      <AlbumSearch
+        _albumList={taggedAlbums}
+        _setAlbumList={setTaggedAlbums}
+        _setIsAddingAlbum={setIsAddingAlbum}
+      />
+    );
+  } else {
+    return normalCompBottom;
+  }
 }
 
 export default MakePostBottom;
