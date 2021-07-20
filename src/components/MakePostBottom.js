@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./MakePostBottom.css";
 import AlbumSearch from "./AlbumSearch";
+import PhotoUpload from "./PhotoUpload";
 
 function MakePostBottom({
   setTaggedAlbums,
@@ -15,6 +16,7 @@ function MakePostBottom({
   const url = `http://localhost:4000/search/?q=album:"${query}"`;
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
+  const [isAddingPhoto, setIsAddingPhoto] = useState(false);
 
   //-----------------------logic and JSX for adding an album--------------
 
@@ -27,7 +29,16 @@ function MakePostBottom({
         <div className="makePost__bottom__option__inactive">
           <h3>max albums tagged</h3>
         </div>
-        <div className="makePost__bottom__option">
+        <div
+          className={
+            isAddingPhoto
+              ? "makePost__bottom__option__active"
+              : "makePost__bottom__option"
+          }
+          onClick={() => {
+            setIsAddingPhoto(true);
+          }}
+        >
           <h3>add photos</h3>
         </div>
       </div>
@@ -45,21 +56,34 @@ function MakePostBottom({
         >
           <h3>add album</h3>
         </div>
-        <div className="makePost__bottom__option">
+        <div
+          className={
+            isAddingPhoto
+              ? "makePost__bottom__option__active"
+              : "makePost__bottom__option"
+          }
+          onClick={() => {
+            setIsAddingPhoto(true);
+          }}
+        >
           <h3>add photos</h3>
         </div>
       </div>
     );
 
-  return isAddingAlbum ? (
-    <AlbumSearch
-      _taggedAlbums={taggedAlbums}
-      _setTaggedAlbums={setTaggedAlbums}
-      _setIsAddingAlbum={setIsAddingAlbum}
-    />
-  ) : (
-    normalCompBottom
-  );
+  if (isAddingAlbum) {
+    return (
+      <AlbumSearch
+        _albumList={taggedAlbums}
+        _setAlbumList={setTaggedAlbums}
+        _setIsAddingAlbum={setIsAddingAlbum}
+      />
+    );
+  } else if (isAddingPhoto) {
+    return <PhotoUpload />;
+  } else {
+    return normalCompBottom;
+  }
 }
 
 export default MakePostBottom;
