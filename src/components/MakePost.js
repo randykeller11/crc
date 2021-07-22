@@ -10,6 +10,7 @@ const initialState = {
   likes: 0,
   comments: 0,
   albums: [],
+  photos: [],
 };
 const postReducer = (state, action) => {
   switch (action.type) {
@@ -183,9 +184,19 @@ function MakePost({ uid }) {
           </div>
         )}
 
+        {post.photos.length > 0 && (
+          <div className="makePost__photoTagDisplay">
+            {post.photos.map((photo) => {
+              return (
+                <div className="makePost__photoTagDisplay__card">
+                  <img src={photo} alt="" />
+                </div>
+              );
+            })}
+          </div>
+        )}
+
         <MakePostBottom
-          setTaggedAlbums={setTaggedAlbums}
-          taggedAlbums={taggedAlbums}
           isAddingAlbum={isAddingAlbum}
           setIsAddingAlbum={setIsAddingAlbum}
         />

@@ -1,5 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useContext } from "react";
 import useStorage from "../hooks/useStorage";
+import { postContext } from "./MakePost";
 
 function ProgressBar({
   file,
@@ -8,15 +9,19 @@ function ProgressBar({
   _setIsAddingPhoto,
 }) {
   const { url, progress } = useStorage(file);
+  const { post, postDispatch } = useContext(postContext);
 
   const translatedProgress = progress === 100 ? "complete" : `${progress}%`;
 
   useEffect(() => {
     if (url) {
       console.log(url);
-      let localArray = [..._loadedPhotos];
+      let localArray = [...post.photos];
       localArray.push(url);
-      _setLoadedPhotos(localArray);
+      postDispatch({
+        type: "update",
+        payload: { location: "photos", updateValue: localArray },
+      });
       _setIsAddingPhoto(false);
     }
   }, [url]);

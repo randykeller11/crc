@@ -4,12 +4,7 @@ import AlbumSearch from "./AlbumSearch";
 import PhotoUpload from "./PhotoUpload";
 import { postContext } from "./MakePost";
 
-function MakePostBottom({
-  setTaggedAlbums,
-  taggedAlbums,
-  isAddingAlbum,
-  setIsAddingAlbum,
-}) {
+function MakePostBottom({ isAddingAlbum, setIsAddingAlbum }) {
   const [sortedData, setSortedData] = useState([]);
   const [componentState, setComponentState] = useState(0);
   const [query, setQuery] = useState("");
@@ -75,15 +70,9 @@ function MakePostBottom({
     );
 
   if (isAddingAlbum) {
-    return (
-      <AlbumSearch
-        _albumList={taggedAlbums}
-        _setAlbumList={setTaggedAlbums}
-        _setIsAddingAlbum={setIsAddingAlbum}
-      />
-    );
+    return <AlbumSearch _setIsAddingAlbum={setIsAddingAlbum} />;
   } else if (isAddingPhoto) {
-    return <PhotoUpload />;
+    return <PhotoUpload _setIsAddingPhoto={setIsAddingPhoto} />;
   } else {
     return normalCompBottom;
   }

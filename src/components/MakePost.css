@@ -72,3 +72,12 @@
 .makePost__albumTagDisplay__card__info {
   text-align: center;
 }
+
+.makePost__photoTagDisplay {
+  display: flex;
+}
+
+.makePost__photoTagDisplay__card > img {
+  height: 10vh;
+  width: 14vw;
+}
