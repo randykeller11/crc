@@ -2,6 +2,7 @@ import React, { useState, useEffect, useReducer } from "react";
 import "./MakePost.css";
 import db from "../config/firebase";
 import MakePostBottom from "./MakePostBottom";
+import firebase from "firebase";
 
 //use useAuth function to get user uid
 
@@ -19,6 +20,8 @@ const postReducer = (state, action) => {
         ...state,
         [action.payload.location]: action.payload.updateValue,
       };
+    case "reset":
+      return initialState;
     default:
       throw new Error();
   }
@@ -29,11 +32,10 @@ export const postContext = React.createContext();
 function MakePost({ uid }) {
   const [post, postDispatch] = useReducer(postReducer, initialState);
 
-  const [postType, setPostType] = useState(0);
   const [postText, setPostText] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [taggedAlbums, setTaggedAlbums] = useState([]);
   const [isAddingAlbum, setIsAddingAlbum] = useState(false);
+  const [componentState, setComponentState] = useState(0);
 
   //logic to add post when user presses submit
   useEffect(() => {
@@ -53,20 +55,31 @@ function MakePost({ uid }) {
       payload: { location: "creatorID", updateValue: uid },
     });
 
-    if (isSubmitted) {
-      // let newPost = {
-      //   creatorID: uid,
-      //   type: postType,
-      //   text: postText,
-      //   timeStamp: Date(),
-      //   followers: ["XlyJbOBWdlbHil6anHybSDyFJC12"],
-      //   taggedAlbums: taggedAlbums,
-      // };
-      // addPostToFirestore(newPost);
-      setPostText("");
-      setIsSubmitted(false);
+    if (componentState === 1) {
+      postDispatch({
+        type: "update",
+        payload: { location: "text", updateValue: postText },
+      });
+
+      postDispatch({
+        type: "update",
+        payload: {
+          location: "created",
+          updateValue: firebase.firestore.FieldValue.serverTimestamp(),
+        },
+      });
+
+      setComponentState(2);
     }
-  }, [isSubmitted]);
+
+    if (componentState === 2) {
+      addPostToFirestore(post);
+
+      setPostText("");
+      postDispatch({ type: "reset" });
+      setComponentState(0);
+    }
+  }, [componentState]);
 
   const postInput = (
     <div className="makePost__textInput">
@@ -75,7 +88,7 @@ function MakePost({ uid }) {
         value={postText}
         onKeyPress={(e) => {
           if (e.charCode === 13) {
-            setIsSubmitted(true);
+            setComponentState(1);
           }
         }}
         onChange={(e) => {
@@ -88,7 +101,7 @@ function MakePost({ uid }) {
             ? "makePost__textInput__submit__active"
             : "makePost__textInput__submit"
         }
-        onClick={() => setIsSubmitted(true)}
+        onClick={() => setComponentState(1)}
       >
         <h3>Submit</h3>
       </div>
