@@ -145,13 +145,24 @@ function MakePost({ uid }) {
     </div>
   );
 
-  const handleRemove = (_albumID) => {
+  const handleAlbumRemove = (_albumID) => {
     let localArray = [...post.albums];
     postDispatch({
       type: "update",
       payload: {
         location: "albums",
         updateValue: localArray.filter((album) => album.id !== _albumID),
+      },
+    });
+  };
+
+  const handlePhotoRemove = (_photoURL) => {
+    let localArray = [...post.photos];
+    postDispatch({
+      type: "update",
+      payload: {
+        location: "photos",
+        updateValue: localArray.filter((photo) => photo !== _photoURL),
       },
     });
   };
@@ -173,7 +184,7 @@ function MakePost({ uid }) {
                   </div>
                   <h3
                     onClick={() => {
-                      handleRemove(album.id);
+                      handleAlbumRemove(album.id);
                     }}
                   >
                     x
@@ -190,6 +201,13 @@ function MakePost({ uid }) {
               return (
                 <div className="makePost__photoTagDisplay__card">
                   <img src={photo} alt="" />
+                  <h3
+                    onClick={() => {
+                      handlePhotoRemove(photo);
+                    }}
+                  >
+                    x
+                  </h3>
                 </div>
               );
             })}

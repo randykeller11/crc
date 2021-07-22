@@ -54,6 +54,7 @@
   display: flex;
   border-left: 2px solid black;
   border-right: 2px solid black;
+  border-bottom: 2px solid black;
 }
 
 .makePost__albumTagDisplay__card {
@@ -74,10 +75,24 @@
 }
 
 .makePost__photoTagDisplay {
+  border-left: 2px solid black;
+  border-right: 2px solid black;
   display: flex;
+}
+
+.makePost__photoTagDisplay__card {
+  display: flex;
+  width: 14vw;
+  border-right: 2px solid black;
+  padding: 4px;
+  justify-content: space-evenly;
 }
 
 .makePost__photoTagDisplay__card > img {
   height: 10vh;
   width: 14vw;
+}
+.makePost__photoTagDisplay__card > h3 {
+  cursor: pointer;
+  color: darkred;
 }
