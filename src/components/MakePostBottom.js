@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import "./MakePostBottom.css";
 import AlbumSearch from "./AlbumSearch";
 import PhotoUpload from "./PhotoUpload";
+import { postContext } from "./MakePost";
 
 function MakePostBottom({
   setTaggedAlbums,
@@ -18,13 +19,15 @@ function MakePostBottom({
   const [error, setError] = useState(null);
   const [isAddingPhoto, setIsAddingPhoto] = useState(false);
 
+  const { post, postDispatch } = useContext(postContext);
+
   //-----------------------logic and JSX for adding an album--------------
 
   //logic for when user clicks add album
 
   //normal bottom of the post component
   const normalCompBottom =
-    taggedAlbums.length === 5 ? (
+    post.albums.length === 5 ? (
       <div className="makePost__bottom">
         <div className="makePost__bottom__option__inactive">
           <h3>max albums tagged</h3>

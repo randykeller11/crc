@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import "./AlbumSearch.css";
+import { postContext } from "./MakePost";
 
 function AlbumSearch({ _albumList, _setAlbumList, _setIsAddingAlbum }) {
   const [sortedData, setSortedData] = useState([]);
@@ -10,6 +11,8 @@ function AlbumSearch({ _albumList, _setAlbumList, _setIsAddingAlbum }) {
   const [error, setError] = useState(null);
   const [artistURL, setArtistURL] = useState(null);
   const [artistAlbums, setArtistAlbums] = useState(null);
+
+  const { post, postDispatch } = useContext(postContext);
 
   //urls for different search modes 0 === album search 1 === artist search
 
@@ -178,7 +181,13 @@ function AlbumSearch({ _albumList, _setAlbumList, _setIsAddingAlbum }) {
               className="albumSearch__result"
               key={`${index}`}
               onClick={() => {
-                _setAlbumList([..._albumList, album]);
+                let localArray = [...post.albums];
+                localArray.push(album);
+
+                postDispatch({
+                  type: "update",
+                  payload: { location: "albums", updateValue: localArray },
+                });
                 _setIsAddingAlbum(false);
                 setSortedData([]);
                 setResult(null);
@@ -218,15 +227,18 @@ function AlbumSearch({ _albumList, _setAlbumList, _setIsAddingAlbum }) {
             <div
               className="albumSearch__result"
               onClick={() => {
-                _setAlbumList([
-                  ..._albumList,
-                  {
-                    id: album.id,
-                    title: album.title,
-                    artist: sortedData[0].name,
-                    cover: album.cover_small,
-                  },
-                ]);
+                let localArray = [...post.albums];
+                localArray.push({
+                  id: album.id,
+                  title: album.title,
+                  artist: sortedData[0].name,
+                  cover: album.cover_small,
+                });
+
+                postDispatch({
+                  type: "update",
+                  payload: { location: "albums", updateValue: localArray },
+                });
                 _setIsAddingAlbum(false);
                 setSortedData([]);
                 setResult(null);

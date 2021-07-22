@@ -9,6 +9,7 @@ const initialState = {
   type: 0,
   likes: 0,
   comments: 0,
+  albums: [],
 };
 const postReducer = (state, action) => {
   switch (action.type) {
@@ -22,7 +23,7 @@ const postReducer = (state, action) => {
   }
 };
 
-const postContext = React.createContext();
+export const postContext = React.createContext();
 
 function MakePost({ uid }) {
   const [post, postDispatch] = useReducer(postReducer, initialState);
@@ -143,8 +144,15 @@ function MakePost({ uid }) {
     </div>
   );
 
-  const handleRemove = () => {
-    console.log("time to remove an album");
+  const handleRemove = (_albumID) => {
+    let localArray = [...post.albums];
+    postDispatch({
+      type: "update",
+      payload: {
+        location: "albums",
+        updateValue: localArray.filter((album) => album.id !== _albumID),
+      },
+    });
   };
 
   return (
@@ -152,9 +160,9 @@ function MakePost({ uid }) {
       <div className="makePost">
         {postTypeSelect}
         {postInput}
-        {taggedAlbums.length > 0 && (
+        {post.albums.length > 0 && (
           <div className="makePost__albumTagDisplay">
-            {taggedAlbums.map((album) => {
+            {post.albums.map((album) => {
               return (
                 <div className="makePost__albumTagDisplay__card">
                   <img src={album.cover} />
@@ -162,7 +170,13 @@ function MakePost({ uid }) {
                     <h3>{album.title}</h3>
                     <h4>{album.artist}</h4>
                   </div>
-                  <h3 onClick={handleRemove}>x</h3>
+                  <h3
+                    onClick={() => {
+                      handleRemove(album.id);
+                    }}
+                  >
+                    x
+                  </h3>
                 </div>
               );
             })}
