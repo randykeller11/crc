@@ -4,7 +4,6 @@ import ProgressBar from "./ProgressBar";
 function PhotoUpload({ _setIsAddingPhoto }) {
   const [file, setFile] = useState(null);
   const [error, setError] = useState(null);
-  const [loadedPhotos, setLoadedPhotos] = useState([]);
   const [useProgressBar, setUseProgressBar] = useState(false);
   const photoInput = useRef(null);
 
