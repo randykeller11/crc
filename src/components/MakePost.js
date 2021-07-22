@@ -1,9 +1,32 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useReducer } from "react";
 import "./MakePost.css";
 import db from "../config/firebase";
 import MakePostBottom from "./MakePostBottom";
 
+//use useAuth function to get user uid
+
+const initialState = {
+  type: 0,
+  likes: 0,
+  comments: 0,
+};
+const postReducer = (state, action) => {
+  switch (action.type) {
+    case "update":
+      return {
+        ...state,
+        [action.payload.location]: action.payload.updateValue,
+      };
+    default:
+      throw new Error();
+  }
+};
+
+const postContext = React.createContext();
+
 function MakePost({ uid }) {
+  const [post, postDispatch] = useReducer(postReducer, initialState);
+
   const [postType, setPostType] = useState(0);
   const [postText, setPostText] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -25,6 +48,11 @@ function MakePost({ uid }) {
     }
 
     if (isSubmitted) {
+      postDispatch({
+        type: "update",
+        payload: { location: "creatorID", updateValue: uid },
+      });
+
       let newPost = {
         creatorID: uid,
         type: postType,
@@ -112,33 +140,35 @@ function MakePost({ uid }) {
   };
 
   return (
-    <div className="makePost">
-      {postTypeSelect}
-      {postInput}
-      {taggedAlbums.length > 0 && (
-        <div className="makePost__albumTagDisplay">
-          {taggedAlbums.map((album) => {
-            return (
-              <div className="makePost__albumTagDisplay__card">
-                <img src={album.cover} />
-                <div className="makePost__albumTagDisplay__card__info">
-                  <h3>{album.title}</h3>
-                  <h4>{album.artist}</h4>
+    <postContext.Provider value={{ post, postDispatch }}>
+      <div className="makePost">
+        {postTypeSelect}
+        {postInput}
+        {taggedAlbums.length > 0 && (
+          <div className="makePost__albumTagDisplay">
+            {taggedAlbums.map((album) => {
+              return (
+                <div className="makePost__albumTagDisplay__card">
+                  <img src={album.cover} />
+                  <div className="makePost__albumTagDisplay__card__info">
+                    <h3>{album.title}</h3>
+                    <h4>{album.artist}</h4>
+                  </div>
+                  <h3 onClick={handleRemove}>x</h3>
                 </div>
-                <h3 onClick={handleRemove}>x</h3>
-              </div>
-            );
-          })}
-        </div>
-      )}
+              );
+            })}
+          </div>
+        )}
 
-      <MakePostBottom
-        setTaggedAlbums={setTaggedAlbums}
-        taggedAlbums={taggedAlbums}
-        isAddingAlbum={isAddingAlbum}
-        setIsAddingAlbum={setIsAddingAlbum}
-      />
-    </div>
+        <MakePostBottom
+          setTaggedAlbums={setTaggedAlbums}
+          taggedAlbums={taggedAlbums}
+          isAddingAlbum={isAddingAlbum}
+          setIsAddingAlbum={setIsAddingAlbum}
+        />
+      </div>
+    </postContext.Provider>
   );
 }
 
