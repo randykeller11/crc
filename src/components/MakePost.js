@@ -1,9 +1,34 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useReducer } from "react";
 import "./MakePost.css";
 import db from "../config/firebase";
 import MakePostBottom from "./MakePostBottom";
 
+//use useAuth function to get user uid
+
+const initialState = {
+  type: 0,
+  likes: 0,
+  comments: 0,
+  albums: [],
+  photos: [],
+};
+const postReducer = (state, action) => {
+  switch (action.type) {
+    case "update":
+      return {
+        ...state,
+        [action.payload.location]: action.payload.updateValue,
+      };
+    default:
+      throw new Error();
+  }
+};
+
+export const postContext = React.createContext();
+
 function MakePost({ uid }) {
+  const [post, postDispatch] = useReducer(postReducer, initialState);
+
   const [postType, setPostType] = useState(0);
   const [postText, setPostText] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -23,17 +48,21 @@ function MakePost({ uid }) {
           console.error("Error writing Value: ", error);
         });
     }
+    postDispatch({
+      type: "update",
+      payload: { location: "creatorID", updateValue: uid },
+    });
 
     if (isSubmitted) {
-      let newPost = {
-        creatorID: uid,
-        type: postType,
-        text: postText,
-        timeStamp: Date(),
-        followers: ["XlyJbOBWdlbHil6anHybSDyFJC12"],
-        taggedAlbums: taggedAlbums,
-      };
-      addPostToFirestore(newPost);
+      // let newPost = {
+      //   creatorID: uid,
+      //   type: postType,
+      //   text: postText,
+      //   timeStamp: Date(),
+      //   followers: ["XlyJbOBWdlbHil6anHybSDyFJC12"],
+      //   taggedAlbums: taggedAlbums,
+      // };
+      // addPostToFirestore(newPost);
       setPostText("");
       setIsSubmitted(false);
     }
@@ -70,36 +99,45 @@ function MakePost({ uid }) {
     <div className="makePost__typeSelect">
       <div
         className={
-          postType === 0
+          post.type === 0
             ? "makePost__typeSelect__option__active"
             : "makePost__typeSelect__option"
         }
         onClick={() => {
-          setPostType(0);
+          postDispatch({
+            type: "update",
+            payload: { location: "type", updateValue: 0 },
+          });
         }}
       >
         <h3>Today's Hall</h3>
       </div>
       <div
         className={
-          postType === 1
+          post.type === 1
             ? "makePost__typeSelect__option__active"
             : "makePost__typeSelect__option"
         }
         onClick={() => {
-          setPostType(1);
+          postDispatch({
+            type: "update",
+            payload: { location: "type", updateValue: 1 },
+          });
         }}
       >
         <h3>Now Spinning</h3>
       </div>
       <div
         className={
-          postType === 2
+          post.type === 2
             ? "makePost__typeSelect__option__active"
             : "makePost__typeSelect__option"
         }
         onClick={() => {
-          setPostType(2);
+          postDispatch({
+            type: "update",
+            payload: { location: "type", updateValue: 2 },
+          });
         }}
       >
         <h3>Misc</h3>
@@ -107,38 +145,81 @@ function MakePost({ uid }) {
     </div>
   );
 
-  const handleRemove = () => {
-    console.log("time to remove an album");
+  const handleAlbumRemove = (_albumID) => {
+    let localArray = [...post.albums];
+    postDispatch({
+      type: "update",
+      payload: {
+        location: "albums",
+        updateValue: localArray.filter((album) => album.id !== _albumID),
+      },
+    });
+  };
+
+  const handlePhotoRemove = (_photoURL) => {
+    let localArray = [...post.photos];
+    postDispatch({
+      type: "update",
+      payload: {
+        location: "photos",
+        updateValue: localArray.filter((photo) => photo !== _photoURL),
+      },
+    });
   };
 
   return (
-    <div className="makePost">
-      {postTypeSelect}
-      {postInput}
-      {taggedAlbums.length > 0 && (
-        <div className="makePost__albumTagDisplay">
-          {taggedAlbums.map((album) => {
-            return (
-              <div className="makePost__albumTagDisplay__card">
-                <img src={album.cover} />
-                <div className="makePost__albumTagDisplay__card__info">
-                  <h3>{album.title}</h3>
-                  <h4>{album.artist}</h4>
+    <postContext.Provider value={{ post, postDispatch }}>
+      <div className="makePost">
+        {postTypeSelect}
+        {postInput}
+        {post.albums.length > 0 && (
+          <div className="makePost__albumTagDisplay">
+            {post.albums.map((album) => {
+              return (
+                <div className="makePost__albumTagDisplay__card">
+                  <img src={album.cover} />
+                  <div className="makePost__albumTagDisplay__card__info">
+                    <h3>{album.title}</h3>
+                    <h4>{album.artist}</h4>
+                  </div>
+                  <h3
+                    onClick={() => {
+                      handleAlbumRemove(album.id);
+                    }}
+                  >
+                    x
+                  </h3>
                 </div>
-                <h3 onClick={handleRemove}>x</h3>
-              </div>
-            );
-          })}
-        </div>
-      )}
+              );
+            })}
+          </div>
+        )}
 
-      <MakePostBottom
-        setTaggedAlbums={setTaggedAlbums}
-        taggedAlbums={taggedAlbums}
-        isAddingAlbum={isAddingAlbum}
-        setIsAddingAlbum={setIsAddingAlbum}
-      />
-    </div>
+        {post.photos.length > 0 && (
+          <div className="makePost__photoTagDisplay">
+            {post.photos.map((photo) => {
+              return (
+                <div className="makePost__photoTagDisplay__card">
+                  <img src={photo} alt="" />
+                  <h3
+                    onClick={() => {
+                      handlePhotoRemove(photo);
+                    }}
+                  >
+                    x
+                  </h3>
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        <MakePostBottom
+          isAddingAlbum={isAddingAlbum}
+          setIsAddingAlbum={setIsAddingAlbum}
+        />
+      </div>
+    </postContext.Provider>
   );
 }
 
