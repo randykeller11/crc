@@ -46,22 +46,21 @@ function MakePost({ uid }) {
           console.error("Error writing Value: ", error);
         });
     }
+    postDispatch({
+      type: "update",
+      payload: { location: "creatorID", updateValue: uid },
+    });
 
     if (isSubmitted) {
-      postDispatch({
-        type: "update",
-        payload: { location: "creatorID", updateValue: uid },
-      });
-
-      let newPost = {
-        creatorID: uid,
-        type: postType,
-        text: postText,
-        timeStamp: Date(),
-        followers: ["XlyJbOBWdlbHil6anHybSDyFJC12"],
-        taggedAlbums: taggedAlbums,
-      };
-      addPostToFirestore(newPost);
+      // let newPost = {
+      //   creatorID: uid,
+      //   type: postType,
+      //   text: postText,
+      //   timeStamp: Date(),
+      //   followers: ["XlyJbOBWdlbHil6anHybSDyFJC12"],
+      //   taggedAlbums: taggedAlbums,
+      // };
+      // addPostToFirestore(newPost);
       setPostText("");
       setIsSubmitted(false);
     }
@@ -98,36 +97,45 @@ function MakePost({ uid }) {
     <div className="makePost__typeSelect">
       <div
         className={
-          postType === 0
+          post.type === 0
             ? "makePost__typeSelect__option__active"
             : "makePost__typeSelect__option"
         }
         onClick={() => {
-          setPostType(0);
+          postDispatch({
+            type: "update",
+            payload: { location: "type", updateValue: 0 },
+          });
         }}
       >
         <h3>Today's Hall</h3>
       </div>
       <div
         className={
-          postType === 1
+          post.type === 1
             ? "makePost__typeSelect__option__active"
             : "makePost__typeSelect__option"
         }
         onClick={() => {
-          setPostType(1);
+          postDispatch({
+            type: "update",
+            payload: { location: "type", updateValue: 1 },
+          });
         }}
       >
         <h3>Now Spinning</h3>
       </div>
       <div
         className={
-          postType === 2
+          post.type === 2
             ? "makePost__typeSelect__option__active"
             : "makePost__typeSelect__option"
         }
         onClick={() => {
-          setPostType(2);
+          postDispatch({
+            type: "update",
+            payload: { location: "type", updateValue: 2 },
+          });
         }}
       >
         <h3>Misc</h3>
