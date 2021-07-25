@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import "./MakePostBottom.css";
 import AlbumSearch from "./AlbumSearch";
 import PhotoUpload from "./PhotoUpload";
 import { postContext } from "./MakePost";
+import ProgressBar from "./ProgressBar";
 
 function MakePostBottom({ isAddingAlbum, setIsAddingAlbum }) {
   const [query, setQuery] = useState("");
@@ -12,9 +13,72 @@ function MakePostBottom({ isAddingAlbum, setIsAddingAlbum }) {
 
   const { post, postDispatch } = useContext(postContext);
 
+  const [file, setFile] = useState(null);
+  const [error, setError] = useState(null);
+  const [useProgressBar, setUseProgressBar] = useState(false);
+  const photoInput = useRef(null);
+
+  const allowedTypes = ["image/png", "image/jpeg"];
+
+  const changeHandler = (e) => {
+    setIsAddingPhoto(true);
+    let selected = e.target.files[0];
+    if (selected && allowedTypes.includes(selected.type)) {
+      setFile(selected);
+      setError("");
+    } else {
+      setFile(null);
+      setError("Please select an image file (png or jpeg)");
+    }
+  };
+
+  useEffect(() => {
+    if (file) {
+      setUseProgressBar(true);
+    }
+  }, [file]);
+
   //-----------------------logic and JSX for adding an album--------------
 
-  //logic for when user clicks add album
+  const addPhotoJSX = (
+    <div
+      className={
+        isAddingPhoto
+          ? "makePost__bottom__option__active"
+          : "makePost__bottom__option"
+      }
+    >
+      <form>
+        <input
+          type="file"
+          id="add_photo"
+          onChange={changeHandler}
+          ref={photoInput}
+          style={{ display: "none" }}
+        />
+        <div
+          className="input_button"
+          style={{ cursor: "pointer" }}
+          onClick={() => {
+            photoInput.current.click();
+          }}
+        >
+          {!useProgressBar && <h3>add photos</h3>}
+        </div>
+        <div className="output">
+          {/* {error && <div className="error">{error}</div>}
+    {file && <div>{file.name}</div>} */}
+          {useProgressBar && (
+            <ProgressBar
+              file={file}
+              _setIsAddingPhoto={setIsAddingPhoto}
+              _setUseProgressBar={setUseProgressBar}
+            />
+          )}
+        </div>
+      </form>
+    </div>
+  );
 
   //normal bottom of the post component
   const normalCompBottom =
@@ -23,18 +87,7 @@ function MakePostBottom({ isAddingAlbum, setIsAddingAlbum }) {
         <div className="makePost__bottom__option__inactive">
           <h3>max albums tagged</h3>
         </div>
-        <div
-          className={
-            isAddingPhoto
-              ? "makePost__bottom__option__active"
-              : "makePost__bottom__option"
-          }
-          onClick={() => {
-            setIsAddingPhoto(true);
-          }}
-        >
-          <h3>add photos</h3>
-        </div>
+        {addPhotoJSX}
       </div>
     ) : (
       <div className="makePost__bottom">
@@ -50,25 +103,12 @@ function MakePostBottom({ isAddingAlbum, setIsAddingAlbum }) {
         >
           <h3>add album</h3>
         </div>
-        <div
-          className={
-            isAddingPhoto
-              ? "makePost__bottom__option__active"
-              : "makePost__bottom__option"
-          }
-          onClick={() => {
-            setIsAddingPhoto(true);
-          }}
-        >
-          <h3>add photos</h3>
-        </div>
+        {addPhotoJSX}
       </div>
     );
 
   if (isAddingAlbum) {
     return <AlbumSearch _setIsAddingAlbum={setIsAddingAlbum} />;
-  } else if (isAddingPhoto) {
-    return <PhotoUpload _setIsAddingPhoto={setIsAddingPhoto} />;
   } else {
     return normalCompBottom;
   }

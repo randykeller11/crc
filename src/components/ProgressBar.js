@@ -2,12 +2,7 @@ import React, { useEffect, useContext } from "react";
 import useStorage from "../hooks/useStorage";
 import { postContext } from "./MakePost";
 
-function ProgressBar({
-  file,
-  _loadedPhotos,
-  _setLoadedPhotos,
-  _setIsAddingPhoto,
-}) {
+function ProgressBar({ file, _setIsAddingPhoto, _setUseProgressBar }) {
   const { url, progress } = useStorage(file);
   const { post, postDispatch } = useContext(postContext);
 
@@ -23,13 +18,13 @@ function ProgressBar({
         payload: { location: "photos", updateValue: localArray },
       });
       _setIsAddingPhoto(false);
+      _setUseProgressBar(false);
     }
   }, [url]);
 
   return (
     <div className="progress-bar">
-      <h1>progressbar: {translatedProgress} </h1>
-      {url && <img src={url} />}
+      <h3>Loading: {translatedProgress} </h3>
     </div>
   );
 }
