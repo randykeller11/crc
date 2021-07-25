@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext, useRef } from "react";
 import "./MakePostBottom.css";
 import AlbumSearch from "./AlbumSearch";
-import PhotoUpload from "./PhotoUpload";
 import { postContext } from "./MakePost";
 import ProgressBar from "./ProgressBar";
 
