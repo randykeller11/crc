@@ -3,6 +3,7 @@ import "./MakePost.css";
 import db from "../config/firebase";
 import MakePostBottom from "./MakePostBottom";
 import firebase from "firebase";
+import { storage } from "../config/firebase";
 
 const initialState = {
   type: 0,
@@ -34,6 +35,7 @@ function MakePost({ uid }) {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isAddingAlbum, setIsAddingAlbum] = useState(false);
   const [componentState, setComponentState] = useState(0);
+  const [photoToDelete, setPhotoToDelete] = useState(null);
 
   //------------------logic to add post when user presses submit----------------------------------------------
   useEffect(() => {
@@ -175,16 +177,37 @@ function MakePost({ uid }) {
     });
   };
 
+  //photo remove is tricky b/c you have to delete the file from firestore async
+
   const handlePhotoRemove = (_photoURL) => {
-    let localArray = [...post.photos];
-    postDispatch({
-      type: "update",
-      payload: {
-        location: "photos",
-        updateValue: localArray.filter((photo) => photo !== _photoURL),
-      },
-    });
+    setPhotoToDelete(_photoURL);
   };
+
+  useEffect(() => {
+    async function deletePhoto() {
+      const photoRef = storage.refFromURL(photoToDelete);
+      photoRef
+        .delete()
+        .then(() => {
+          setPhotoToDelete(null);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+
+    if (photoToDelete) {
+      deletePhoto();
+      let localArray = [...post.photos];
+      postDispatch({
+        type: "update",
+        payload: {
+          location: "photos",
+          updateValue: localArray.filter((photo) => photo !== photoToDelete),
+        },
+      });
+    }
+  }, [photoToDelete]);
 
   //------------------------primary JSX for component--------------------------
   //---------------------------------------------------------------------------
