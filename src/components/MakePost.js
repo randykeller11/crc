@@ -4,8 +4,6 @@ import db from "../config/firebase";
 import MakePostBottom from "./MakePostBottom";
 import firebase from "firebase";
 
-//use useAuth function to get user uid
-
 const initialState = {
   type: 0,
   likes: 0,
@@ -37,7 +35,7 @@ function MakePost({ uid }) {
   const [isAddingAlbum, setIsAddingAlbum] = useState(false);
   const [componentState, setComponentState] = useState(0);
 
-  //logic to add post when user presses submit
+  //------------------logic to add post when user presses submit----------------------------------------------
   useEffect(() => {
     async function addPostToFirestore(_newPost) {
       db.collection("posts")
@@ -50,11 +48,14 @@ function MakePost({ uid }) {
           console.error("Error writing Value: ", error);
         });
     }
+
+    //turn this into a custom hook to load user data from "users" collection and make viewers value for post
     postDispatch({
       type: "update",
       payload: { location: "creatorID", updateValue: uid },
     });
 
+    //add text and timestamp to post when user clicks submit
     if (componentState === 1) {
       postDispatch({
         type: "update",
@@ -72,6 +73,7 @@ function MakePost({ uid }) {
       setComponentState(2);
     }
 
+    //send completed post to firestore
     if (componentState === 2) {
       addPostToFirestore(post);
 
@@ -81,6 +83,7 @@ function MakePost({ uid }) {
     }
   }, [componentState]);
 
+  //------------------------jsx for text input--------------------------------
   const postInput = (
     <div className="makePost__textInput">
       <textarea
@@ -108,6 +111,7 @@ function MakePost({ uid }) {
     </div>
   );
 
+  //--------------------jsx for post type options on top-----------------
   const postTypeSelect = (
     <div className="makePost__typeSelect">
       <div
@@ -158,6 +162,8 @@ function MakePost({ uid }) {
     </div>
   );
 
+  //-------functions to remove albums and photos when user clicks the red x--------
+
   const handleAlbumRemove = (_albumID) => {
     let localArray = [...post.albums];
     postDispatch({
@@ -179,6 +185,9 @@ function MakePost({ uid }) {
       },
     });
   };
+
+  //------------------------primary JSX for component--------------------------
+  //---------------------------------------------------------------------------
 
   return (
     <postContext.Provider value={{ post, postDispatch }}>

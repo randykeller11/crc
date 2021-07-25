@@ -5,13 +5,9 @@ import PhotoUpload from "./PhotoUpload";
 import { postContext } from "./MakePost";
 
 function MakePostBottom({ isAddingAlbum, setIsAddingAlbum }) {
-  const [sortedData, setSortedData] = useState([]);
-  const [componentState, setComponentState] = useState(0);
   const [query, setQuery] = useState("");
-  const [searchType, setSearchType] = useState(0);
   const url = `http://localhost:4000/search/?q=album:"${query}"`;
-  const [result, setResult] = useState(null);
-  const [error, setError] = useState(null);
+
   const [isAddingPhoto, setIsAddingPhoto] = useState(false);
 
   const { post, postDispatch } = useContext(postContext);
