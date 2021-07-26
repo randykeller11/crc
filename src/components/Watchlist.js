@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useProfileData } from "../hooks/useProfileData";
 import { useFirestoreData } from "../hooks/useFirestoreData";
+import db from "../config/firebase";
 function Watchlist() {
   // const profileData = useProfileData();
   const userData = useFirestoreData("users");
+  const [payload, setPayload] = useState(null);
   // const [userTest, setUserTest] = useState();
   // const [watchlistData, setWatchListData] = useState([]);
   // const [result, setResult] = useState(null);
@@ -11,12 +12,33 @@ function Watchlist() {
   // const [loadStatus, setLoadStatus] = useState(0);
 
   useEffect(() => {
+    async function writeToDb(_collection, _payload, _id) {
+      // Add a new document in collection "users" with ID of userID
+      const res = await db.collection(_collection).doc(`${_id}`).set(_payload);
+    }
+
+    if (payload && userData) {
+      writeToDb("watchlists", payload, userData.id);
+    }
+  }, [payload]);
+
+  useEffect(() => {
     if (userData) {
       console.log(userData);
     }
   }, [userData]);
 
-  return <div>{userData && <h1>{userData.test}</h1>}</div>;
+  return (
+    <div>
+      <button
+        onClick={() => {
+          setPayload({ emoji: "🍩", testPhrase: "donut" });
+        }}
+      >
+        add Data
+      </button>
+    </div>
+  );
 }
 export default Watchlist;
 
