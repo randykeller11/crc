@@ -17,26 +17,22 @@ function Watchlist() {
       const res = await db.collection(_collection).doc(`${_id}`).set(_payload);
     }
 
-    if (payload && userData) {
+    if (payload) {
       writeToDb("watchlists", payload, userData.id);
     }
   }, [payload]);
 
-  useEffect(() => {
-    if (userData) {
-      console.log(userData);
-    }
-  }, [userData]);
-
   return (
     <div>
-      <button
-        onClick={() => {
-          setPayload({ emoji: "🍩", testPhrase: "donut" });
-        }}
-      >
-        add Data
-      </button>
+      {userData && (
+        <button
+          onClick={() => {
+            setPayload({ emoji: "🍩", testPhrase: "donut" });
+          }}
+        >
+          add Data
+        </button>
+      )}
     </div>
   );
 }
