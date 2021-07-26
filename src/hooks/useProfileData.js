@@ -18,7 +18,7 @@ export const useProfileData = () => {
   //check if user has a document
   useEffect(() => {
     async function checkForStorage() {
-      var docRef = db.collection("test").doc(`${loadedUID}`).collection();
+      var docRef = db.collection("users").doc(`${loadedUID}`).collection();
 
       docRef
         .get()
@@ -64,12 +64,14 @@ export const useProfileData = () => {
     }
 
     async function addUserToFirestore() {
-      db.collection("test")
+      db.collection("users")
         .doc(`${loadedUID}`)
-        .collection("watchlist")
         .add({
-          index: 0,
-          id: 183133172,
+          UID: currentUser,
+          followers: [],
+          following: [],
+          watchlist: [],
+          bio: "",
         })
         .then(function () {
           console.log("Value successfully written!");
@@ -85,5 +87,5 @@ export const useProfileData = () => {
     }
   }, [componentState]);
 
-  return [profileData, componentState, loadedUID];
+  return profileData;
 };

@@ -76,6 +76,9 @@ export const AuthenticatedRoutes = () => {
           <Route path="/" exact>
             <Home />
           </Route>
+          <Route path="/home/:uid">
+            <Home />
+          </Route>
           <Route path="/dashboard">
             <Dashboard />
           </Route>
