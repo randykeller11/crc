@@ -15,10 +15,10 @@ export const useProfileData = () => {
     }
   }, [currentUser]);
 
-  //check if user has a document
+  //load users data or error out
   useEffect(() => {
     async function checkForStorage() {
-      var docRef = db.collection("test").doc(`${loadedUID}`).collection();
+      var docRef = db.collection("users").doc(`${loadedUID}`);
 
       docRef
         .get()
@@ -41,49 +41,53 @@ export const useProfileData = () => {
     }
   }, [loadedUID]);
 
-  //add document to firestore if user does not have storage
-  useEffect(() => {
-    async function checkForStorage() {
-      var docRef = db.collection("watchlists").doc(`${loadedUID}`);
-
-      docRef
-        .get()
-        .then((doc) => {
-          if (doc.exists) {
-            setComponentState(2);
-            setProfileData(doc.data());
-            console.log("Document data:", doc.data());
-          } else {
-            setComponentState(1);
-            console.log("No such document!");
-          }
-        })
-        .catch(function (error) {
-          console.log("Error getting document:", error);
-        });
-    }
-
-    async function addUserToFirestore() {
-      db.collection("test")
-        .doc(`${loadedUID}`)
-        .collection("watchlist")
-        .add({
-          index: 0,
-          id: 183133172,
-        })
-        .then(function () {
-          console.log("Value successfully written!");
-          checkForStorage();
-        })
-        .catch(function (error) {
-          console.error("Error writing Value: ", error);
-        });
-    }
-
-    if (componentState === 1) {
-      addUserToFirestore();
-    }
-  }, [componentState]);
-
-  return [profileData, componentState, loadedUID];
+  if (profileData) {
+    return profileData;
+  }
 };
+
+// //add document to firestore if user does not have storage
+// useEffect(() => {
+//   async function checkForStorage() {
+//     var docRef = db.collection("watchlists").doc(`${loadedUID}`);
+
+//     docRef
+//       .get()
+//       .then((doc) => {
+//         if (doc.exists) {
+//           setComponentState(2);
+//           setProfileData(doc.data());
+//           console.log("Document data:", doc.data());
+//         } else {
+//           setComponentState(1);
+//           console.log("No such document!");
+//         }
+//       })
+//       .catch(function (error) {
+//         console.log("Error getting document:", error);
+//       });
+//   }
+
+// async function addUserToFirestore() {
+//   db.collection("users")
+//     .doc(`${loadedUID}`)
+//     .add({
+//       UID: currentUser,
+//       followers: [],
+//       following: [],
+//       watchlist: [],
+//       bio: "",
+//     })
+//     .then(function () {
+//       console.log("Value successfully written!");
+//       checkForStorage();
+//     })
+//     .catch(function (error) {
+//       console.error("Error writing Value: ", error);
+//     });
+// }
+
+// if (componentState === 1) {
+//   addUserToFirestore();
+// }
+// }, [componentState]);
