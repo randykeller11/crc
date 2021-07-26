@@ -3,7 +3,7 @@ import { useProfileData } from "../hooks/useProfileData";
 import { useFirestoreData } from "../hooks/useFirestoreData";
 function Watchlist() {
   // const profileData = useProfileData();
-  const firestoreData = useFirestoreData("users");
+  const userData = useFirestoreData("users");
   // const [userTest, setUserTest] = useState();
   // const [watchlistData, setWatchListData] = useState([]);
   // const [result, setResult] = useState(null);
@@ -11,12 +11,12 @@ function Watchlist() {
   // const [loadStatus, setLoadStatus] = useState(0);
 
   useEffect(() => {
-    if (firestoreData) {
-      console.log(firestoreData);
+    if (userData) {
+      console.log(userData);
     }
-  }, [firestoreData]);
+  }, [userData]);
 
-  return <div>{firestoreData && <h1>{firestoreData.test}</h1>}</div>;
+  return <div>{userData && <h1>{userData.test}</h1>}</div>;
 }
 export default Watchlist;
 
