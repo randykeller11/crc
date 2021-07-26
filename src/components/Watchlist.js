@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { useFirestoreData } from "../hooks/useFirestoreData";
 import db from "../config/firebase";
+import AlbumSearch from "./AlbumSearch";
+
 function Watchlist() {
   // const profileData = useProfileData();
   const userData = useFirestoreData("users");
   const [payload, setPayload] = useState(null);
+  const [watchlist, setWatchlist] = useState([]);
   // const [userTest, setUserTest] = useState();
   // const [watchlistData, setWatchListData] = useState([]);
   // const [result, setResult] = useState(null);
   // const [error, setError] = useState(null);
   // const [loadStatus, setLoadStatus] = useState(0);
 
+  //write payload to db dynamically
   useEffect(() => {
     async function writeToDb(_collection, _payload, _id) {
       // Add a new document in collection "users" with ID of userID
@@ -25,13 +29,17 @@ function Watchlist() {
   return (
     <div>
       {userData && (
-        <button
-          onClick={() => {
-            setPayload({ emoji: "🍩", testPhrase: "donut" });
-          }}
-        >
-          add Data
-        </button>
+        <div className="watchlist">
+          {/* <AlbumSearch /> */}
+
+          <button
+            onClick={() => {
+              setPayload({ emoji: "🍩", testPhrase: "donut" });
+            }}
+          >
+            add Data
+          </button>
+        </div>
       )}
     </div>
   );
