@@ -1,25 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { useProfileData } from "../hooks/useProfileData";
-
+import { useFirestoreData } from "../hooks/useFirestoreData";
 function Watchlist() {
-  const [profileData, componentState, loadedUID] = useProfileData();
-  const [userTest, setUserTest] = useState();
+  // const profileData = useProfileData();
+  const firestoreData = useFirestoreData("users");
+  // const [userTest, setUserTest] = useState();
   // const [watchlistData, setWatchListData] = useState([]);
   // const [result, setResult] = useState(null);
   // const [error, setError] = useState(null);
   // const [loadStatus, setLoadStatus] = useState(0);
 
   useEffect(() => {
-    if (profileData) {
-      setUserTest(profileData.UID);
+    if (firestoreData) {
+      console.log(firestoreData);
     }
-  }, [profileData]);
+  }, [firestoreData]);
 
-  return (
-    <div>
-      <h1>watchlist connected</h1>
-    </div>
-  );
+  return <div>{firestoreData && <h1>{firestoreData.test}</h1>}</div>;
 }
 export default Watchlist;
 
