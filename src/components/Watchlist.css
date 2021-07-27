@@ -1,0 +1,11 @@
+.watchlist {
+  border: 2px solid green;
+}
+.watchlist__console {
+  border: 2px solid red;
+  margin-left: 5vw;
+  margin-right: 5vw;
+  justify-self: center;
+  display: flex;
+  flex-flow: column;
+}

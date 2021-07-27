@@ -3,16 +3,19 @@ import { useFirestoreData } from "../hooks/useFirestoreData";
 import db from "../config/firebase";
 import AlbumSearch from "./AlbumSearch";
 import { getData, writeToDb } from "./helperFunctions";
+import "./Watchlist.css";
+import WatchlistAlbum from "./WatchlistAlbum";
 
 function Watchlist() {
   const userData = useFirestoreData("users");
   const [payload, setPayload] = useState(null);
+  const [dbWatchlist, setDbWatchlist] = useState(null);
   const [localWatchlist, setLocalWatchlist] = useState(null);
   const [isSearching, setIsSearching] = useState(false);
 
   useEffect(() => {
     if (userData) {
-      getData("watchlists", userData.id, setLocalWatchlist);
+      getData("watchlists", userData.id, setDbWatchlist);
     }
   }, [userData]);
 
@@ -20,58 +23,64 @@ function Watchlist() {
   useEffect(() => {
     if (payload) {
       writeToDb("watchlists", payload, userData.id);
+      setPayload(null);
     }
   }, [payload]);
 
-  // useEffect(() => {
-  //   if (watchlistData) {
-  //     console.log(watchlistData.watchlist);
-  //     let localArray = [];
-  //     for (let i = 0; i < 20; i++) {
-  //       if (i < watchlistData.watchlist.length) {
-  //         localArray.push(watchlistData.watchlist[i]);
-  //       }
-  //       localArray.push(0);
-  //     }
-  //     setLocalWatchlist(localArray);
-  //   }
-  // }, [watchlistData]);
+  useEffect(() => {
+    if (dbWatchlist) {
+      console.log(dbWatchlist.watchlist);
+      let localArray = [];
+      for (let i = 0; i < 20; i++) {
+        if (i < dbWatchlist.watchlist.length) {
+          localArray.push(dbWatchlist.watchlist[i]);
+        } else {
+          localArray.push(0);
+        }
+      }
+      setLocalWatchlist(localArray);
+    }
+  }, [dbWatchlist]);
 
-  return (
-    <div className="watchlist">
-      {userData ? (
-        <div className="watchlist">
-          {!isSearching && (
-            <div className="watchlist__console">
-              {localWatchlist &&
-                localWatchlist.watchlist.map((album, i) => {
-                  return <h1 key={i}>{album.title}</h1>;
-                })}
-              <button
-                onClick={() => {
-                  setIsSearching(true);
-                  // setPayload({ emoji: "🍩", testPhrase: "donut" });
-                }}
-              >
-                add Data
-              </button>
-            </div>
-          )}
-
-          {isSearching && (
-            <div className="watchlist__search">
-              <AlbumSearch
-                _albumList={localWatchlist}
-                _setAlbumList={setLocalWatchlist}
-                _setIsAddingAlbum={setIsSearching}
-              />
-            </div>
-          )}
-        </div>
-      ) : (
-        <h1>loading watchlist...</h1>
-      )}
-    </div>
+  const testButton = (
+    <button
+      onClick={() => {
+        setIsSearching(true);
+        setPayload({ emoji: "🍩", testPhrase: "donut" });
+      }}
+    >
+      edit
+    </button>
   );
+
+  //------------------primary watchlist component------------------
+  if (userData) {
+    return (
+      <div className="watchlist">
+        {!isSearching && (
+          <div className="watchlist__console">
+            {localWatchlist &&
+              localWatchlist.map((album, i) => {
+                return (
+                  <WatchlistAlbum _album={album} key={album.index} _index={i} />
+                );
+              })}
+          </div>
+        )}
+
+        {isSearching && (
+          <div className="watchlist__search">
+            <AlbumSearch
+              _albumList={dbWatchlist}
+              _setAlbumList={setDbWatchlist}
+              _setIsAddingAlbum={setIsSearching}
+            />
+          </div>
+        )}
+      </div>
+    );
+  }
+  //-----------loading page until user data is loaded-------------
+  return <h1>loading watchlist...</h1>;
 }
 export default Watchlist;
