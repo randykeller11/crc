@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
 import "./AlbumSearch.css";
-import { postContext } from "./MakePost";
 
 function AlbumSearch({ _albumList, _setAlbumList, _setIsAddingAlbum }) {
   const [sortedData, setSortedData] = useState([]);
@@ -11,8 +10,8 @@ function AlbumSearch({ _albumList, _setAlbumList, _setIsAddingAlbum }) {
   const [error, setError] = useState(null);
   const [artistURL, setArtistURL] = useState(null);
   const [artistAlbums, setArtistAlbums] = useState(null);
-
-  const { post, postDispatch } = useContext(postContext);
+  const [albumURL, setAlbumURL] = useState(null);
+  const [targetAlbumData, setTargetAlbumData] = useState(null);
 
   //urls for different search modes 0 === album search 1 === artist search
 
@@ -110,6 +109,43 @@ function AlbumSearch({ _albumList, _setAlbumList, _setIsAddingAlbum }) {
     }
   }, [artistURL]);
 
+  //use effect to gather artist album data when user clicks on an artist
+
+  useEffect(() => {
+    async function getAlbumData(url) {
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+        setTargetAlbumData(data);
+      } catch (error) {
+        console.error("error from fetch: ", error);
+        setError(error.message);
+      }
+    }
+    if (albumURL) {
+      getAlbumData(`http://localhost:4000/album/${albumURL}`);
+    }
+  }, [albumURL]);
+
+  useEffect(() => {
+    if (targetAlbumData) {
+      let _albumObject = {
+        id: targetAlbumData.id,
+        title: targetAlbumData.title,
+        artist: targetAlbumData.artist.name,
+        cover: targetAlbumData.cover_small,
+        genreID: targetAlbumData.genres.data[0].id,
+        genreName: targetAlbumData.genres.data[0].name,
+        released: targetAlbumData.release_date,
+      };
+      let localArray = [..._albumList];
+      localArray.push(_albumObject);
+
+      _setAlbumList(localArray);
+      _setIsAddingAlbum(false);
+    }
+  }, [targetAlbumData]);
+
   return (
     <div className="albumSearch">
       <div className="albumSearch__console">
@@ -181,14 +217,9 @@ function AlbumSearch({ _albumList, _setAlbumList, _setIsAddingAlbum }) {
               className="albumSearch__result"
               key={`${index}`}
               onClick={() => {
-                let localArray = [...post.albums];
-                localArray.push(album);
+                // console.log(album);
+                setAlbumURL(album.id);
 
-                postDispatch({
-                  type: "update",
-                  payload: { location: "albums", updateValue: localArray },
-                });
-                _setIsAddingAlbum(false);
                 setSortedData([]);
                 setResult(null);
                 setQuery("");
@@ -196,7 +227,7 @@ function AlbumSearch({ _albumList, _setAlbumList, _setIsAddingAlbum }) {
             >
               <img src={album.cover} />
               <h3>
-                {album.title} - {album.artist} - {album.id}
+                {album.title} - {album.artist}
               </h3>
             </div>
           );
@@ -227,19 +258,7 @@ function AlbumSearch({ _albumList, _setAlbumList, _setIsAddingAlbum }) {
             <div
               className="albumSearch__result"
               onClick={() => {
-                let localArray = [...post.albums];
-                localArray.push({
-                  id: album.id,
-                  title: album.title,
-                  artist: sortedData[0].name,
-                  cover: album.cover_small,
-                });
-
-                postDispatch({
-                  type: "update",
-                  payload: { location: "albums", updateValue: localArray },
-                });
-                _setIsAddingAlbum(false);
+                setAlbumURL(album.id);
                 setSortedData([]);
                 setResult(null);
                 setQuery("");
