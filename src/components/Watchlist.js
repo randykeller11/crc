@@ -7,7 +7,7 @@ function Watchlist() {
   const userData = useFirestoreData("users");
   const watchlistData = useFirestoreData("watchlists");
   const [payload, setPayload] = useState(null);
-  const [watchlist, setWatchlist] = useState([]);
+  const [localWatchlist, setLocalWatchlist] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
 
   //write payload to db dynamically
@@ -25,6 +25,14 @@ function Watchlist() {
   useEffect(() => {
     if (watchlistData) {
       console.log(watchlistData.watchlist);
+      let localArray = [];
+      for (let i = 0; i < 20; i++) {
+        if (i < watchlistData.watchlist.length) {
+          localArray.push(watchlistData.watchlist[i]);
+        }
+        localArray.push(0);
+      }
+      setLocalWatchlist(localArray);
     }
   }, [watchlistData]);
 
@@ -32,6 +40,10 @@ function Watchlist() {
     <div>
       {userData && (
         <div className="watchlist">
+          {watchlistData &&
+            watchlistData.watchlist.map((album, i) => {
+              return <h1 key={i}>{album.title}</h1>;
+            })}
           <button
             onClick={() => {
               setIsSearching(true);
@@ -42,8 +54,8 @@ function Watchlist() {
           </button>
           {isSearching && (
             <AlbumSearch
-              _albumList={watchlist}
-              _setAlbumList={setWatchlist}
+              _albumList={localWatchlist}
+              _setAlbumList={setLocalWatchlist}
               _setIsAddingAlbum={setIsSearching}
             />
           )}
