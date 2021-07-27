@@ -16,3 +16,8 @@ export async function getData(_collection, _uid, _stateUpdate) {
       console.log("Error getting document:", error);
     });
 }
+
+export async function writeToDb(_collection, _payload, _id) {
+  // Add a new document in collection "users" with ID of userID
+  const res = await db.collection(_collection).doc(`${_id}`).set(_payload);
+}

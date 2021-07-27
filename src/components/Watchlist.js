@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useFirestoreData } from "../hooks/useFirestoreData";
 import db from "../config/firebase";
 import AlbumSearch from "./AlbumSearch";
-import { getData } from "./helperFunctions";
+import { getData, writeToDb } from "./helperFunctions";
 
 function Watchlist() {
   const userData = useFirestoreData("users");
@@ -18,11 +18,6 @@ function Watchlist() {
 
   //write payload to db dynamically
   useEffect(() => {
-    async function writeToDb(_collection, _payload, _id) {
-      // Add a new document in collection "users" with ID of userID
-      const res = await db.collection(_collection).doc(`${_id}`).set(_payload);
-    }
-
     if (payload) {
       writeToDb("watchlists", payload, userData.id);
     }
@@ -43,29 +38,38 @@ function Watchlist() {
   // }, [watchlistData]);
 
   return (
-    <div>
-      {userData && (
+    <div className="watchlist">
+      {userData ? (
         <div className="watchlist">
-          {localWatchlist &&
-            localWatchlist.watchlist.map((album, i) => {
-              return <h1 key={i}>{album.title}</h1>;
-            })}
-          <button
-            onClick={() => {
-              setIsSearching(true);
-              // setPayload({ emoji: "🍩", testPhrase: "donut" });
-            }}
-          >
-            add Data
-          </button>
+          {!isSearching && (
+            <div className="watchlist__console">
+              {localWatchlist &&
+                localWatchlist.watchlist.map((album, i) => {
+                  return <h1 key={i}>{album.title}</h1>;
+                })}
+              <button
+                onClick={() => {
+                  setIsSearching(true);
+                  // setPayload({ emoji: "🍩", testPhrase: "donut" });
+                }}
+              >
+                add Data
+              </button>
+            </div>
+          )}
+
           {isSearching && (
-            <AlbumSearch
-              _albumList={localWatchlist}
-              _setAlbumList={setLocalWatchlist}
-              _setIsAddingAlbum={setIsSearching}
-            />
+            <div className="watchlist__search">
+              <AlbumSearch
+                _albumList={localWatchlist}
+                _setAlbumList={setLocalWatchlist}
+                _setIsAddingAlbum={setIsSearching}
+              />
+            </div>
           )}
         </div>
+      ) : (
+        <h1>loading watchlist...</h1>
       )}
     </div>
   );
