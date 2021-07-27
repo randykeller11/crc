@@ -8,6 +8,7 @@ function Watchlist() {
   const userData = useFirestoreData("users");
   const [payload, setPayload] = useState(null);
   const [watchlist, setWatchlist] = useState([]);
+  const [isSearching, setIsSearching] = useState(false);
   // const [userTest, setUserTest] = useState();
   // const [watchlistData, setWatchListData] = useState([]);
   // const [result, setResult] = useState(null);
@@ -30,11 +31,18 @@ function Watchlist() {
     <div>
       {userData && (
         <div className="watchlist">
-          {/* <AlbumSearch /> */}
+          {isSearching && (
+            <AlbumSearch
+              _albumList={watchlist}
+              _setAlbumList={setWatchlist}
+              _setIsAddingAlbum={setIsSearching}
+            />
+          )}
 
           <button
             onClick={() => {
-              setPayload({ emoji: "🍩", testPhrase: "donut" });
+              setIsSearching(true);
+              // setPayload({ emoji: "🍩", testPhrase: "donut" });
             }}
           >
             add Data
