@@ -5,6 +5,7 @@ import AlbumSearch from "./AlbumSearch";
 
 function Watchlist() {
   const userData = useFirestoreData("users");
+  const watchlistData = useFirestoreData("watchlists");
   const [payload, setPayload] = useState(null);
   const [watchlist, setWatchlist] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
@@ -21,18 +22,16 @@ function Watchlist() {
     }
   }, [payload]);
 
+  useEffect(() => {
+    if (watchlistData) {
+      console.log(watchlistData.watchlist);
+    }
+  }, [watchlistData]);
+
   return (
     <div>
       {userData && (
         <div className="watchlist">
-          {isSearching && (
-            <AlbumSearch
-              _albumList={watchlist}
-              _setAlbumList={setWatchlist}
-              _setIsAddingAlbum={setIsSearching}
-            />
-          )}
-
           <button
             onClick={() => {
               setIsSearching(true);
@@ -41,6 +40,13 @@ function Watchlist() {
           >
             add Data
           </button>
+          {isSearching && (
+            <AlbumSearch
+              _albumList={watchlist}
+              _setAlbumList={setWatchlist}
+              _setIsAddingAlbum={setIsSearching}
+            />
+          )}
         </div>
       )}
     </div>

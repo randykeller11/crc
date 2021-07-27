@@ -16,7 +16,6 @@ export const useFirestoreData = (_collection) => {
         .then((doc) => {
           if (doc.exists) {
             setFirestoreData(doc.data());
-            console.log("Document data:", doc.data());
           } else {
             console.log("No such document!");
           }
