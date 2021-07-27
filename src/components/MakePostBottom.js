@@ -106,8 +106,21 @@ function MakePostBottom({ isAddingAlbum, setIsAddingAlbum }) {
       </div>
     );
 
+  const postDispatchAlbumSearch = (_localArray) => {
+    postDispatch({
+      type: "update",
+      payload: { location: "albums", updateValue: _localArray },
+    });
+  };
+
   if (isAddingAlbum) {
-    return <AlbumSearch _setIsAddingAlbum={setIsAddingAlbum} />;
+    return (
+      <AlbumSearch
+        _setIsAddingAlbum={setIsAddingAlbum}
+        _albumList={post.albums}
+        _setAlbumList={postDispatchAlbumSearch}
+      />
+    );
   } else {
     return normalCompBottom;
   }

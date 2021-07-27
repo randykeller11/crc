@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
 import "./AlbumSearch.css";
-import { postContext } from "./MakePost";
 
 function AlbumSearch({ _albumList, _setAlbumList, _setIsAddingAlbum }) {
   const [sortedData, setSortedData] = useState([]);
@@ -11,8 +10,6 @@ function AlbumSearch({ _albumList, _setAlbumList, _setIsAddingAlbum }) {
   const [error, setError] = useState(null);
   const [artistURL, setArtistURL] = useState(null);
   const [artistAlbums, setArtistAlbums] = useState(null);
-
-  const { post, postDispatch } = useContext(postContext);
 
   //urls for different search modes 0 === album search 1 === artist search
 
@@ -181,13 +178,10 @@ function AlbumSearch({ _albumList, _setAlbumList, _setIsAddingAlbum }) {
               className="albumSearch__result"
               key={`${index}`}
               onClick={() => {
-                let localArray = [...post.albums];
+                let localArray = [..._albumList];
                 localArray.push(album);
 
-                postDispatch({
-                  type: "update",
-                  payload: { location: "albums", updateValue: localArray },
-                });
+                _setAlbumList(localArray);
                 _setIsAddingAlbum(false);
                 setSortedData([]);
                 setResult(null);
@@ -227,7 +221,7 @@ function AlbumSearch({ _albumList, _setAlbumList, _setIsAddingAlbum }) {
             <div
               className="albumSearch__result"
               onClick={() => {
-                let localArray = [...post.albums];
+                let localArray = [..._albumList];
                 localArray.push({
                   id: album.id,
                   title: album.title,
@@ -235,10 +229,7 @@ function AlbumSearch({ _albumList, _setAlbumList, _setIsAddingAlbum }) {
                   cover: album.cover_small,
                 });
 
-                postDispatch({
-                  type: "update",
-                  payload: { location: "albums", updateValue: localArray },
-                });
+                _setAlbumList(localArray);
                 _setIsAddingAlbum(false);
                 setSortedData([]);
                 setResult(null);
