@@ -34,11 +34,27 @@ export const whatRow = (_index) => {
   }
 };
 
-export const buildWatchlistDisplay = (_array) => {
+export const initialPlaceholders = (_array) => {
   let localArray = [];
   for (let i = 0; i < 20; i++) {
     if (i < _array.length) {
       localArray.push({ value: _array[i], index: i, row: whatRow(i) });
+    } else {
+      localArray.push({ value: 0, index: i, row: whatRow(i) });
+    }
+  }
+  return localArray;
+};
+
+export const addPlaceholders = (_array) => {
+  let localArray = [];
+
+  for (let i = 0; i < 20; i++) {
+    if (i < _array.length) {
+      let updatedAlbum = _array[i].hasOwnProperty("row");
+      updatedAlbum
+        ? localArray.push(_array[i])
+        : localArray.push({ value: _array[i], index: i, row: whatRow(i) });
     } else {
       localArray.push({ value: 0, index: i, row: whatRow(i) });
     }

@@ -2,7 +2,12 @@ import React, { useState, useEffect, useRef } from "react";
 import { useFirestoreData } from "../hooks/useFirestoreData";
 import db from "../config/firebase";
 import AlbumSearch from "./AlbumSearch";
-import { getData, writeToDb, buildWatchlistDisplay } from "./helperFunctions";
+import {
+  getData,
+  writeToDb,
+  initialPlaceholders,
+  addPlaceholders,
+} from "./helperFunctions";
 import "./Watchlist.css";
 import WatchlistRow from "./WatchlistRow";
 
@@ -11,12 +16,10 @@ function Watchlist() {
   const [payload, setPayload] = useState(null);
   const [dbWatchlist, setDbWatchlist] = useState(null);
   const [localWatchlist, setLocalWatchlist] = useState(null);
-  const [displayMap, setDisplayMap] = useState(null);
   const [isSearching, setIsSearching] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [searchTarget, setSearchTarget] = useState(null);
-  const [renderSearch, setRenderSearch] = useState(false);
-  const localStateAlbums = useRef();
+  const [localStateAlbums, setLocalStateAlbums] = useState(null);
 
   useEffect(() => {
     if (userData) {
@@ -24,25 +27,42 @@ function Watchlist() {
     }
   }, [userData]);
 
-  const managePlaceHolders = (_usePlaceholders) => {
+  const managePlaceHolders = (_usePlaceholders, _array) => {
     if (_usePlaceholders) {
-      let placeHolderArray = buildWatchlistDisplay(dbWatchlist.watchlist);
+      let placeHolderArray = addPlaceholders(_array);
       setLocalWatchlist(placeHolderArray);
     } else {
       let noPlaceHolderArray = localWatchlist.filter(
         (album) => album.value != 0
       );
-      localStateAlbums.current = setLocalWatchlist(noPlaceHolderArray);
+      setLocalStateAlbums(noPlaceHolderArray.length);
+      setLocalWatchlist(noPlaceHolderArray);
     }
   };
-
+  //--------------------build board from initial data-------------------------------
   useEffect(() => {
     if (dbWatchlist) {
-      localStateAlbums.current = dbWatchlist.watchlist.length;
-      managePlaceHolders(true);
+      setLocalStateAlbums(dbWatchlist.watchlist.length);
+      let placeHolderArray = initialPlaceholders(dbWatchlist.watchlist);
+      setLocalWatchlist(placeHolderArray);
       setDbWatchlist(null);
     }
   }, [dbWatchlist]);
+
+  //---------------------useEffect for when user clicks album------------------------
+  useEffect(() => {
+    if (searchTarget) {
+      managePlaceHolders(false);
+      setIsSearching(true);
+    }
+  }, [searchTarget]);
+
+  useEffect(() => {
+    if (!isSearching && searchTarget) {
+      managePlaceHolders(true, localWatchlist);
+      console.log("time to fix the bug");
+    }
+  }, [isSearching]);
 
   //----------------------functions to build elements---------------------------
 
@@ -59,18 +79,17 @@ function Watchlist() {
     });
   };
 
-  //------------------primary watchlist component------------------
-
   const handleClick = () => {
     // setIsSearching(true);
     // setEditMode(1);
   };
+
+  //------------------primary watchlist component------------------
+
   if (userData) {
     return (
       <div>
-        <button onClick={handleClick}>
-          {editMode === 1 ? "confirm" : "edit"}
-        </button>
+        <button onClick={handleClick}>{editMode ? "confirm" : "edit"}</button>
         {!isSearching && (
           <div className="watchlist">
             <div className="watchlist__header">
@@ -79,11 +98,11 @@ function Watchlist() {
             {localWatchlist && localWatchlist.length === 20 && makeRows()}
           </div>
         )}
-        {renderSearch && localWatchlist.length < 20 && (
+        {isSearching && localWatchlist.length === localStateAlbums && (
           <div className="watchlist__search">
             <AlbumSearch
-              _albumList={dbWatchlist}
-              _setAlbumList={setDbWatchlist}
+              _albumList={localWatchlist}
+              _setAlbumList={setLocalWatchlist}
               _setIsAddingAlbum={setIsSearching}
             />
           </div>
