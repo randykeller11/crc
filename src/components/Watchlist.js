@@ -2,102 +2,99 @@ import React, { useState, useEffect } from "react";
 import { useFirestoreData } from "../hooks/useFirestoreData";
 import db from "../config/firebase";
 import AlbumSearch from "./AlbumSearch";
+import { getData, writeToDb, buildWatchlistDisplay } from "./helperFunctions";
+import "./Watchlist.css";
+import WatchlistRow from "./WatchlistRow";
 
 function Watchlist() {
-  // const profileData = useProfileData();
   const userData = useFirestoreData("users");
   const [payload, setPayload] = useState(null);
-  const [watchlist, setWatchlist] = useState([]);
+  const [dbWatchlist, setDbWatchlist] = useState(null);
+  const [localWatchlist, setLocalWatchlist] = useState(null);
+  const [displayMap, setDisplayMap] = useState(null);
   const [isSearching, setIsSearching] = useState(false);
-  // const [userTest, setUserTest] = useState();
-  // const [watchlistData, setWatchListData] = useState([]);
-  // const [result, setResult] = useState(null);
-  // const [error, setError] = useState(null);
-  // const [loadStatus, setLoadStatus] = useState(0);
+  const [editMode, setEditMode] = useState(0);
 
-  //write payload to db dynamically
   useEffect(() => {
-    async function writeToDb(_collection, _payload, _id) {
-      // Add a new document in collection "users" with ID of userID
-      const res = await db.collection(_collection).doc(`${_id}`).set(_payload);
+    if (userData) {
+      getData("watchlists", userData.id, setDbWatchlist);
     }
+  }, [userData]);
 
-    if (payload) {
-      writeToDb("watchlists", payload, userData.id);
+  useEffect(() => {
+    if (dbWatchlist) {
+      let testDisplay = buildWatchlistDisplay(dbWatchlist.watchlist);
+      setLocalWatchlist(testDisplay);
     }
-  }, [payload]);
+  }, [dbWatchlist]);
 
-  return (
-    <div>
-      {userData && (
-        <div className="watchlist">
-          {isSearching && (
+  useEffect(() => {
+    if (localWatchlist) {
+      let localArray = [];
+      for (let i = 0; i < 4; i++) {
+        let targetAlbums = localWatchlist.filter((album) => album.row === i);
+        localArray.push({ id: i, albums: targetAlbums });
+      }
+      setDisplayMap(localArray);
+    }
+  }, [localWatchlist]);
+
+  //------------------primary watchlist component------------------
+
+  const handleClick = () => {
+    // setIsSearching(true);
+    // setEditMode(1);
+  };
+  if (userData) {
+    return (
+      <div>
+        <button onClick={handleClick}>
+          {editMode === 1 ? "confirm" : "edit"}
+        </button>
+        {!isSearching && (
+          <div className="watchlist">
+            <div className="watchlist__header">
+              <h1>My Watchlist</h1>
+            </div>
+            {displayMap &&
+              displayMap.map((row) => {
+                return <WatchlistRow albums={row.albums} />;
+              })}
+          </div>
+        )}
+
+        {isSearching && (
+          <div className="watchlist__search">
             <AlbumSearch
-              _albumList={watchlist}
-              _setAlbumList={setWatchlist}
+              _albumList={dbWatchlist}
+              _setAlbumList={setDbWatchlist}
               _setIsAddingAlbum={setIsSearching}
             />
-          )}
-
-          <button
-            onClick={() => {
-              setIsSearching(true);
-              // setPayload({ emoji: "🍩", testPhrase: "donut" });
-            }}
-          >
-            add Data
-          </button>
-        </div>
-      )}
-    </div>
-  );
+          </div>
+        )}
+      </div>
+    );
+  }
+  //-----------loading page until user data is loaded-------------
+  return <h1>loading watchlist...</h1>;
 }
 export default Watchlist;
 
-//-----------------------function to retrieve albums and render----------------------
+//write payload to db dynamically
 // useEffect(() => {
-//   const retrievalFunction = async (album) => {
-//     try {
-//       const response = await fetch(`http://localhost:4000/album/${album.id}`);
-//       const data = await response.json();
-//       const albumObject = { id: album.id, albumData: data };
-//       setResult(albumObject);
-//     } catch (error) {
-//       console.error("error from fetch: ", error);
-//       setError(error.message);
-//     }
-//   };
-//   const getData = () => {
-//     setLoadStatus(1);
-//     watchlistAlbums.forEach((album) => {
-//       console.log(album);
-//       retrievalFunction(album);
-//     });
-//   };
-//   if (watchlistAlbums) {
-//     getData();
+//   if (payload) {
+//     writeToDb("watchlists", payload, userData.id);
+//     setPayload(null);
 //   }
-// }, [watchlistAlbums]);
+// }, [payload]);
 
-// useEffect(() => {
-//   console.log(result, "🏆🍩");
-//   if (result) {
-//     const localArray = [...watchlistData];
-//     localArray.push(result);
-//     setWatchListData(localArray);
-//   }
-// }, [result]);
-
-//   return (
-//     <div className="watchlist">
-//       <h1>welcome to the watchlist</h1>
-//       {watchlistData.length === watchlistAlbums.length &&
-//         watchlistData.map((_album) => (
-//           <div>
-//             <h1>{_album.albumData.title}</h1>
-//             <img src={`${_album.albumData.cover_big}`} />
-//           </div>
-//         ))}
-//     </div>
-//   );
-// }
+// const testButton = (
+//   <button
+//     onClick={() => {
+//       setIsSearching(true);
+//       setPayload({ emoji: "🍩", testPhrase: "donut" });
+//     }}
+//   >
+//     edit
+//   </button>
+// );
