@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useFirestoreData } from "../hooks/useFirestoreData";
 import db from "../config/firebase";
 import AlbumSearch from "./AlbumSearch";
@@ -16,6 +16,7 @@ function Watchlist() {
   const [editMode, setEditMode] = useState(false);
   const [searchTarget, setSearchTarget] = useState(null);
   const [renderSearch, setRenderSearch] = useState(false);
+  const localStateAlbums = useRef();
 
   useEffect(() => {
     if (userData) {
@@ -23,24 +24,40 @@ function Watchlist() {
     }
   }, [userData]);
 
+  const managePlaceHolders = (_usePlaceholders) => {
+    if (_usePlaceholders) {
+      let placeHolderArray = buildWatchlistDisplay(dbWatchlist.watchlist);
+      setLocalWatchlist(placeHolderArray);
+    } else {
+      let noPlaceHolderArray = localWatchlist.filter(
+        (album) => album.value != 0
+      );
+      localStateAlbums.current = setLocalWatchlist(noPlaceHolderArray);
+    }
+  };
+
   useEffect(() => {
     if (dbWatchlist) {
-      let testDisplay = buildWatchlistDisplay(dbWatchlist.watchlist);
-      setLocalWatchlist(testDisplay);
+      localStateAlbums.current = dbWatchlist.watchlist.length;
+      managePlaceHolders(true);
       setDbWatchlist(null);
     }
   }, [dbWatchlist]);
 
-  useEffect(() => {
-    if (localWatchlist && localWatchlist.length === 20) {
-      let localArray = [];
-      for (let i = 0; i < 4; i++) {
-        let targetAlbums = localWatchlist.filter((album) => album.row === i);
-        localArray.push({ id: i, albums: targetAlbums });
-      }
-      setDisplayMap(localArray);
+  //----------------------functions to build elements---------------------------
+
+  const makeRows = () => {
+    let localArray = [];
+    for (let i = 0; i < 4; i++) {
+      let targetAlbums = localWatchlist.filter((album) => album.row === i);
+      localArray.push({ id: i, albums: targetAlbums });
     }
-  }, [localWatchlist]);
+    return localArray.map((row) => {
+      return (
+        <WatchlistRow albums={row.albums} setSearchTarget={setSearchTarget} />
+      );
+    });
+  };
 
   //------------------primary watchlist component------------------
 
@@ -59,14 +76,10 @@ function Watchlist() {
             <div className="watchlist__header">
               <h1>My Watchlist</h1>
             </div>
-            {displayMap &&
-              displayMap.map((row) => {
-                return <WatchlistRow albums={row.albums} />;
-              })}
+            {localWatchlist && localWatchlist.length === 20 && makeRows()}
           </div>
         )}
-        .
-        {renderSearch && (
+        {renderSearch && localWatchlist.length < 20 && (
           <div className="watchlist__search">
             <AlbumSearch
               _albumList={dbWatchlist}
