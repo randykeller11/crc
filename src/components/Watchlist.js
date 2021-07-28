@@ -13,7 +13,9 @@ function Watchlist() {
   const [localWatchlist, setLocalWatchlist] = useState(null);
   const [displayMap, setDisplayMap] = useState(null);
   const [isSearching, setIsSearching] = useState(false);
-  const [editMode, setEditMode] = useState(0);
+  const [editMode, setEditMode] = useState(false);
+  const [searchTarget, setSearchTarget] = useState(null);
+  const [renderSearch, setRenderSearch] = useState(false);
 
   useEffect(() => {
     if (userData) {
@@ -25,6 +27,7 @@ function Watchlist() {
     if (dbWatchlist) {
       let testDisplay = buildWatchlistDisplay(dbWatchlist.watchlist);
       setLocalWatchlist(testDisplay);
+      setDbWatchlist(null);
     }
   }, [dbWatchlist]);
 
@@ -38,8 +41,6 @@ function Watchlist() {
       setDisplayMap(localArray);
     }
   }, [localWatchlist]);
-
-  //-----------------function to trick albumSearch component-----------
 
   //------------------primary watchlist component------------------
 
@@ -64,8 +65,8 @@ function Watchlist() {
               })}
           </div>
         )}
-
-        {isSearching && (
+        .
+        {renderSearch && (
           <div className="watchlist__search">
             <AlbumSearch
               _albumList={dbWatchlist}
