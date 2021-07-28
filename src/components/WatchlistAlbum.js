@@ -12,6 +12,7 @@ function WatchlistAlbum({ _album, _index }) {
   return (
     <div className="album">
       <h1>{_album.title}</h1>
+      <img src={`${_album.cover}`} alt="" />
     </div>
   );
 }
