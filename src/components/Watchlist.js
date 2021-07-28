@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useFirestoreData } from "../hooks/useFirestoreData";
 import db from "../config/firebase";
 import AlbumSearch from "./AlbumSearch";
-import { getData, writeToDb } from "./helperFunctions";
+import { getData, writeToDb, whatRow } from "./helperFunctions";
 import "./Watchlist.css";
 import WatchlistAlbum from "./WatchlistAlbum";
 
@@ -27,11 +27,32 @@ function Watchlist() {
     }
   }, [userData]);
 
+  const rowAlbumsUpdate = (_index, _watchlistDisplay) => {
+    let targetRow = whatRow(_index);
+    let currentAlbums = _watchlistDisplay.find(
+      (row) => row.rowNum === targetRow
+    );
+
+    let localArray = [...watchlistDisplay];
+    let updateArray = localArray.filter((row) => row.rowNum != targetRow);
+    // _setWatchlistDisplay(newArray.push());
+    // console.log("the target row is:", targetRow);
+    return { _updateArray: updateArray, albums: currentAlbums.albums };
+  };
+
   const buildWatchlistDisplay = (_array) => {
     let localArray = [];
-    console.log(_array.length);
     for (let i = 0; i < 20; i++) {
+      const rowTranslation = rowAlbumsUpdate(i, watchlistDisplay);
       if (i < _array.length) {
+        let _testArray = [
+          ...rowTranslation._updateArray,
+          {
+            rowNum: whatRow(i),
+            albums: [...rowTranslation.albums, dbWatchlist.watchlist[i]],
+          },
+        ];
+        console.log(_testArray);
         localArray.push(_array[i]);
       } else {
         localArray.push(0);
@@ -42,9 +63,8 @@ function Watchlist() {
 
   useEffect(() => {
     if (dbWatchlist) {
-      console.log(dbWatchlist.watchlist);
       let testDisplay = buildWatchlistDisplay(dbWatchlist.watchlist);
-      setLocalWatchlist(testDisplay);
+      // setLocalWatchlist(testDisplay);
     }
   }, [dbWatchlist]);
 
@@ -62,12 +82,13 @@ function Watchlist() {
         </button>
         {!isSearching && (
           <div className="watchlist__console">
-            {localWatchlist &&
+            <h1>watchlist console</h1>
+            {/* {localWatchlist &&
               localWatchlist.map((album, i) => {
                 return (
                   <WatchlistAlbum _album={album} key={album.index} _index={i} />
                 );
-              })}
+              })} */}
           </div>
         )}
 
