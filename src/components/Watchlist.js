@@ -29,7 +29,7 @@ function Watchlist() {
   }, [dbWatchlist]);
 
   useEffect(() => {
-    if (localWatchlist) {
+    if (localWatchlist && localWatchlist.length === 20) {
       let localArray = [];
       for (let i = 0; i < 4; i++) {
         let targetAlbums = localWatchlist.filter((album) => album.row === i);
@@ -38,6 +38,8 @@ function Watchlist() {
       setDisplayMap(localArray);
     }
   }, [localWatchlist]);
+
+  //-----------------function to trick albumSearch component-----------
 
   //------------------primary watchlist component------------------
 

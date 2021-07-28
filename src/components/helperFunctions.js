@@ -38,9 +38,9 @@ export const buildWatchlistDisplay = (_array) => {
   let localArray = [];
   for (let i = 0; i < 20; i++) {
     if (i < _array.length) {
-      localArray.push({ album: _array[i], index: i, row: whatRow(i) });
+      localArray.push({ value: _array[i], index: i, row: whatRow(i) });
     } else {
-      localArray.push({ album: 0, index: i, row: whatRow(i) });
+      localArray.push({ value: 0, index: i, row: whatRow(i) });
     }
   }
   return localArray;

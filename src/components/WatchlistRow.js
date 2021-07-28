@@ -8,7 +8,7 @@ function WatchlistRow({ albums }) {
       {albums.map((album) => {
         return (
           <WatchlistAlbum
-            _album={album.album}
+            _album={album.value}
             key={album.index}
             _index={album.index}
           />
