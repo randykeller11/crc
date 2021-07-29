@@ -1,13 +1,16 @@
-import React from "react";
+import React, { useContext } from "react";
 import "./WatchlistAlbum.css";
+import { watchlistContext } from "./Watchlist";
 
-function WatchlistAlbum({ _album, _index, setSearchTarget }) {
+function WatchlistAlbum({ _album, _index, _isTopFive }) {
+  const { setIsSearching, setSearchTarget } = useContext(watchlistContext);
   if (_album === 0) {
     return (
       <div
         className="placeholderAlbum"
         onClick={() => {
-          setSearchTarget(_index);
+          setSearchTarget({ isTopFive: _isTopFive, index: _index });
+          setIsSearching(true);
         }}
       >
         <img

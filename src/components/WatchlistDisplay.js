@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 import db from "../config/firebase";
-import AlbumSearch from "./AlbumSearch";
 import {
   getData,
   writeToDb,
@@ -69,7 +68,11 @@ function WatchlistDisplay({ _initValue, _isTopFive }) {
     }
     return localArray.map((row) => {
       return (
-        <WatchlistRow albums={row.albums} setSearchTarget={setSearchTarget} />
+        <WatchlistRow
+          albums={row.albums}
+          setSearchTarget={setSearchTarget}
+          _isTopFive={false}
+        />
       );
     });
   };
@@ -92,17 +95,9 @@ function WatchlistDisplay({ _initValue, _isTopFive }) {
             <WatchlistRow
               albums={localWatchlist}
               setSearchTarget={setSearchTarget}
+              _isTopFive={_isTopFive}
             />
           )}
-        </div>
-      )}
-      {isSearching && localWatchlist.length === localStateAlbums && (
-        <div className="watchlist__search">
-          <AlbumSearch
-            _albumList={localWatchlist}
-            _setAlbumList={setLocalWatchlist}
-            _setIsAddingAlbum={setIsSearching}
-          />
         </div>
       )}
     </div>

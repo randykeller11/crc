@@ -20,6 +20,7 @@ function Watchlist() {
 
   const [editMode, setEditMode] = useState(true);
   const [isSearching, setIsSearching] = useState(false);
+  const [searchTarget, setSearchTarget] = useState(null);
 
   useEffect(() => {
     if (userData) {
@@ -29,23 +30,36 @@ function Watchlist() {
 
   return (
     <watchlistContext.Provider
-      value={{ editMode, watchlist, watchlistDispatch }}
+      value={{
+        editMode,
+        watchlist,
+        watchlistDispatch,
+        setIsSearching,
+        setSearchTarget,
+      }}
     >
-      <div className="watchlist">
-        <div className="watchlist__header">
-          <h1>My Collection</h1>
-          <button>edit</button>
+      {isSearching ? (
+        <h1>time to search</h1>
+      ) : (
+        <div className="watchlist">
+          <div className="watchlist__header">
+            <h1>My Collection</h1>
+            <button>edit</button>
+          </div>
+          {watchlist && watchlist.topFive && (
+            <WatchlistDisplay
+              _initValue={watchlist.topFive}
+              _isTopFive={true}
+            />
+          )}
+          {watchlist && watchlist.secondTier && (
+            <WatchlistDisplay
+              _initValue={watchlist.secondTier}
+              _isTopFive={false}
+            />
+          )}
         </div>
-        {watchlist && watchlist.topFive && (
-          <WatchlistDisplay _initValue={watchlist.topFive} _isTopFive={true} />
-        )}
-        {watchlist && watchlist.secondTier && (
-          <WatchlistDisplay
-            _initValue={watchlist.secondTier}
-            _isTopFive={false}
-          />
-        )}
-      </div>
+      )}
     </watchlistContext.Provider>
   );
 }
