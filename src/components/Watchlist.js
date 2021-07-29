@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useContext, useReducer } from "react";
+import React, { useState, useEffect, useReducer } from "react";
 import WatchlistDisplay from "./WatchlistDisplay";
 import { getData } from "./helperFunctions";
 import AlbumSearch from "./AlbumSearch";
 import { useFirestoreData } from "../hooks/useFirestoreData";
 import { initialState, watchlistReducer } from "../reducers/watchlistReducer";
-
+import "./Watchlist.css";
 export const watchlistContext = React.createContext();
 
 function Watchlist() {
@@ -18,6 +18,9 @@ function Watchlist() {
     watchlistDispatch({ type: "init", payload: _initValue });
   };
 
+  const [editMode, setEditMode] = useState(true);
+  const [isSearching, setIsSearching] = useState(false);
+
   useEffect(() => {
     if (userData) {
       getData("watchlists", userData.id, handleInit);
@@ -25,8 +28,14 @@ function Watchlist() {
   }, [userData]);
 
   return (
-    <watchlistContext.Provider>
+    <watchlistContext.Provider
+      value={{ editMode, watchlist, watchlistDispatch }}
+    >
       <div className="watchlist">
+        <div className="watchlist__header">
+          <h1>My Collection</h1>
+          <button>edit</button>
+        </div>
         {watchlist && watchlist.topFive && (
           <WatchlistDisplay _initValue={watchlist.topFive} _isTopFive={true} />
         )}
