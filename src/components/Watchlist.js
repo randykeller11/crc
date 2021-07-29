@@ -3,27 +3,7 @@ import WatchlistDisplay from "./WatchlistDisplay";
 import { getData } from "./helperFunctions";
 import AlbumSearch from "./AlbumSearch";
 import { useFirestoreData } from "../hooks/useFirestoreData";
-
-const initialState = {
-  topFive: null,
-  secondTier: null,
-};
-
-const watchlistReducer = (state, action) => {
-  switch (action.type) {
-    case "init":
-      return action.payload;
-    case "update":
-      return {
-        ...state,
-        [action.payload.tier]: action.payload.updateValue,
-      };
-    case "reset":
-      return initialState;
-    default:
-      throw new Error();
-  }
-};
+import { initialState, watchlistReducer } from "../reducers/watchlistReducer";
 
 export const watchlistContext = React.createContext();
 
@@ -34,7 +14,6 @@ function Watchlist() {
   );
 
   const userData = useFirestoreData("users");
-
   const handleInit = (_initValue) => {
     watchlistDispatch({ type: "init", payload: _initValue });
   };
