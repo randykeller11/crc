@@ -21,9 +21,9 @@ function WatchlistAlbum({ _album, _index, setSearchTarget }) {
   }
   return (
     <div className="album">
-      <h3 className="delete">x</h3>
+      <h4 className="delete">x</h4>
       <img src={`${_album.cover}`} alt="" />
-      <h3>{_album.title}</h3>
+      <h4>{_album.title}</h4>
       <h5>{_album.artist}</h5>
     </div>
   );
