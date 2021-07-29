@@ -11,7 +11,7 @@ import {
 import "./WatchlistDisplay.css";
 import WatchlistRow from "./WatchlistRow";
 
-function WatchlistDisplay() {
+function WatchlistDisplay({ _init }) {
   const userData = useFirestoreData("users");
   const [payload, setPayload] = useState(null);
   const [dbWatchlist, setDbWatchlist] = useState(null);
