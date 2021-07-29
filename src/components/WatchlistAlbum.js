@@ -18,6 +18,7 @@ function WatchlistAlbum({ _album, _index, setSearchTarget }) {
     <div className="album">
       <h3>{_album.title}</h3>
       <img src={`${_album.cover}`} alt="" />
+      <h5>{_album.artist}</h5>
     </div>
   );
 }
