@@ -29,14 +29,12 @@ export const whatRow = (_index) => {
     return 1;
   } else if (_index >= 10 && _index < 15) {
     return 2;
-  } else if (_index >= 15 && _index < 20) {
-    return 3;
   }
 };
 
 export const initialPlaceholders = (_array) => {
   let localArray = [];
-  for (let i = 0; i < 20; i++) {
+  for (let i = 0; i < 15; i++) {
     if (i < _array.length) {
       localArray.push({ value: _array[i], index: i, row: whatRow(i) });
     } else {
@@ -49,7 +47,7 @@ export const initialPlaceholders = (_array) => {
 export const addPlaceholders = (_array) => {
   let localArray = [];
 
-  for (let i = 0; i < 20; i++) {
+  for (let i = 0; i < 15; i++) {
     if (i < _array.length) {
       let updatedAlbum = _array[i].hasOwnProperty("row");
       updatedAlbum

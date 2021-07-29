@@ -2,10 +2,31 @@
   border: 2px solid black;
   text-align: center;
   width: 20%;
-  padding-top: 10px;
+  height: 18vh;
+}
+
+.placeholderAlbum {
+  border: 2px solid black;
+  text-align: center;
+  width: 20%;
+  height: 18vh;
+}
+
+.placeholderAlbum > img {
+  padding-top: 2vh;
+  height: 60%;
+  width: 70%;
 }
 
 .album > img {
-  height: 60%;
-  width: 70%;
+  height: 50%;
+  width: 60%;
+}
+
+.delete {
+  padding-left: 85%;
+}
+
+.delete:hover {
+  cursor: pointer;
 }
