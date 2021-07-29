@@ -27,7 +27,15 @@ function Watchlist() {
   return (
     <watchlistContext.Provider>
       <div className="watchlist">
-        <h1>watchlist connected 🍩</h1>
+        {watchlist && watchlist.topFive && (
+          <WatchlistDisplay _initValue={watchlist.topFive} _isTopFive={true} />
+        )}
+        {watchlist && watchlist.secondTier && (
+          <WatchlistDisplay
+            _initValue={watchlist.secondTier}
+            _isTopFive={false}
+          />
+        )}
       </div>
     </watchlistContext.Provider>
   );
