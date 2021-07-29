@@ -24,6 +24,9 @@
 }
 
 .delete {
-  color: darkred;
   padding-left: 85%;
+}
+
+.delete:hover {
+  cursor: pointer;
 }
