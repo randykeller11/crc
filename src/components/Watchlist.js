@@ -42,8 +42,8 @@ function Watchlist() {
   //--------------------build board from initial data-------------------------------
   useEffect(() => {
     if (dbWatchlist) {
-      setLocalStateAlbums(dbWatchlist.watchlist.length);
-      let placeHolderArray = initialPlaceholders(dbWatchlist.watchlist);
+      setLocalStateAlbums(dbWatchlist.secondTier.length);
+      let placeHolderArray = initialPlaceholders(dbWatchlist.secondTier);
       setLocalWatchlist(placeHolderArray);
       setDbWatchlist(null);
     }
@@ -68,7 +68,7 @@ function Watchlist() {
 
   const makeRows = () => {
     let localArray = [];
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < 3; i++) {
       let targetAlbums = localWatchlist.filter((album) => album.row === i);
       localArray.push({ id: i, albums: targetAlbums });
     }
@@ -95,7 +95,7 @@ function Watchlist() {
             <div className="watchlist__header">
               <h1>My Watchlist</h1>
             </div>
-            {localWatchlist && localWatchlist.length === 20 && makeRows()}
+            {localWatchlist && localWatchlist.length === 15 && makeRows()}
           </div>
         )}
         {isSearching && localWatchlist.length === localStateAlbums && (
