@@ -6,3 +6,8 @@
   display: flex;
   flex-flow: column;
 }
+
+.watchlist__header {
+  display: flex;
+  flex-flow: row;
+}

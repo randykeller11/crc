@@ -1,7 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useFirestoreData } from "../hooks/useFirestoreData";
 import db from "../config/firebase";
-import AlbumSearch from "./AlbumSearch";
 import {
   getData,
   writeToDb,
@@ -11,25 +9,17 @@ import {
 import "./WatchlistDisplay.css";
 import WatchlistRow from "./WatchlistRow";
 
-function WatchlistDisplay() {
-  const userData = useFirestoreData("users");
+function WatchlistDisplay({ _initValue, _isTopFive }) {
   const [payload, setPayload] = useState(null);
-  const [dbWatchlist, setDbWatchlist] = useState(null);
   const [localWatchlist, setLocalWatchlist] = useState(null);
   const [isSearching, setIsSearching] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [searchTarget, setSearchTarget] = useState(null);
   const [localStateAlbums, setLocalStateAlbums] = useState(null);
 
-  useEffect(() => {
-    if (userData) {
-      getData("watchlists", userData.id, setDbWatchlist);
-    }
-  }, [userData]);
-
   const managePlaceHolders = (_usePlaceholders, _array) => {
     if (_usePlaceholders) {
-      let placeHolderArray = addPlaceholders(_array);
+      let placeHolderArray = addPlaceholders(_array, _isTopFive);
       setLocalWatchlist(placeHolderArray);
     } else {
       let noPlaceHolderArray = localWatchlist.filter(
@@ -41,13 +31,17 @@ function WatchlistDisplay() {
   };
   //--------------------build board from initial data-------------------------------
   useEffect(() => {
-    if (dbWatchlist) {
-      setLocalStateAlbums(dbWatchlist.secondTier.length);
-      let placeHolderArray = initialPlaceholders(dbWatchlist.secondTier);
+    if (_isTopFive) {
+      setLocalStateAlbums(_initValue.length);
+      let placeHolderArray = initialPlaceholders(_initValue, _isTopFive);
       setLocalWatchlist(placeHolderArray);
-      setDbWatchlist(null);
+    } else {
+      console.log("time to build second tier board");
+      setLocalStateAlbums(_initValue.length);
+      let placeHolderArray = initialPlaceholders(_initValue);
+      setLocalWatchlist(placeHolderArray);
     }
-  }, [dbWatchlist]);
+  }, []);
 
   //---------------------useEffect for when user clicks album------------------------
   useEffect(() => {
@@ -74,44 +68,40 @@ function WatchlistDisplay() {
     }
     return localArray.map((row) => {
       return (
-        <WatchlistRow albums={row.albums} setSearchTarget={setSearchTarget} />
+        <WatchlistRow
+          albums={row.albums}
+          setSearchTarget={setSearchTarget}
+          _isTopFive={false}
+        />
       );
     });
   };
 
-  const handleClick = () => {
-    // setIsSearching(true);
-    // setEditMode(1);
-  };
-
   //------------------primary watchlist component------------------
 
-  if (userData) {
-    return (
-      <div>
-        <button onClick={handleClick}>{editMode ? "confirm" : "edit"}</button>
-        {!isSearching && (
-          <div className="watchlist">
-            <div className="watchlist__header">
-              <h1>My Watchlist</h1>
-            </div>
-            {localWatchlist && localWatchlist.length === 15 && makeRows()}
+  return (
+    <div>
+      {/* <button onClick={handleClick}>{editMode ? "confirm" : "edit"}</button> */}
+      {!isSearching && (
+        <div className="watchlist">
+          <div className="watchlist__header">
+            <h1>{_isTopFive ? "Top Five" : "Second Tier"}</h1>
           </div>
-        )}
-        {isSearching && localWatchlist.length === localStateAlbums && (
-          <div className="watchlist__search">
-            <AlbumSearch
-              _albumList={localWatchlist}
-              _setAlbumList={setLocalWatchlist}
-              _setIsAddingAlbum={setIsSearching}
+          {localWatchlist &&
+            !_isTopFive &&
+            localWatchlist.length === 15 &&
+            makeRows()}
+          {localWatchlist && _isTopFive && localWatchlist.length === 5 && (
+            <WatchlistRow
+              albums={localWatchlist}
+              setSearchTarget={setSearchTarget}
+              _isTopFive={_isTopFive}
             />
-          </div>
-        )}
-      </div>
-    );
-  }
-  //-----------loading page until user data is loaded-------------
-  return <h1>loading watchlist...</h1>;
+          )}
+        </div>
+      )}
+    </div>
+  );
 }
 export default WatchlistDisplay;
 
