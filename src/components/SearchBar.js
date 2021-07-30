@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useState, useEffect, useReducer } from "react";
+import "./SearchBar.css";
+import { initialValue, SearchBarReducer } from "../reducers/SearchBarReducer";
 
-function SearchBar() {
+function SearchBar({ setIsSearching, setResult }) {
   return (
     <div>
-      <h1>Search Bar connected!!!!</h1>
+      <h1>Searchbar connected</h1>
     </div>
   );
 }
