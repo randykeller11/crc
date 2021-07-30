@@ -14,7 +14,13 @@ function SearchBar({ setIsSearching, setResult }) {
     async function getArtistData(url, _dispatch) {
       try {
         const response = await axios.get(url);
-        dispatch({ type: "artistSearch", payload: response.data.artists });
+        _dispatch({
+          type: "update",
+          payload: {
+            location: "artistResults",
+            updateValue: response.data.artists,
+          },
+        });
       } catch (error) {
         console.error(error);
       }
@@ -23,7 +29,10 @@ function SearchBar({ setIsSearching, setResult }) {
     if (isSubmitted) {
       let artistSearchURL = `https://theaudiodb.com/api/v1/json/523532/search.php?s=${searchState.query}`;
       getArtistData(artistSearchURL, dispatch);
-      dispatch({ type: "setQuery", payload: null });
+      dispatch({
+        type: "update",
+        payload: { location: "query", updateValue: null },
+      });
       setIsSubmitted(false);
     }
   }, [isSubmitted]);
@@ -40,7 +49,11 @@ function SearchBar({ setIsSearching, setResult }) {
           }
         }}
         onChange={(e) => {
-          dispatch({ type: "setQuery", payload: e.target.value });
+          dispatch({
+            type: "update",
+            payload: { location: "query", updateValue: e.target.value },
+          });
+
           if (searchState.query && searchState.query.length >= 7) {
             setIsSubmitted(false);
             setIsSubmitted(true);

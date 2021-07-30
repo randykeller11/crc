@@ -11,20 +11,11 @@ export const initialState = {
 
 export const SearchBarReducer = (state, action) => {
   switch (action.type) {
-    case "albumSearch":
+    case "update":
       return {
         ...state,
-        albumResults: action.payload,
+        [action.payload.location]: action.payload.updateValue,
       };
-    case "artistSearch":
-      return {
-        ...state,
-        artistResults: action.payload,
-      };
-    case "setSearchType":
-      return { ...state, searchType: action.payload };
-    case "setQuery":
-      return { ...state, query: action.payload };
     default:
       throw new Error();
   }
