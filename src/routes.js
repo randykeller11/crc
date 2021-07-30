@@ -9,7 +9,7 @@ import Onboarding from "./components/Onboarding";
 import Watchlist from "./components/Watchlist";
 import SearchTest from "./components/SearchTest";
 import ProfileReroute from "./components/ProfileReroute";
-import StorePortal from "./pages/StorePortal";
+import StorePortal from "./pages/StorePortal/StorePortal";
 import "./routes.css";
 
 export const UnauthenticatedRoutes = () => {

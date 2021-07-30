@@ -1,0 +1,9 @@
+.searchBar {
+  border: 2px solid orange;
+}
+
+.searchBar__options {
+  border: 2px solid purple;
+  display: flex;
+  justify-content: space-evenly;
+}

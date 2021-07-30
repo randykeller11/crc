@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import SearchBar from "../components/SearchBar";
+import SearchBar from "../../components/SearchBar";
+import "./StorePortal.css";
 
 function StorePortal() {
   const [isSearching, setIsSearching] = useState(false);
@@ -16,7 +17,9 @@ function StorePortal() {
         Search
       </button>
       {isSearching && (
-        <SearchBar isSearching={isSearching} searchResult={setSearchResult} />
+        <div className="searchBarComponent">
+          <SearchBar isSearching={isSearching} searchResult={setSearchResult} />
+        </div>
       )}
     </div>
   );
