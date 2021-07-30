@@ -23,6 +23,8 @@ function SearchBar({ setIsSearching, setResult }) {
     if (isSubmitted) {
       let artistSearchURL = `https://theaudiodb.com/api/v1/json/523532/search.php?s=${searchState.query}`;
       getArtistData(artistSearchURL, dispatch);
+      dispatch({ type: "setQuery", payload: null });
+      setIsSubmitted(false);
     }
   }, [isSubmitted]);
 
@@ -33,15 +35,16 @@ function SearchBar({ setIsSearching, setResult }) {
         placeholder={"Search Artist 'Stevie Wonder'"}
         onKeyPress={(e) => {
           if (e.charCode === 13) {
+            setIsSubmitted(false);
             setIsSubmitted(true);
           }
         }}
         onChange={(e) => {
           dispatch({ type: "setQuery", payload: e.target.value });
-          //   if (searchState.query && searchState.query.length >= 7) {
-          //     setIsSubmitted(false);
-          //     setIsSubmitted(true);
-          //   }
+          if (searchState.query && searchState.query.length >= 7) {
+            setIsSubmitted(false);
+            setIsSubmitted(true);
+          }
         }}
       />
       {searchState.artistResults &&
@@ -51,6 +54,7 @@ function SearchBar({ setIsSearching, setResult }) {
               _isAlbumSearch={false}
               _index={i}
               dispatch={dispatch}
+              displayValue={result}
             />
           );
         })}

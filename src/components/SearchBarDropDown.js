@@ -1,10 +1,11 @@
 import React from "react";
 import "./SearchBarDropDown.css";
 
-function SearchBarDropDown() {
+function SearchBarDropDown({ _isAlbumSearch, _index, dispatch, displayValue }) {
   return (
     <div className="dropDown">
-      <h1>Seach bar drop down</h1>
+      <img src={displayValue.strArtistThumb} alt="" />
+      <h3>{displayValue.strArtist}</h3>
     </div>
   );
 }
