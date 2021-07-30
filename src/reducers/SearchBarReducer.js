@@ -6,6 +6,7 @@ export const initialState = {
   query: null,
   albumResults: null,
   artistResults: [],
+  artistURL: null,
 };
 
 export const SearchBarReducer = (state, action) => {
