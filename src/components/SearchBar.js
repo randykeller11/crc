@@ -4,6 +4,11 @@ import { initialState, SearchBarReducer } from "../reducers/SearchBarReducer";
 
 function SearchBar({ setIsSearching, setResult }) {
   const [searchState, dispatch] = useReducer(SearchBarReducer, initialState);
+
+  const handleSubmit = () => {
+    console.log("time to submit something");
+  };
+
   return (
     <div className="searchBar">
       <input
@@ -11,6 +16,17 @@ function SearchBar({ setIsSearching, setResult }) {
         placeholder={
           searchState.searchType === 0 ? "ATLiens" : "Lonnie Liston Smith"
         }
+        onKeyPress={(e) => {
+          if (e.charCode === 13) {
+            handleSubmit();
+          }
+        }}
+        onChange={(e) => {
+          dispatch({ type: "setQuery", payload: e.target.value });
+          if (searchState.query && searchState.query.length >= 7) {
+            handleSubmit();
+          }
+        }}
       />
       <div className="searchBar__options">
         <div

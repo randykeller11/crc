@@ -22,6 +22,8 @@ export const SearchBarReducer = (state, action) => {
       };
     case "setSearchType":
       return { ...state, searchType: action.payload };
+    case "setQuery":
+      return { ...state, query: action.payload };
     default:
       throw new Error();
   }
