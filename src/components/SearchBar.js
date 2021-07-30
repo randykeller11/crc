@@ -53,9 +53,13 @@ function SearchBar({ setIsSearching, setResult }) {
             type: "update",
             payload: { location: "query", updateValue: e.target.value },
           });
+          setIsSubmitted(false);
+          dispatch({
+            type: "update",
+            payload: { location: "artistURL", updateValue: null },
+          });
 
           if (searchState.query && searchState.query.length >= 7) {
-            setIsSubmitted(false);
             setIsSubmitted(true);
           }
         }}
@@ -68,6 +72,7 @@ function SearchBar({ setIsSearching, setResult }) {
               _index={i}
               dispatch={dispatch}
               displayValue={result}
+              artistURL={searchState.artistURL}
             />
           );
         })}

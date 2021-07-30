@@ -17,3 +17,9 @@
   margin-left: 5vw;
   margin: 1vh;
 }
+
+.dropDown__clicked {
+  height: 5vh;
+  display: flex;
+  background-color: lightgray;
+}
