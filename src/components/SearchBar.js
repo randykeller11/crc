@@ -19,6 +19,9 @@ function SearchBar({ setIsSearching, setResult }) {
               ? "searchBar__options__selectorActive"
               : "searchBar__options__selector"
           }
+          onClick={() => {
+            dispatch({ type: "setSearchType", payload: 0 });
+          }}
         >
           <h3>Album</h3>
         </div>
@@ -28,6 +31,9 @@ function SearchBar({ setIsSearching, setResult }) {
               ? "searchBar__options__selectorActive"
               : "searchBar__options__selector"
           }
+          onClick={() => {
+            dispatch({ type: "setSearchType", payload: 1 });
+          }}
         >
           <h3>Artist</h3>
         </div>
