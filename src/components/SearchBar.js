@@ -33,6 +33,19 @@ function SearchBar({ setIsSearching, setResult }) {
     }
   }, [isSubmitted]);
 
+  useEffect(() => {
+    if (searchState.query === "") {
+      dispatch({
+        type: "update",
+        payload: { location: "query", updateValue: null },
+      });
+      dispatch({
+        type: "update",
+        payload: { location: "artistResults", updateValue: null },
+      });
+    }
+  }, [searchState]);
+
   return (
     <div className="searchBar">
       <input
