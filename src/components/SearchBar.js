@@ -44,7 +44,7 @@ function SearchBar({ setIsSearching, setResult }) {
         payload: { location: "artistResults", updateValue: null },
       });
     }
-  }, [searchState]);
+  }, [searchState.query]);
 
   return (
     <div className="searchBar">
