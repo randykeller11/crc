@@ -29,10 +29,6 @@ function SearchBar({ setIsSearching, setResult }) {
     if (isSubmitted) {
       let artistSearchURL = `https://theaudiodb.com/api/v1/json/523532/search.php?s=${searchState.query}`;
       getArtistData(artistSearchURL, dispatch);
-      dispatch({
-        type: "update",
-        payload: { location: "query", updateValue: null },
-      });
       setIsSubmitted(false);
     }
   }, [isSubmitted]);
@@ -45,7 +41,14 @@ function SearchBar({ setIsSearching, setResult }) {
         onKeyPress={(e) => {
           if (e.charCode === 13) {
             setIsSubmitted(false);
-            setIsSubmitted(true);
+            if (searchState.query) {
+              setIsSubmitted(true);
+            } else {
+              dispatch({
+                type: "update",
+                payload: { location: "query", updateValue: null },
+              });
+            }
           }
         }}
         onChange={(e) => {
@@ -54,10 +57,10 @@ function SearchBar({ setIsSearching, setResult }) {
             payload: { location: "query", updateValue: e.target.value },
           });
           setIsSubmitted(false);
-          dispatch({
-            type: "update",
-            payload: { location: "artistURL", updateValue: null },
-          });
+          //   dispatch({
+          //     type: "update",
+          //     payload: { location: "artistURL", updateValue: null },
+          //   });
 
           if (searchState.query && searchState.query.length >= 7) {
             setIsSubmitted(true);
