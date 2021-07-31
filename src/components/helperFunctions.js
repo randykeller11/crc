@@ -1,4 +1,5 @@
 import db from "../config/firebase";
+const axios = require("axios");
 
 export async function getData(_collection, _uid, _stateUpdate) {
   var docRef = db.collection(_collection).doc(_uid);
@@ -82,3 +83,18 @@ export const addPlaceholders = (_array, _isTopFive) => {
   }
   return localArray;
 };
+
+export async function getSearchData(url, _dispatch, _location) {
+  try {
+    const response = await axios.get(url);
+    _dispatch({
+      type: "update",
+      payload: {
+        location: _location,
+        updateValue: response.data,
+      },
+    });
+  } catch (error) {
+    console.error(error);
+  }
+}

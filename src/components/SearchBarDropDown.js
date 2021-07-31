@@ -7,8 +7,10 @@ function SearchBarDropDown({
   dispatch,
   displayValue,
   artistURL,
+  setIsSearching,
+  setResult,
 }) {
-  return (
+  const artistSearchMode = (
     <>
       {artistURL ? (
         <div className="dropDown__clicked">
@@ -34,6 +36,22 @@ function SearchBarDropDown({
       )}
     </>
   );
+
+  const handleAlbumClick = () => {
+    // console.log("clicked");
+    setResult(displayValue);
+    setIsSearching(false);
+  };
+
+  const albumSearchMode = (
+    <div className="dropDown" onClick={handleAlbumClick}>
+      <img src={displayValue.strAlbumThumb} alt="" />
+      <h3>{displayValue.strAlbum}</h3>
+      {/* <h5>{displayValue}</h5> */}
+    </div>
+  );
+
+  return _isAlbumSearch ? albumSearchMode : artistSearchMode;
 }
 
 export default SearchBarDropDown;

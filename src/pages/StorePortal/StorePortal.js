@@ -16,9 +16,13 @@ function StorePortal() {
       >
         Search
       </button>
+      {searchResult && <h1>{searchResult.strAlbum}</h1>}
       {isSearching && (
         <div className="searchBarComponent">
-          <SearchBar isSearching={isSearching} searchResult={setSearchResult} />
+          <SearchBar
+            setIsSearching={setIsSearching}
+            setResult={setSearchResult}
+          />
         </div>
       )}
     </div>
