@@ -1,0 +1,14 @@
+.searchBar {
+  border: 2px solid black;
+}
+
+.searchBar > input {
+  height: 2vh;
+  width: 98.5%;
+  outline: none;
+}
+
+.albumSearch__container {
+  height: 20vh;
+  overflow-y: auto;
+}
