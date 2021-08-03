@@ -3,12 +3,15 @@ import SearchBar from "../../components/SearchBar";
 import "./MusicInventory.css";
 import { useProfile } from "../../hooks/useProfile";
 import db from "../../config/firebase";
+import "../../components/AddAlbumToStore";
+import AddAlbumToStore from "../../components/AddAlbumToStore";
 
 function MusicInventory() {
-  const [isSearching, setIsSearching] = useState(false);
-  const [searchResult, setSearchResult] = useState(null);
+  const [isAdded, setIsAdded] = useState(false);
+  const [newAlbumObject, setNewAlbumObject] = useState(null);
   const profileData = useProfile();
   const [storeData, setStoreData] = useState(null);
+  const [addAlbumMode, setAddAlbumMode] = useState(false);
 
   //-----------------------create snapshot listener for stores collection--------------------------------------
   //-----------------------eventually refactor into paginated infinite scroll---------------------------------
@@ -28,40 +31,41 @@ function MusicInventory() {
     }
   }, [profileData]);
 
-  //-------------------------------------useEffect for sending search result to db-----------------------------------------
-
   useEffect(() => {
-    if (searchResult) {
-      let localArray = [];
-
-      db.collection("stores").doc(`${profileData.profileID}`).add(searchResult);
-      setSearchResult(null);
+    if (newAlbumObject) {
+      let localArray = [...storeData.albums];
+      localArray.push(newAlbumObject);
+      db.collection("stores")
+        .doc(`${profileData.profileID}`)
+        .set({ ...storeData, albums: localArray })
+        .then(setIsAdded(true))
+        .catch(console.log("error"));
     }
-  }, [searchResult]);
+  }, [newAlbumObject]);
 
   //------------------------------return jsx------------------------------------------------------------------
   if (storeData) {
     return (
       <div>
-        <h1>Manage your E-Store Music Inventory </h1>
-        {storeData.albums.map((album) => {
-          return <h1>{album.title}</h1>;
-        })}
-        <button
-          onClick={() => {
-            setIsSearching(true);
-          }}
-        >
-          Search
-        </button>
-        {searchResult && <h1>{searchResult.strAlbum}</h1>}
-        {isSearching && (
-          <div className="searchBarComponent">
-            <SearchBar
-              setIsSearching={setIsSearching}
-              setResult={setSearchResult}
-            />
-          </div>
+        {!addAlbumMode &&
+          storeData.albums.map((album) => {
+            return <h1>{album.albumData.strAlbum}</h1>;
+          })}
+        {!addAlbumMode && (
+          <button
+            onClick={() => {
+              setAddAlbumMode(true);
+            }}
+          >
+            add
+          </button>
+        )}
+        {addAlbumMode && (
+          <AddAlbumToStore
+            profileID={profileData.profileID}
+            setAddAlbumMode={setAddAlbumMode}
+            setNewAlbumObject={setNewAlbumObject}
+          />
         )}
       </div>
     );

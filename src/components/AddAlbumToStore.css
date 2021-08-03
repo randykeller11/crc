@@ -1,0 +1,27 @@
+.albumCard {
+  height: 20vh;
+  width: 90vw;
+  display: flex;
+  justify-content: space-evenly;
+  margin-top: 5vh;
+}
+
+.albumCard > img {
+  height: 100%;
+  width: 30%;
+}
+
+.albumInfo {
+  display: flex;
+  flex-flow: column;
+  justify-content: space-evenly;
+}
+
+.conditionOptions {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.conditionOptions:hover {
+  cursor: pointer;
+}
