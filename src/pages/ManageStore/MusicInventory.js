@@ -44,13 +44,10 @@ function MusicInventory() {
   }, [newAlbumObject]);
 
   //------------------------------return jsx------------------------------------------------------------------
+
   if (storeData) {
     return (
       <div>
-        {!addAlbumMode &&
-          storeData.albums.map((album) => {
-            return <h1>{album.albumData.strAlbum}</h1>;
-          })}
         {!addAlbumMode && (
           <button
             onClick={() => {
@@ -60,6 +57,43 @@ function MusicInventory() {
             add
           </button>
         )}
+        {!addAlbumMode && (
+          <div className="mainDisplay">
+            <div className="mainDisplay__album">
+              <h1>album display</h1>
+            </div>
+            <div className="mainDisplay__inventory">
+              {storeData.albums.map((album) => {
+                let info = album.albumData;
+                return (
+                  <div className="mainDisplay__inventory__card">
+                    <img src={info.strAlbumThumb} alt="" />
+                    <div className="inventory__card__info">
+                      <div className="inventory__card__top">
+                        <h4>{info.strAlbum}</h4>
+                        <h5>{info.strArtist}</h5>
+                        <h5>{info.intYearReleased}</h5>
+                      </div>
+                      <div className="inventory__card__bottom">
+                        <h5>
+                          {album.condition === 1 && "⭐️"}
+                          {album.condition === 2 && "⭐️⭐️"}
+                          {album.condition === 3 && "⭐️⭐️⭐️"}
+                          {album.condition === 4 && "⭐️⭐️⭐️⭐️"}
+                          {album.condition === 5 && "⭐️⭐️⭐️⭐️⭐️"}
+                        </h5>
+                        <h5
+                          style={{ "margin-top": ".65vh" }}
+                        >{`$${album.priceTarget}`}</h5>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
         {addAlbumMode && (
           <AddAlbumToStore
             profileID={profileData.profileID}
