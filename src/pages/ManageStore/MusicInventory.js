@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import SearchBar from "../../components/SearchBar";
+import "./MusicInventory.css";
 
 function MusicInventory() {
   const [isSearching, setIsSearching] = useState(false);
