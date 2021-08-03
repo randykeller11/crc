@@ -9,7 +9,7 @@ import Onboarding from "./components/Onboarding";
 import Watchlist from "./components/Watchlist";
 import SearchTest from "./components/SearchTest";
 import ProfileReroute from "./components/ProfileReroute";
-import StorePortal from "./pages/StorePortal/StorePortal";
+import MusicInventory from "./pages/ManageStore/MusicInventory";
 import "./routes.css";
 
 export const UnauthenticatedRoutes = () => {
@@ -78,7 +78,7 @@ export const AuthenticatedRoutes = () => {
             <Home />
           </Route>
           <Route path="/storetest">
-            <StorePortal />
+            <MusicInventory />
           </Route>
           <Route path="/home/:uid">
             <Home />
