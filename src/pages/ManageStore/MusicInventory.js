@@ -65,6 +65,7 @@ function MusicInventory() {
             <div className="mainDisplay__inventory">
               {storeData.albums.map((album) => {
                 let info = album.albumData;
+                let hasRange = typeof album.priceTarget === "object";
                 return (
                   <div className="mainDisplay__inventory__card">
                     <img src={info.strAlbumThumb} alt="" />
@@ -82,9 +83,11 @@ function MusicInventory() {
                           {album.condition === 4 && "⭐️⭐️⭐️⭐️"}
                           {album.condition === 5 && "⭐️⭐️⭐️⭐️⭐️"}
                         </h5>
-                        <h5
-                          style={{ "margin-top": ".65vh" }}
-                        >{`$${album.priceTarget}`}</h5>
+                        <h5 style={{ "margin-top": ".65vh" }}>
+                          {hasRange
+                            ? `$${album.priceTarget.low}-$${album.priceTarget.high}`
+                            : `$${album.priceTarget}`}
+                        </h5>
                       </div>
                     </div>
                   </div>

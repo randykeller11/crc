@@ -10,6 +10,9 @@ function AddAlbumToStore({ profileID, setAddAlbumMode, setNewAlbumObject }) {
   const [isSearching, setIsSearching] = useState(true);
   const [searchResult, setSearchResult] = useState(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [priceRangeMode, setPriceRangeMode] = useState(false);
+  const [lowPrice, setLowPrice] = useState(null);
+  const [highPrice, setHighPrice] = useState(null);
 
   useEffect(() => {
     if (isSubmitted) {
@@ -30,11 +33,15 @@ function AddAlbumToStore({ profileID, setAddAlbumMode, setNewAlbumObject }) {
 
       let cleanAlbumData = removeNullProperties(searchResult);
 
+      let formattedPriceTarget = lowPrice
+        ? { high: highPrice, low: lowPrice }
+        : priceTarget;
+
       const objectToSubmit = {
         albumData: cleanAlbumData,
         condition: condition,
         formatTags: formatTags,
-        priceTarget: priceTarget,
+        priceTarget: formattedPriceTarget,
         albumUPC: albumUPC,
       };
       setNewAlbumObject(objectToSubmit);
@@ -107,15 +114,43 @@ function AddAlbumToStore({ profileID, setAddAlbumMode, setNewAlbumObject }) {
                 setFormatTags(e.target.value);
               }}
             />
-            <input
-              type="number"
-              placeholder="$"
-              value={priceTarget}
-              onChange={(e) => {
-                e.preventDefault();
-                setPriceTarget(e.target.value);
-              }}
-            />
+            <div className="priceInput">
+              {priceRangeMode ? (
+                <>
+                  <input
+                    type="number"
+                    placeholder="$low"
+                    value={lowPrice}
+                    onChange={(e) => {
+                      e.preventDefault();
+                      setLowPrice(e.target.value);
+                    }}
+                  />
+                  <input
+                    type="number"
+                    placeholder="$high"
+                    value={highPrice}
+                    onChange={(e) => {
+                      e.preventDefault();
+                      setHighPrice(e.target.value);
+                    }}
+                  />
+                </>
+              ) : (
+                <>
+                  <h5 onClick={() => setPriceRangeMode(true)}>Set Range</h5>
+                  <input
+                    type="number"
+                    placeholder="$"
+                    value={priceTarget}
+                    onChange={(e) => {
+                      e.preventDefault();
+                      setPriceTarget(e.target.value);
+                    }}
+                  />
+                </>
+              )}
+            </div>
             <input
               type="text"
               placeholder="UPC"
