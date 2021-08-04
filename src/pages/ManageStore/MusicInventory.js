@@ -16,6 +16,7 @@ function MusicInventory() {
   const [storeData, setStoreData] = useState(null);
   const [addAlbumMode, setAddAlbumMode] = useState(false);
   const [displayTarget, setDisplayTarget] = useState(null);
+  const [displayValue, setDisplayValue] = useState(null);
 
   //-----------------------create snapshot listener for stores collection--------------------------------------
   //-----------------------eventually refactor into paginated infinite scroll---------------------------------
@@ -33,6 +34,7 @@ function MusicInventory() {
           }
         );
     }
+    return;
   }, [profileData]);
 
   useEffect(() => {
@@ -48,8 +50,8 @@ function MusicInventory() {
   }, [newAlbumObject]);
 
   useEffect(() => {
-    storeData && console.log(storeData);
-  }, [storeData]);
+    displayTarget && setDisplayValue(storeData[displayTarget]);
+  }, [displayTarget]);
 
   //------------------------------return jsx------------------------------------------------------------------
 
@@ -68,7 +70,7 @@ function MusicInventory() {
         {!addAlbumMode && (
           <div className="mainDisplay">
             <div className="mainDisplay__album">
-              <AlbumDisplayCard displayTarget={displayTarget} />
+              <AlbumDisplayCard displayValue={displayValue} />
             </div>
             <div className="mainDisplay__inventory">
               {storeData &&
