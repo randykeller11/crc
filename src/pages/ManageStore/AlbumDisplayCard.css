@@ -2,4 +2,23 @@
   border: 2px solid black;
   width: 60vw;
   height: 60vh;
+  padding-top: 1vh;
+  padding-left: 1vw;
+  padding-right: 1vw;
+  padding-bottom: 1vh;
+}
+
+.targetAlbum__info {
+  display: flex;
+  justify-content: space-between;
+}
+
+.targetAlbum__info > img {
+  height: 20vh;
+  width: 20vw;
+}
+
+.targetAlbum__condition {
+  padding-top: 1vh;
+  padding-left: 1vw;
 }

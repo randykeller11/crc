@@ -51,6 +51,13 @@ function MusicInventory() {
   }, [newAlbumObject]);
 
   useEffect(() => {
+    if (storeData) {
+      let keysArray = Object.keys(storeData);
+      setDisplayTarget(keysArray[0]);
+    }
+  }, [storeData]);
+
+  useEffect(() => {
     displayTarget && setDisplayValue(storeData[displayTarget]);
   }, [displayTarget]);
 
@@ -71,7 +78,7 @@ function MusicInventory() {
         {!addAlbumMode && (
           <div className="mainDisplay">
             <div className="mainDisplay__album">
-              <AlbumDisplayCard displayValue={displayValue} />
+              {displayValue && <AlbumDisplayCard displayValue={displayValue} />}
             </div>
             <div className="mainDisplay__inventory">
               {storeData &&
