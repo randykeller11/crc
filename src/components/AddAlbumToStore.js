@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import SearchBar from "./SearchBar";
 import "./AddAlbumToStore.css";
 
-function AddAlbumToStore({ profileID, setAddAlbumMode, setNewAlbumObject }) {
+function AddAlbumToStore({ setAddAlbumMode, setNewAlbumObject }) {
   const [condition, setCondition] = useState(4);
   const [formatTags, setFormatTags] = useState(null);
   const [priceTarget, setPriceTarget] = useState(null);

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import uuid from "react-uuid";
 import SearchBar from "../../components/SearchBar";
 import "./MusicInventory.css";
 import { useProfile } from "../../hooks/useProfile";
@@ -18,14 +19,14 @@ function MusicInventory() {
 
   useEffect(() => {
     if (profileData) {
-      db.collection("stores")
+      db.collection("storeMusicInventorys")
         .doc(`${profileData.profileID}`)
         .onSnapshot(
           (docSnapshot) => {
             setStoreData(docSnapshot.data());
           },
           (err) => {
-            console.log(`Encountered error: ${err}`);
+            console.log("error");
           }
         );
     }
@@ -33,15 +34,19 @@ function MusicInventory() {
 
   useEffect(() => {
     if (newAlbumObject) {
-      let localArray = [...storeData.albums];
-      localArray.push(newAlbumObject);
-      db.collection("stores")
+      db.collection("storeMusicInventorys")
         .doc(`${profileData.profileID}`)
-        .set({ ...storeData, albums: localArray })
-        .then(setIsAdded(true))
+        .set({ [`${uuid()}`]: newAlbumObject })
+        .then(() => {
+          setIsAdded(true);
+        })
         .catch(console.log("error"));
     }
   }, [newAlbumObject]);
+
+  useEffect(() => {
+    storeData && console.log(storeData);
+  }, [storeData]);
 
   //------------------------------return jsx------------------------------------------------------------------
 
@@ -63,43 +68,44 @@ function MusicInventory() {
               <h1>album display</h1>
             </div>
             <div className="mainDisplay__inventory">
-              {storeData.albums.map((album) => {
-                let info = album.albumData;
-                let hasRange = typeof album.priceTarget === "object";
-                return (
-                  <div className="mainDisplay__inventory__card">
-                    <img src={info.strAlbumThumb} alt="" />
-                    <div className="inventory__card__info">
-                      <div className="inventory__card__top">
-                        <h4>{info.strAlbum}</h4>
-                        <h5>{info.strArtist}</h5>
-                        <h5>{info.intYearReleased}</h5>
-                      </div>
-                      <div className="inventory__card__bottom">
-                        <h5>
-                          {album.condition === 1 && "⭐️"}
-                          {album.condition === 2 && "⭐️⭐️"}
-                          {album.condition === 3 && "⭐️⭐️⭐️"}
-                          {album.condition === 4 && "⭐️⭐️⭐️⭐️"}
-                          {album.condition === 5 && "⭐️⭐️⭐️⭐️⭐️"}
-                        </h5>
-                        <h5 style={{ "margin-top": ".65vh" }}>
-                          {hasRange
-                            ? `$${album.priceTarget.low}-$${album.priceTarget.high}`
-                            : `$${album.priceTarget}`}
-                        </h5>
+              {storeData &&
+                Object.keys(storeData).map(function (key, index) {
+                  let album = storeData[key];
+                  let info = album.albumData;
+                  let hasRange = typeof album.priceTarget === "object";
+                  return (
+                    <div className="mainDisplay__inventory__card">
+                      <img src={info.strAlbumThumb} alt="" />
+                      <div className="inventory__card__info">
+                        <div className="inventory__card__top">
+                          <h4>{info.strAlbum}</h4>
+                          <h5>{info.strArtist}</h5>
+                          <h5>{info.intYearReleased}</h5>
+                        </div>
+                        <div className="inventory__card__bottom">
+                          <h5>
+                            {album.condition === 1 && "⭐️"}
+                            {album.condition === 2 && "⭐️⭐️"}
+                            {album.condition === 3 && "⭐️⭐️⭐️"}
+                            {album.condition === 4 && "⭐️⭐️⭐️⭐️"}
+                            {album.condition === 5 && "⭐️⭐️⭐️⭐️⭐️"}
+                          </h5>
+                          <h5 style={{ "margin-top": ".65vh" }}>
+                            {hasRange
+                              ? `$${album.priceTarget.low}-$${album.priceTarget.high}`
+                              : `$${album.priceTarget}`}
+                          </h5>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
             </div>
           </div>
         )}
 
         {addAlbumMode && (
           <AddAlbumToStore
-            profileID={profileData.profileID}
             setAddAlbumMode={setAddAlbumMode}
             setNewAlbumObject={setNewAlbumObject}
           />
