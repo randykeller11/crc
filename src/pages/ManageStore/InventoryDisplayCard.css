@@ -29,6 +29,11 @@
   background-color: lightblue;
 }
 
+.inventory__card__active > img {
+  width: 10vw;
+  height: 10vh;
+}
+
 .inventory__card__info {
   display: flex;
   flex-flow: column;

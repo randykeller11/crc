@@ -1,7 +1,12 @@
 import React from "react";
-import "./AlbumDisplayCard.css";
+import "./InventoryDisplayCard.css";
 
-function AlbumDisplayCard({ album, cardID, displayTarget, setDisplayTarget }) {
+function InventoryDisplayCard({
+  album,
+  cardID,
+  displayTarget,
+  setDisplayTarget,
+}) {
   let info = album.albumData;
   let hasRange = typeof album.priceTarget === "object";
   let isTarget = displayTarget === cardID;
@@ -41,4 +46,4 @@ function AlbumDisplayCard({ album, cardID, displayTarget, setDisplayTarget }) {
   );
 }
 
-export default AlbumDisplayCard;
+export default InventoryDisplayCard;

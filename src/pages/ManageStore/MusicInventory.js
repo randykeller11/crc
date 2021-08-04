@@ -6,7 +6,7 @@ import { useProfile } from "../../hooks/useProfile";
 import db from "../../config/firebase";
 import "../../components/AddAlbumToStore";
 import AddAlbumToStore from "../../components/AddAlbumToStore";
-import AlbumDisplayCard from "./AlbumDisplayCard";
+import InventoryDisplayCard from "./InventoryDisplayCard";
 
 function MusicInventory() {
   const [isAdded, setIsAdded] = useState(false);
@@ -73,7 +73,7 @@ function MusicInventory() {
               {storeData &&
                 Object.keys(storeData).map(function (key, index) {
                   return (
-                    <AlbumDisplayCard
+                    <InventoryDisplayCard
                       album={storeData[key]}
                       cardID={key}
                       displayTarget={displayTarget}
