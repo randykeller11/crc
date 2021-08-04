@@ -36,7 +36,7 @@ function MusicInventory() {
     if (newAlbumObject) {
       db.collection("storeMusicInventorys")
         .doc(`${profileData.profileID}`)
-        .set({ [`${uuid()}`]: newAlbumObject })
+        .set({ [`${uuid()}`]: newAlbumObject }, { merge: true })
         .then(() => {
           setIsAdded(true);
         })
