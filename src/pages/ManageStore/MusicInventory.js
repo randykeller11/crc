@@ -22,8 +22,9 @@ function MusicInventory() {
   //-----------------------eventually refactor into paginated infinite scroll---------------------------------
 
   useEffect(() => {
-    if (profileData) {
-      db.collection("musicInventories")
+    profileData &&
+      db
+        .collection("musicInventories")
         .doc(`${profileData.profileID}`)
         .onSnapshot(
           (docSnapshot) => {
@@ -33,20 +34,20 @@ function MusicInventory() {
             console.log("error");
           }
         );
-    }
+
     return;
   }, [profileData]);
 
   useEffect(() => {
-    if (newAlbumObject) {
-      db.collection("musicInventories")
+    newAlbumObject &&
+      db
+        .collection("musicInventories")
         .doc(`${profileData.profileID}`)
         .set({ [`${uuid()}`]: newAlbumObject }, { merge: true })
         .then(() => {
           setIsAdded(true);
         })
         .catch(console.log("error"));
-    }
   }, [newAlbumObject]);
 
   useEffect(() => {

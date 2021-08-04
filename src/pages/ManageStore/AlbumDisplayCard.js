@@ -1,9 +1,12 @@
 import React from "react";
+import "./AlbumDisplayCard.css";
 
 function AlbumDisplayCard({ displayTarget }) {
   return (
-    <div>
-      <h1>{displayTarget}</h1>
+    <div className="targetAlbum">
+      <div className="targetAlbum__info"></div>
+      <div className="targetAlbum__setCondition"></div>
+      <h1></h1>
     </div>
   );
 }
