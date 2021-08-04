@@ -6,6 +6,7 @@ import { useProfile } from "../../hooks/useProfile";
 import db from "../../config/firebase";
 import "../../components/AddAlbumToStore";
 import AddAlbumToStore from "../../components/AddAlbumToStore";
+import AlbumDisplayCard from "./AlbumDisplayCard";
 
 function MusicInventory() {
   const [isAdded, setIsAdded] = useState(false);
@@ -13,6 +14,7 @@ function MusicInventory() {
   const profileData = useProfile();
   const [storeData, setStoreData] = useState(null);
   const [addAlbumMode, setAddAlbumMode] = useState(false);
+  const [displayTarget, setDisplayTarget] = useState(null);
 
   //-----------------------create snapshot listener for stores collection--------------------------------------
   //-----------------------eventually refactor into paginated infinite scroll---------------------------------
@@ -70,34 +72,13 @@ function MusicInventory() {
             <div className="mainDisplay__inventory">
               {storeData &&
                 Object.keys(storeData).map(function (key, index) {
-                  let album = storeData[key];
-                  let info = album.albumData;
-                  let hasRange = typeof album.priceTarget === "object";
                   return (
-                    <div className="mainDisplay__inventory__card">
-                      <img src={info.strAlbumThumb} alt="" />
-                      <div className="inventory__card__info">
-                        <div className="inventory__card__top">
-                          <h4>{info.strAlbum}</h4>
-                          <h5>{info.strArtist}</h5>
-                          <h5>{info.intYearReleased}</h5>
-                        </div>
-                        <div className="inventory__card__bottom">
-                          <h5>
-                            {album.condition === 1 && "⭐️"}
-                            {album.condition === 2 && "⭐️⭐️"}
-                            {album.condition === 3 && "⭐️⭐️⭐️"}
-                            {album.condition === 4 && "⭐️⭐️⭐️⭐️"}
-                            {album.condition === 5 && "⭐️⭐️⭐️⭐️⭐️"}
-                          </h5>
-                          <h5 style={{ "margin-top": ".65vh" }}>
-                            {hasRange
-                              ? `$${album.priceTarget.low}-$${album.priceTarget.high}`
-                              : `$${album.priceTarget}`}
-                          </h5>
-                        </div>
-                      </div>
-                    </div>
+                    <AlbumDisplayCard
+                      album={storeData[key]}
+                      cardID={key}
+                      displayTarget={displayTarget}
+                      setDisplayTarget={setDisplayTarget}
+                    />
                   );
                 })}
             </div>

@@ -1,0 +1,50 @@
+.mainDisplay__inventory__card {
+  width: 35vw;
+  height: 10vh;
+  border-left: 2px solid black;
+  border-right: 2px solid black;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+
+  display: flex;
+  flex-flow: row;
+  background-color: lightgray;
+}
+
+.mainDisplay__inventory__card > img {
+  width: 10vw;
+  height: 10vh;
+}
+
+.inventory__card__active {
+  width: 35vw;
+  height: 10vh;
+  border-left: 2px solid black;
+  border-right: 2px solid black;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+
+  display: flex;
+  flex-flow: row;
+  background-color: lightblue;
+}
+
+.inventory__card__info {
+  display: flex;
+  flex-flow: column;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.inventory__card__top {
+  display: flex;
+  flex-flow: column;
+  height: 7vh;
+}
+
+.inventory__card__bottom {
+  display: flex;
+  justify-content: space-between;
+  padding-left: 2%;
+  padding-right: 2%;
+}
