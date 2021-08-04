@@ -7,6 +7,7 @@ import db from "../../config/firebase";
 import "../../components/AddAlbumToStore";
 import AddAlbumToStore from "../../components/AddAlbumToStore";
 import InventoryDisplayCard from "./InventoryDisplayCard";
+import AlbumDisplayCard from "./AlbumDisplayCard";
 
 function MusicInventory() {
   const [isAdded, setIsAdded] = useState(false);
@@ -21,7 +22,7 @@ function MusicInventory() {
 
   useEffect(() => {
     if (profileData) {
-      db.collection("storeMusicInventorys")
+      db.collection("musicInventories")
         .doc(`${profileData.profileID}`)
         .onSnapshot(
           (docSnapshot) => {
@@ -36,7 +37,7 @@ function MusicInventory() {
 
   useEffect(() => {
     if (newAlbumObject) {
-      db.collection("storeMusicInventorys")
+      db.collection("musicInventories")
         .doc(`${profileData.profileID}`)
         .set({ [`${uuid()}`]: newAlbumObject }, { merge: true })
         .then(() => {
@@ -67,7 +68,7 @@ function MusicInventory() {
         {!addAlbumMode && (
           <div className="mainDisplay">
             <div className="mainDisplay__album">
-              <h1>album display</h1>
+              <AlbumDisplayCard displayTarget={displayTarget} />
             </div>
             <div className="mainDisplay__inventory">
               {storeData &&
