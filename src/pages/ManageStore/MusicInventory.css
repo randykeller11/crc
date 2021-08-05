@@ -3,17 +3,22 @@
   justify-content: space-between;
   border: 2px solid black;
   margin-left: 1vw;
-  margin-right: 1vw;
+  margin-right: 2vw;
 }
 
 .mainDisplay {
   display: flex;
   justify-content: space-between;
+  border-bottom: 2px solid black;
+  border-right: 2px solid black;
   /* padding-left: 2vw; */
 }
 
 .mainDisplay__inventory {
   border-top: 1px solid black;
   border-bottom: 1px solid black;
+  padding-right: 1vw;
+  height: 61vh;
+  overflow-y: scroll;
   padding-right: 1vw;
 }

@@ -1,5 +1,5 @@
 .mainDisplay__inventory__card {
-  width: 36vw;
+  width: 35vw;
   height: 10vh;
   border-left: 2px solid black;
   border-right: 2px solid black;
@@ -17,7 +17,7 @@
 }
 
 .inventory__card__active {
-  width: 36vw;
+  width: 35vw;
   height: 10vh;
   border-left: 2px solid black;
   border-right: 2px solid black;
