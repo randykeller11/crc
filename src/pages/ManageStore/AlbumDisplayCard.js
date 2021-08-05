@@ -27,7 +27,7 @@ function AlbumDisplayCard({ displayValue }) {
       </div>
 
       {hasRange ? (
-        <div>
+        <div className="targetPrice">
           <input
             type="number"
             placeholder={`low: $${displayValue.priceTarget.low}`}
@@ -38,8 +38,15 @@ function AlbumDisplayCard({ displayValue }) {
           />
         </div>
       ) : (
-        <input type="number" placeholder={`$${displayValue.priceTarget}`} />
+        <input
+          className="targetPrice"
+          type="number"
+          placeholder={`$${displayValue.priceTarget}`}
+        />
       )}
+      <div className="delete">
+        <h3>Delete 🗑</h3>
+      </div>
     </div>
   );
 }

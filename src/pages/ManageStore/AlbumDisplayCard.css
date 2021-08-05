@@ -1,24 +1,48 @@
 .targetAlbum {
-  border: 2px solid black;
+  border-left: 2px solid black;
+  border-bottom: 2px solid black;
   width: 60vw;
   height: 60vh;
   padding-top: 1vh;
-  padding-left: 1vw;
+  margin-left: 1vw;
   padding-right: 1vw;
   padding-bottom: 1vh;
 }
 
 .targetAlbum__info {
   display: flex;
-  justify-content: space-between;
+}
+
+.targetAlbum__info__text {
+  padding-left: 1vw;
 }
 
 .targetAlbum__info > img {
   height: 20vh;
   width: 20vw;
+  padding-left: 1vw;
 }
 
 .targetAlbum__condition {
   padding-top: 1vh;
   padding-left: 1vw;
+}
+
+.targetPrice {
+  padding: 1vw;
+}
+
+.delete > h3 {
+  color: red;
+  border: 2px solid red;
+  text-align: center;
+  padding: 5px;
+
+  border-radius: 80%;
+}
+
+.delete > h3:hover {
+  cursor: pointer;
+  background-color: lightcoral;
+  color: white;
 }

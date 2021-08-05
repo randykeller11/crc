@@ -67,13 +67,17 @@ function MusicInventory() {
     return (
       <div>
         {!addAlbumMode && (
-          <button
-            onClick={() => {
-              setAddAlbumMode(true);
-            }}
-          >
-            add
-          </button>
+          <div className="component__header">
+            <button
+              onClick={() => {
+                setAddAlbumMode(true);
+              }}
+            >
+              add
+            </button>
+            <h1>Music Inventory</h1>
+            <input type="text" placeholder="Search Inventory" />
+          </div>
         )}
         {!addAlbumMode && (
           <div className="mainDisplay">
