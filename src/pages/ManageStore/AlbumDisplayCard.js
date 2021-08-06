@@ -11,13 +11,9 @@ function AlbumDisplayCard({
   let album = displayValue.albumData;
   let hasRange = typeof displayValue.priceTarget === "object";
 
-  async function handleDelete() {
-    let albumToDelete = {
-      [`${displayTarget}`]: firebase.firestore.FieldValue.delete(),
-    };
-
+  async function handleUpdate(_updatedAlbum) {
     dbLocation
-      .update(albumToDelete)
+      .update(_updatedAlbum)
       .then(() => {
         setDisplayTarget(0);
       })
@@ -68,7 +64,14 @@ function AlbumDisplayCard({
         <h3>UPC: {displayValue.albumUPC}</h3>
       </div>
 
-      <div className="delete" onClick={handleDelete}>
+      <div
+        className="delete"
+        onClick={() =>
+          handleUpdate({
+            [`${displayTarget}`]: firebase.firestore.FieldValue.delete(),
+          })
+        }
+      >
         <h3>Delete 🗑</h3>
       </div>
     </div>
