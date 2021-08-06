@@ -1,9 +1,28 @@
 import React from "react";
 import "./AlbumDisplayCard.css";
+import firebase from "firebase";
 
-function AlbumDisplayCard({ displayValue }) {
+function AlbumDisplayCard({
+  displayValue,
+  displayTarget,
+  setDisplayTarget,
+  dbLocation,
+}) {
   let album = displayValue.albumData;
   let hasRange = typeof displayValue.priceTarget === "object";
+
+  async function handleDelete() {
+    let albumToDelete = {
+      [`${displayTarget}`]: firebase.firestore.FieldValue.delete(),
+    };
+
+    dbLocation
+      .update(albumToDelete)
+      .then(() => {
+        setDisplayTarget(0);
+      })
+      .catch(console.log("error"));
+  }
 
   return (
     <div className="targetAlbum">
@@ -44,7 +63,7 @@ function AlbumDisplayCard({ displayValue }) {
           placeholder={`$${displayValue.priceTarget}`}
         />
       )}
-      <div className="delete">
+      <div className="delete" onClick={handleDelete}>
         <h3>Delete 🗑</h3>
       </div>
     </div>

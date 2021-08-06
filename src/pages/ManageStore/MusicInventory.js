@@ -17,7 +17,8 @@ function MusicInventory() {
   const [addAlbumMode, setAddAlbumMode] = useState(false);
   const [displayTarget, setDisplayTarget] = useState(null);
   const [displayValue, setDisplayValue] = useState(null);
-
+  const [docRef, setDocRef] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
   //-----------------------create snapshot listener for stores collection--------------------------------------
   //-----------------------eventually refactor into paginated infinite scroll---------------------------------
 
@@ -52,13 +53,21 @@ function MusicInventory() {
 
   useEffect(() => {
     if (storeData) {
+      setDocRef(
+        db.collection("musicInventories").doc(`${profileData.profileID}`)
+      );
       let keysArray = Object.keys(storeData);
       setDisplayTarget(keysArray[0]);
     }
   }, [storeData]);
 
   useEffect(() => {
-    displayTarget && setDisplayValue(storeData[displayTarget]);
+    if (displayTarget && displayTarget != 0) {
+      setDisplayValue(storeData[displayTarget]);
+    } else if (displayTarget === 0) {
+      let keysArray = Object.keys(storeData);
+      setDisplayTarget(keysArray[0]);
+    }
   }, [displayTarget]);
 
   //------------------------------return jsx------------------------------------------------------------------
@@ -82,7 +91,14 @@ function MusicInventory() {
         {!addAlbumMode && (
           <div className="mainDisplay">
             <div className="mainDisplay__album">
-              {displayValue && <AlbumDisplayCard displayValue={displayValue} />}
+              {displayValue && (
+                <AlbumDisplayCard
+                  displayValue={displayValue}
+                  displayTarget={displayTarget}
+                  setDisplayTarget={setDisplayTarget}
+                  dbLocation={docRef}
+                />
+              )}
             </div>
             <div className="mainDisplay__inventory">
               {storeData &&
