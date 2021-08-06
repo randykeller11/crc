@@ -31,6 +31,10 @@
   padding: 1vw;
 }
 
+.generalInfo {
+  padding-left: 1vw;
+}
+
 .delete > h3 {
   color: red;
   border: 2px solid red;

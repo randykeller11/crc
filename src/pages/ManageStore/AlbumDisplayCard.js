@@ -63,6 +63,11 @@ function AlbumDisplayCard({
           placeholder={`$${displayValue.priceTarget}`}
         />
       )}
+      <div className="generalInfo">
+        <h3>Format: {displayValue.formatTags}</h3>
+        <h3>UPC: {displayValue.albumUPC}</h3>
+      </div>
+
       <div className="delete" onClick={handleDelete}>
         <h3>Delete 🗑</h3>
       </div>
