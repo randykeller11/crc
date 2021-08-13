@@ -28,14 +28,8 @@ function InventoryDisplayCard({
           <h5>{info.intYearReleased}</h5>
         </div>
         <div className="inventory__card__bottom">
+          <h5>{album.condition}</h5>
           <h5>
-            {album.condition === 1 && "⭐️"}
-            {album.condition === 2 && "⭐️⭐️"}
-            {album.condition === 3 && "⭐️⭐️⭐️"}
-            {album.condition === 4 && "⭐️⭐️⭐️⭐️"}
-            {album.condition === 5 && "⭐️⭐️⭐️⭐️⭐️"}
-          </h5>
-          <h5 style={{ "margin-top": ".65vh" }}>
             {hasRange
               ? `$${album.priceTarget.low}-$${album.priceTarget.high}`
               : `$${album.priceTarget}`}

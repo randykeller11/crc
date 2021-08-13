@@ -32,13 +32,7 @@ function AlbumDisplayCard({
         </div>
       </div>
       <div className="targetAlbum__condition">
-        <h1>
-          {displayValue.condition === 1 && "⭐️"}
-          {displayValue.condition === 2 && "⭐️⭐️"}
-          {displayValue.condition === 3 && "⭐️⭐️⭐️"}
-          {displayValue.condition === 4 && "⭐️⭐️⭐️⭐️"}
-          {displayValue.condition === 5 && "⭐️⭐️⭐️⭐️⭐️"}
-        </h1>
+        <h1>{displayValue.condition}</h1>
       </div>
 
       {hasRange ? (
