@@ -42,9 +42,8 @@ function MusicInventory() {
   useEffect(() => {
     newAlbumObject &&
       db
-        .collection("musicInventories")
-        .doc(`${currentUser.uid}`)
-        .set({ [`${uuid()}`]: newAlbumObject }, { merge: true })
+        .collection("pendingInventoryUpdates")
+        .add({ type: "add", inventoryID: `${uuid()}`, value: newAlbumObject })
         .then(() => {
           setIsAdded(true);
         })
