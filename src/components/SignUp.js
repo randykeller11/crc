@@ -22,7 +22,7 @@ function SignUp() {
   };
 
   return isSubmitted ? (
-    <Redirect to="/onboard" />
+    <Redirect to="/" />
   ) : (
     <div className="signUp_form">
       <form action="">
