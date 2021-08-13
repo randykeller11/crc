@@ -5,60 +5,52 @@ import { Redirect } from "react-router-dom";
 
 function Onboarding() {
   const { currentUser } = useAuth();
-
-  //onboard mode
-  //1 no user in db so trigger upload
-  //2 user is already in db so check the onboard state in document
   const [onboardMode, setOnboardMode] = useState(0);
-  const [userData, setUserData] = useState(null);
+  const [accountType, setAccountType] = useState(null);
 
   useEffect(() => {
-    //check if user is in database
-    async function checkUser() {
-      const userRef = db.collection("users").doc(`${currentUser.uid}`);
-      const doc = await userRef.get();
-      if (!doc.exists) {
-        setOnboardMode(1);
-        console.log("No such document!");
-      } else {
-        //if user exists attach the listener
-        setOnboardMode(2);
-      }
-    }
-
-    if (currentUser) {
-      checkUser();
-    }
-  }, [currentUser]);
-
-  //add user to database if not already added
-
-  useEffect(() => {
-    async function addUserToDb() {
-      const data = {
-        id: currentUser.uid,
-        onboardStatus: 0,
-        test: "🔑",
-      };
+    async function addAccountTypeToDb() {
       // Add a new document in collection "users" with ID of userID
-      const res = await db
-        .collection("users")
-        .doc(`${currentUser.uid}`)
-        .set(data);
+      const res = await db.collection("users").doc(`${currentUser.uid}`).set(
+        {
+          accountType: accountType,
+        },
+        { merge: true }
+      );
     }
 
     //logic for adding user
     if (onboardMode === 1) {
-      addUserToDb();
+      addAccountTypeToDb();
       setOnboardMode(2);
     }
   }, [onboardMode]);
 
-  return onboardMode === 2 ? (
-    <Redirect to={`/profile/${currentUser.uid}`} />
-  ) : (
+  return (
     <div>
-      <h1>onboarding you to the platform!</h1>
+      {onboardMode === 0 && (
+        <div>
+          <h1>What best describes you?</h1>
+          <h3
+            onClick={() => {
+              setAccountType(0);
+              setOnboardMode(1);
+            }}
+          >
+            I'm here to buy records
+          </h3>
+          <h3
+            onClick={() => {
+              setAccountType(1);
+              setOnboardMode(1);
+            }}
+          >
+            I'm a record store here to sell records
+          </h3>
+        </div>
+      )}
+      {onboardMode == 2 && accountType === 0 && <Redirect to="/" />}
+      {onboardMode == 2 && accountType === 1 && <Redirect to="/storetest" />}
     </div>
   );
 }
