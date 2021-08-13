@@ -7,6 +7,7 @@ import db from "../../config/firebase";
 import "../../components/AddAlbumToStore";
 import AddAlbumToStore from "../../components/AddAlbumToStore";
 import InventoryDisplayCard from "./InventoryDisplayCard";
+import AlbumDisplayCard from "./AlbumDisplayCard";
 
 function MusicInventory() {
   const [isAdded, setIsAdded] = useState(false);
@@ -15,13 +16,16 @@ function MusicInventory() {
   const [storeData, setStoreData] = useState(null);
   const [addAlbumMode, setAddAlbumMode] = useState(false);
   const [displayTarget, setDisplayTarget] = useState(null);
-
+  const [displayValue, setDisplayValue] = useState(null);
+  const [docRef, setDocRef] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
   //-----------------------create snapshot listener for stores collection--------------------------------------
   //-----------------------eventually refactor into paginated infinite scroll---------------------------------
 
   useEffect(() => {
-    if (profileData) {
-      db.collection("storeMusicInventorys")
+    profileData &&
+      db
+        .collection("musicInventories")
         .doc(`${profileData.profileID}`)
         .onSnapshot(
           (docSnapshot) => {
@@ -31,24 +35,40 @@ function MusicInventory() {
             console.log("error");
           }
         );
-    }
+
+    return;
   }, [profileData]);
 
   useEffect(() => {
-    if (newAlbumObject) {
-      db.collection("storeMusicInventorys")
+    newAlbumObject &&
+      db
+        .collection("musicInventories")
         .doc(`${profileData.profileID}`)
         .set({ [`${uuid()}`]: newAlbumObject }, { merge: true })
         .then(() => {
           setIsAdded(true);
         })
         .catch(console.log("error"));
-    }
   }, [newAlbumObject]);
 
   useEffect(() => {
-    storeData && console.log(storeData);
+    if (storeData) {
+      setDocRef(
+        db.collection("musicInventories").doc(`${profileData.profileID}`)
+      );
+      let keysArray = Object.keys(storeData);
+      setDisplayTarget(keysArray[0]);
+    }
   }, [storeData]);
+
+  useEffect(() => {
+    if (displayTarget && displayTarget != 0) {
+      setDisplayValue(storeData[displayTarget]);
+    } else if (displayTarget === 0) {
+      let keysArray = Object.keys(storeData);
+      setDisplayTarget(keysArray[0]);
+    }
+  }, [displayTarget]);
 
   //------------------------------return jsx------------------------------------------------------------------
 
@@ -56,18 +76,29 @@ function MusicInventory() {
     return (
       <div>
         {!addAlbumMode && (
-          <button
-            onClick={() => {
-              setAddAlbumMode(true);
-            }}
-          >
-            add
-          </button>
+          <div className="component__header">
+            <button
+              onClick={() => {
+                setAddAlbumMode(true);
+              }}
+            >
+              add
+            </button>
+            <h1>Music Inventory</h1>
+            <input type="text" placeholder="Search Inventory" />
+          </div>
         )}
         {!addAlbumMode && (
           <div className="mainDisplay">
             <div className="mainDisplay__album">
-              <h1>album display</h1>
+              {displayValue && (
+                <AlbumDisplayCard
+                  displayValue={displayValue}
+                  displayTarget={displayTarget}
+                  setDisplayTarget={setDisplayTarget}
+                  dbLocation={docRef}
+                />
+              )}
             </div>
             <div className="mainDisplay__inventory">
               {storeData &&
