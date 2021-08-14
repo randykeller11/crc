@@ -43,8 +43,14 @@ function MusicInventory() {
     newAlbumObject &&
       db
         .collection("pendingInventoryUpdates")
-        .add({ type: "add", inventoryID: `${uuid()}`, value: newAlbumObject })
+        .add({
+          type: "add",
+          seller: `${currentUser.uid}`,
+          inventoryID: `${uuid()}`,
+          value: newAlbumObject,
+        })
         .then(() => {
+          setNewAlbumObject(null);
           setIsAdded(true);
         })
         .catch(console.log("error"));
