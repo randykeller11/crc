@@ -16,7 +16,7 @@ function CRCInvSearch({ setIsSearching, setResult }) {
     const getAlbumPageData = async (_dataLocation) => {
       let searchData = await db
         .collection("albumPages")
-        .where(_dataLocation, "==", searchState.query)
+        .where(_dataLocation, "==", searchState.query.toLowerCase())
         .get();
       if (!searchData.empty) {
         searchData.forEach((_albumPageDoc) => {
@@ -31,9 +31,9 @@ function CRCInvSearch({ setIsSearching, setResult }) {
         payload: { location: "albumResults", updateValue: null },
       });
       if (searchState.searchType === 0) {
-        getAlbumPageData("albumInfo.strAlbum");
+        getAlbumPageData("albumTitle");
       } else if (searchState.searchType === 1) {
-        getAlbumPageData("albumInfo.strArtist");
+        getAlbumPageData("artist");
       }
       setIsSubmitted(false);
     }
