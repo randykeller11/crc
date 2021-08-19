@@ -10,7 +10,6 @@ function SearchBarDropDown({
   setIsSearching,
   setResult,
   fullValue,
-  componentType,
 }) {
   const artistSearchMode = (
     <>
@@ -40,7 +39,7 @@ function SearchBarDropDown({
   );
 
   const handleAlbumClick = () => {
-    setResult(displayValue);
+    setResult(fullValue);
     setIsSearching(false);
 
     // console.log("clicked");

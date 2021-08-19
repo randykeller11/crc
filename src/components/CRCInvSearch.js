@@ -21,7 +21,7 @@ function CRCInvSearch({ setIsSearching, setResult }) {
       if (!searchData.empty) {
         let localArray = [];
         searchData.forEach((_albumPageDoc) => {
-          localArray.push(_albumPageDoc.data());
+          localArray.push({ ..._albumPageDoc.data(), docID: _albumPageDoc.id });
         });
         dispatch({
           type: "update",

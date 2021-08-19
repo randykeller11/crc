@@ -44,6 +44,13 @@ function AddAlbumToStore({ setAddAlbumMode, setNewAlbumObject }) {
         cleanAlbumData.strAlbumThumb = albumImage;
       }
 
+      if (infoSource === "albumPages") {
+        cleanAlbumData = {
+          ...cleanAlbumData.albumInfo,
+          docID: cleanAlbumData.docID,
+        };
+      }
+
       let formattedPriceTarget = lowPrice
         ? { high: highPrice, low: lowPrice }
         : priceTarget;
@@ -148,7 +155,19 @@ function AddAlbumToStore({ setAddAlbumMode, setNewAlbumObject }) {
           )}
         </>
       )}
-      {!isSearching && searchResult && infoSource != "user" && (
+      {!isSearching && searchResult && infoSource === "albumPages" && (
+        <div className="albumCard">
+          <img src={searchResult.albumInfo.strAlbumThumb} alt="" />
+          <div className="albumInfo">
+            <h3>{searchResult.albumInfo.strAlbum}</h3>
+            <h3>{searchResult.albumInfo.strArtist}</h3>
+            <h4>{searchResult.albumInfo.intYearReleased}</h4>
+            <h3>{searchResult.albumInfo.strLabel}</h3>
+            {componentBottom}
+          </div>
+        </div>
+      )}
+      {!isSearching && searchResult && infoSource === "audioDB" && (
         <div className="albumCard">
           <img src={searchResult.strAlbumThumb} alt="" />
           <div className="albumInfo">

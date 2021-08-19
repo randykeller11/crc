@@ -119,6 +119,7 @@ function SearchBar({ setIsSearching, setResult }) {
                 setIsSearching={setIsSearching}
                 setResult={setResult}
                 componentType={0}
+                fullValue={album}
               />
             );
           })}
