@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import SearchBar from "./SearchBar";
+import CRCInvSearch from "./CRCInvSearch";
 import "./AddAlbumToStore.css";
 
 function AddAlbumToStore({ setAddAlbumMode, setNewAlbumObject }) {
@@ -12,6 +13,7 @@ function AddAlbumToStore({ setAddAlbumMode, setNewAlbumObject }) {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [lowPrice, setLowPrice] = useState(null);
   const [highPrice, setHighPrice] = useState(null);
+  const [searchCRC, setSearchCRC] = useState(false);
 
   useEffect(() => {
     if (isSubmitted) {
@@ -52,11 +54,21 @@ function AddAlbumToStore({ setAddAlbumMode, setNewAlbumObject }) {
     <div className="addAlbum">
       {isSearching && (
         <>
-          <h5>dont see your album?</h5>
-          <SearchBar
-            setIsSearching={setIsSearching}
-            setResult={setSearchResult}
-          />
+          <h5
+            onClick={() => {
+              setSearchCRC(true);
+            }}
+          >
+            dont see your album?
+          </h5>
+          {searchCRC ? (
+            <CRCInvSearch />
+          ) : (
+            <SearchBar
+              setIsSearching={setIsSearching}
+              setResult={setSearchResult}
+            />
+          )}
         </>
       )}
       {!isSearching && searchResult && (
