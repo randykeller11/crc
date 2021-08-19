@@ -7,7 +7,6 @@ import { getSearchData } from "./helperFunctions";
 function SearchBar({ setIsSearching, setResult }) {
   const [searchState, dispatch] = useReducer(SearchBarReducer, initialState);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [testData, setTestData] = useState(null);
 
   useEffect(() => {
     if (isSubmitted) {
