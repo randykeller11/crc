@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import uuid from "react-uuid";
 import SearchBar from "../../components/SearchBar";
 import "./MusicInventory.css";
-import { useProfile } from "../../hooks/useProfile";
+import { useAuth } from "../../auth-context";
 import db from "../../config/firebase";
 import "../../components/AddAlbumToStore";
 import AddAlbumToStore from "../../components/AddAlbumToStore";
@@ -12,7 +12,7 @@ import AlbumDisplayCard from "./AlbumDisplayCard";
 function MusicInventory() {
   const [isAdded, setIsAdded] = useState(false);
   const [newAlbumObject, setNewAlbumObject] = useState(null);
-  const profileData = useProfile();
+  const { currentUser } = useAuth();
   const [storeData, setStoreData] = useState(null);
   const [addAlbumMode, setAddAlbumMode] = useState(false);
   const [displayTarget, setDisplayTarget] = useState(null);
@@ -23,10 +23,10 @@ function MusicInventory() {
   //-----------------------eventually refactor into paginated infinite scroll---------------------------------
 
   useEffect(() => {
-    profileData &&
+    currentUser &&
       db
         .collection("musicInventories")
-        .doc(`${profileData.profileID}`)
+        .doc(`${currentUser.uid}`)
         .onSnapshot(
           (docSnapshot) => {
             setStoreData(docSnapshot.data());
@@ -37,15 +37,20 @@ function MusicInventory() {
         );
 
     return;
-  }, [profileData]);
+  }, [currentUser]);
 
   useEffect(() => {
     newAlbumObject &&
       db
-        .collection("musicInventories")
-        .doc(`${profileData.profileID}`)
-        .set({ [`${uuid()}`]: newAlbumObject }, { merge: true })
+        .collection("pendingInventoryUpdates")
+        .add({
+          type: "add",
+          seller: `${currentUser.uid}`,
+          inventoryID: `${uuid()}`,
+          value: newAlbumObject,
+        })
         .then(() => {
+          setNewAlbumObject(null);
           setIsAdded(true);
         })
         .catch(console.log("error"));
@@ -53,9 +58,7 @@ function MusicInventory() {
 
   useEffect(() => {
     if (storeData) {
-      setDocRef(
-        db.collection("musicInventories").doc(`${profileData.profileID}`)
-      );
+      setDocRef(db.collection("musicInventories").doc(`${currentUser.uid}`));
       let keysArray = Object.keys(storeData);
       setDisplayTarget(keysArray[0]);
     }
