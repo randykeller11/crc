@@ -118,6 +118,7 @@ function SearchBar({ setIsSearching, setResult }) {
                 artistURL={null}
                 setIsSearching={setIsSearching}
                 setResult={setResult}
+                componentType={0}
               />
             );
           })}

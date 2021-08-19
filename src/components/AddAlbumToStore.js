@@ -62,7 +62,10 @@ function AddAlbumToStore({ setAddAlbumMode, setNewAlbumObject }) {
             dont see your album?
           </h5>
           {searchCRC ? (
-            <CRCInvSearch />
+            <CRCInvSearch
+              setIsSearching={setIsSearching}
+              setResult={setSearchResult}
+            />
           ) : (
             <SearchBar
               setIsSearching={setIsSearching}

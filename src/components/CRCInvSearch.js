@@ -19,8 +19,13 @@ function CRCInvSearch({ setIsSearching, setResult }) {
         .where(_dataLocation, "==", searchState.query.toLowerCase())
         .get();
       if (!searchData.empty) {
+        let localArray = [];
         searchData.forEach((_albumPageDoc) => {
-          console.log(_albumPageDoc.data());
+          localArray.push(_albumPageDoc.data());
+        });
+        dispatch({
+          type: "update",
+          payload: { location: "albumResults", updateValue: localArray },
         });
       }
     };
@@ -151,6 +156,25 @@ function CRCInvSearch({ setIsSearching, setResult }) {
           <h3>Artist</h3>
         </div>
       </div>
+      {searchState.albumResults && (
+        <div className="albumSearch__container">
+          {searchState.albumResults.map((album, i) => {
+            return (
+              <SearchBarDropDown
+                _isAlbumSearch={true}
+                _index={i}
+                dispatch={dispatch}
+                fullValue={album}
+                displayValue={album.albumInfo}
+                artistURL={null}
+                setIsSearching={setIsSearching}
+                setResult={setResult}
+                componentType={1}
+              />
+            );
+          })}
+        </div>
+      )}
 
       {/* {searchState.artistResults &&
         searchState.artistResults.artists &&
