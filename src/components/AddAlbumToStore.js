@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import SearchBar from "./SearchBar";
 import CRCInvSearch from "./CRCInvSearch";
+import DiscogsSearch from "./DiscogsSearch";
 import "./AddAlbumToStore.css";
 
 function AddAlbumToStore({ setAddAlbumMode, setNewAlbumObject }) {
@@ -147,12 +148,7 @@ function AddAlbumToStore({ setAddAlbumMode, setNewAlbumObject }) {
               setResult={setSearchResult}
             />
           )}
-          {infoSource === "audioDB" && (
-            <SearchBar
-              setIsSearching={setIsSearching}
-              setResult={setSearchResult}
-            />
-          )}
+          {infoSource === "audioDB" && <DiscogsSearch />}
         </>
       )}
       {!isSearching && searchResult && infoSource === "albumPages" && (

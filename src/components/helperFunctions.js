@@ -86,7 +86,13 @@ export const addPlaceholders = (_array, _isTopFive) => {
 
 export async function getSearchData(url, _dispatch, _location) {
   try {
-    const response = await axios.get(url);
+    const headers = {
+      headers: {
+        Authorization:
+          "Discogs key=LotIRXAOnZgAeppKxkLP, secret=XouTbVNJTnYQKIsQZUoXFkocIuktXLoc",
+      },
+    };
+    const response = await axios.get(url, headers);
     _dispatch({
       type: "update",
       payload: {
