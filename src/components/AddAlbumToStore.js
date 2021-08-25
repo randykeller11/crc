@@ -171,16 +171,16 @@ function AddAlbumToStore({ setAddAlbumMode, setNewAlbumObject }) {
       )}
       {!isSearching && masterResult && infoSource === "audioDB" && (
         <div className="albumCard">
-          <img src={masterResult.cover_image} alt="" />
+          <img src={masterResult.value.cover_image} alt="" />
           <div className="albumInfo">
-            <h3>{masterResult.title}</h3>
-            <h4>{masterResult.year}</h4>
+            <h3>{masterResult.value.title}</h3>
+            <h4>{masterResult.value.year}</h4>
             {searchResult.strAlbum != "" ? (
               componentBottom
             ) : (
               <PickAlbumVersion
                 setResult={setSearchResult}
-                masterURL={masterResult.resource_url}
+                masterResult={masterResult}
               />
             )}
           </div>

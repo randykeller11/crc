@@ -102,7 +102,11 @@ function DiscogsSearch({ setIsSearching, setResult }) {
             displayValue={album}
             setIsSearching={setIsSearching}
             setResult={setResult}
-            fullValue={album}
+            fullValue={{
+              searchType: searchState.searchType,
+              query: searchState.query,
+              value: album,
+            }}
           />
         ))}
     </div>
