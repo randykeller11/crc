@@ -9,6 +9,7 @@ function AlbumDisplayCard({
   dbLocation,
 }) {
   let album = displayValue.albumData;
+  let gradeDictionary = { 5: "M", 4: "NM", 3: "VG+", 2: "VG", 1: "G" };
 
   async function handleUpdate(_updatedAlbum) {
     dbLocation
@@ -22,7 +23,7 @@ function AlbumDisplayCard({
   return (
     <div className="targetAlbum">
       <div className="targetAlbum__info">
-        <img src={album.images[0].resource_url} />
+        <img src={album.thumb} />
         <div className="targetAlbum__info__text">
           <h1>{album.title}</h1>
           <h1>{album.artists_sort}</h1>
@@ -30,8 +31,8 @@ function AlbumDisplayCard({
         </div>
       </div>
       <div className="targetAlbum__condition">
-        <h1>Sleeve: {displayValue.sleeveCondition}</h1>
-        <h1>Media: {displayValue.mediaCondition}</h1>
+        <h1>Sleeve: {gradeDictionary[displayValue.sleeveCondition]}</h1>
+        <h1>Media: {gradeDictionary[displayValue.mediaCondition]}</h1>
       </div>
 
       <input

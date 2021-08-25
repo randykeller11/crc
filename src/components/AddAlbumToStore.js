@@ -7,8 +7,8 @@ import PickAlbumVersion from "./PickAlbumVersion";
 import { getReleaseData } from "./helperFunctions";
 
 function AddAlbumToStore({ setAddAlbumMode, setNewAlbumObject }) {
-  const [sleeveCondition, setSleeveCondition] = useState("M");
-  const [mediaCondition, setMediaCondition] = useState("M");
+  const [sleeveCondition, setSleeveCondition] = useState(5);
+  const [mediaCondition, setMediaCondition] = useState(5);
   const [priceTarget, setPriceTarget] = useState(null);
   const [isSearching, setIsSearching] = useState(true);
   const [masterResult, setMasterResult] = useState(null);
@@ -53,11 +53,11 @@ function AddAlbumToStore({ setAddAlbumMode, setNewAlbumObject }) {
             setSleeveCondition(e.target.value);
           }}
         >
-          <option value="M">M</option>
-          <option value="NM">NM</option>
-          <option value="VG+">VG+</option>
-          <option value="VG">VG</option>
-          <option value="G+">G+</option>
+          <option value={1}>M</option>
+          <option value={2}>NM</option>
+          <option value={3}>VG+</option>
+          <option value={4}>VG</option>
+          <option value={5}>G+</option>
         </select>
         <label>Media Condition: </label>
         <select
@@ -66,11 +66,11 @@ function AddAlbumToStore({ setAddAlbumMode, setNewAlbumObject }) {
             setMediaCondition(e.target.value);
           }}
         >
-          <option value="M">M</option>
-          <option value="NM">NM</option>
-          <option value="VG+">VG+</option>
-          <option value="VG">VG</option>
-          <option value="G+">G+</option>
+          <option value={1}>M</option>
+          <option value={2}>NM</option>
+          <option value={3}>VG+</option>
+          <option value={4}>VG</option>
+          <option value={5}>G+</option>
         </select>
       </div>
       <div className="priceInput">
