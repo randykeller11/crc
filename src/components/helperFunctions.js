@@ -104,3 +104,19 @@ export async function getSearchData(url, _dispatch, _location) {
     console.error(error);
   }
 }
+
+export const getMasterVersions = async (url, setResult) => {
+  try {
+    const headers = {
+      headers: {
+        Authorization:
+          "Discogs key=LotIRXAOnZgAeppKxkLP, secret=XouTbVNJTnYQKIsQZUoXFkocIuktXLoc",
+      },
+    };
+    const versionsURL = url.concat("/versions?format=Vinyl");
+    const response = await axios.get(versionsURL, headers);
+    setResult(response.data);
+  } catch (error) {
+    console.error(error);
+  }
+};

@@ -3,6 +3,7 @@ import SearchBar from "./SearchBar";
 import CRCInvSearch from "./CRCInvSearch";
 import DiscogsSearch from "./DiscogsSearch";
 import "./AddAlbumToStore.css";
+import PickAlbumVersion from "./PickAlbumVersion";
 
 function AddAlbumToStore({ setAddAlbumMode, setNewAlbumObject }) {
   const [condition, setCondition] = useState("M");
@@ -10,6 +11,7 @@ function AddAlbumToStore({ setAddAlbumMode, setNewAlbumObject }) {
   const [priceTarget, setPriceTarget] = useState(null);
   const [albumUPC, setAlbumUPC] = useState(null);
   const [isSearching, setIsSearching] = useState(true);
+  const [masterResult, setMasterResult] = useState(null);
   const [searchResult, setSearchResult] = useState({
     strAlbum: "",
     strArtist: "",
@@ -151,7 +153,7 @@ function AddAlbumToStore({ setAddAlbumMode, setNewAlbumObject }) {
           {infoSource === "audioDB" && (
             <DiscogsSearch
               setIsSearching={setIsSearching}
-              setResult={setSearchResult}
+              setResult={setMasterResult}
             />
           )}
         </>
@@ -167,13 +169,20 @@ function AddAlbumToStore({ setAddAlbumMode, setNewAlbumObject }) {
           </div>
         </div>
       )}
-      {!isSearching && searchResult && infoSource === "audioDB" && (
+      {!isSearching && masterResult && infoSource === "audioDB" && (
         <div className="albumCard">
-          <img src={searchResult.cover_image} alt="" />
+          <img src={masterResult.cover_image} alt="" />
           <div className="albumInfo">
-            <h3>{searchResult.title}</h3>
-            <h4>{searchResult.year}</h4>
-            {componentBottom}
+            <h3>{masterResult.title}</h3>
+            <h4>{masterResult.year}</h4>
+            {searchResult.strAlbum != "" ? (
+              componentBottom
+            ) : (
+              <PickAlbumVersion
+                setResult={setSearchResult}
+                masterURL={masterResult.resource_url}
+              />
+            )}
           </div>
         </div>
       )}

@@ -1,0 +1,19 @@
+.pickVersion {
+  display: flex;
+  flex-flow: column;
+  border: 2px solid black;
+  height: 100%;
+  width: 100%;
+  overflow-y: scroll;
+}
+
+.version__option {
+  display: flex;
+  flex-flow: column;
+  border-bottom: 2px solid black;
+}
+
+.version__option:hover {
+  background-color: lightblue;
+  cursor: pointer;
+}
