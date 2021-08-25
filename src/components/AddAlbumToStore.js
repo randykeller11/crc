@@ -148,15 +148,19 @@ function AddAlbumToStore({ setAddAlbumMode, setNewAlbumObject }) {
               setResult={setSearchResult}
             />
           )}
-          {infoSource === "audioDB" && <DiscogsSearch />}
+          {infoSource === "audioDB" && (
+            <DiscogsSearch
+              setIsSearching={setIsSearching}
+              setResult={setSearchResult}
+            />
+          )}
         </>
       )}
       {!isSearching && searchResult && infoSource === "albumPages" && (
         <div className="albumCard">
-          <img src={searchResult.albumInfo.strAlbumThumb} alt="" />
+          <img src={searchResult.cover_image} alt="" />
           <div className="albumInfo">
-            <h3>{searchResult.albumInfo.strAlbum}</h3>
-            <h3>{searchResult.albumInfo.strArtist}</h3>
+            <h3>{searchResult.title}</h3>
             <h4>{searchResult.albumInfo.intYearReleased}</h4>
             <h3>{searchResult.albumInfo.strLabel}</h3>
             {componentBottom}
@@ -165,12 +169,10 @@ function AddAlbumToStore({ setAddAlbumMode, setNewAlbumObject }) {
       )}
       {!isSearching && searchResult && infoSource === "audioDB" && (
         <div className="albumCard">
-          <img src={searchResult.strAlbumThumb} alt="" />
+          <img src={searchResult.cover_image} alt="" />
           <div className="albumInfo">
-            <h3>{searchResult.strAlbum}</h3>
-            <h3>{searchResult.strArtist}</h3>
-            <h4>{searchResult.intYearReleased}</h4>
-            <h3>{searchResult.strLabel}</h3>
+            <h3>{searchResult.title}</h3>
+            <h4>{searchResult.year}</h4>
             {componentBottom}
           </div>
         </div>
