@@ -3,7 +3,6 @@ import "./SearchBarDropDown.css";
 
 function SearchBarDropDown({
   _isAlbumSearch,
-  _index,
   dispatch,
   displayValue,
   artistURL,
@@ -16,7 +15,7 @@ function SearchBarDropDown({
       {artistURL ? (
         <div className="dropDown__clicked">
           <img src={displayValue.thumb} alt="" />
-          <h3>{displayValue.strArtist}</h3>
+          <h3>{displayValue.title}</h3>
         </div>
       ) : (
         <div
@@ -26,13 +25,13 @@ function SearchBarDropDown({
               type: "update",
               payload: {
                 location: "artistURL",
-                updateValue: displayValue.idArtist,
+                updateValue: displayValue.resource_url,
               },
             });
           }}
         >
-          <img src={displayValue.strArtistThumb} alt="" />
-          <h3>{displayValue.strArtist}</h3>
+          <img src={displayValue.thumb} alt="" />
+          <h3>{displayValue.title}</h3>
         </div>
       )}
     </>

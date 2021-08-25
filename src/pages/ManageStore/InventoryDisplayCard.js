@@ -25,7 +25,7 @@ function InventoryDisplayCard({
         <div className="inventory__card__top">
           <h4>{info.title}</h4>
           <h5>{info.artists_sort}</h5>
-          <h5>{info.released}</h5>
+          <h5>{info.year}</h5>
         </div>
         <div className="inventory__card__bottom">
           <h5>Sleeve: {album.sleeveCondition}</h5>

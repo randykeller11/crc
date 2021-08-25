@@ -15,13 +15,23 @@ function DiscogsSearch({ setIsSearching, setResult }) {
   );
 
   useEffect(() => {
-    isSubmitted &&
-      searchState.searchType === 2 &&
-      getSearchData(
-        `https://api.discogs.com/database/search?catno=${searchState.query}&type=master`,
-        dispatch,
-        "albumResults"
-      );
+    if (isSubmitted) {
+      searchState.searchType === 0 &&
+        getSearchData(
+          `https://api.discogs.com/database/search?release_title=${searchState.query}&type=master`,
+          dispatch,
+          "albumResults"
+        );
+
+      isSubmitted &&
+        searchState.searchType === 1 &&
+        getSearchData(
+          `https://api.discogs.com/database/search?catno=${searchState.query}&type=master`,
+          dispatch,
+          "albumResults"
+        );
+    }
+
     setIsSubmitted(false);
   }, [isSubmitted]);
 
@@ -62,6 +72,7 @@ function DiscogsSearch({ setIsSearching, setResult }) {
         >
           <h3>Album</h3>
         </div>
+
         <div
           className={
             searchState.searchType === 1
@@ -75,29 +86,14 @@ function DiscogsSearch({ setIsSearching, setResult }) {
             });
           }}
         >
-          <h3>Artist</h3>
-        </div>
-        <div
-          className={
-            searchState.searchType === 2
-              ? "searchBar__optionActive"
-              : "searchBar__option"
-          }
-          onClick={() => {
-            dispatch({
-              type: "update",
-              payload: { location: "searchType", updateValue: 2 },
-            });
-          }}
-        >
           <h3>Cat #</h3>
         </div>
       </div>
+
       {searchState.albumResults &&
         searchState.albumResults.results.map((album, i) => (
           <SearchBarDropDown
             _isAlbumSearch={true}
-            index={i}
             dispatch={dispatch}
             displayValue={album}
             setIsSearching={setIsSearching}
