@@ -4,6 +4,7 @@ import CRCInvSearch from "./CRCInvSearch";
 import DiscogsSearch from "./DiscogsSearch";
 import "./AddAlbumToStore.css";
 import PickAlbumVersion from "./PickAlbumVersion";
+import { getReleaseData } from "./helperFunctions";
 
 function AddAlbumToStore({ setAddAlbumMode, setNewAlbumObject }) {
   const [condition, setCondition] = useState("M");
@@ -12,17 +13,13 @@ function AddAlbumToStore({ setAddAlbumMode, setNewAlbumObject }) {
   const [albumUPC, setAlbumUPC] = useState(null);
   const [isSearching, setIsSearching] = useState(true);
   const [masterResult, setMasterResult] = useState(null);
-  const [searchResult, setSearchResult] = useState({
-    strAlbum: "",
-    strArtist: "",
-    intYearReleased: "",
-    strLabel: "",
-  });
+  const [searchResult, setSearchResult] = useState(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [lowPrice, setLowPrice] = useState(null);
   const [highPrice, setHighPrice] = useState(null);
   const [infoSource, setInfoSource] = useState("albumPages");
   const [albumImage, setAlbumImage] = useState(null);
+  const [releaseURL, setReleaseURL] = useState(null);
 
   useEffect(() => {
     if (isSubmitted) {
@@ -70,6 +67,10 @@ function AddAlbumToStore({ setAddAlbumMode, setNewAlbumObject }) {
       setAddAlbumMode(false);
     }
   }, [isSubmitted]);
+
+  useEffect(() => {
+    releaseURL && getReleaseData(releaseURL, setSearchResult);
+  }, [releaseURL]);
 
   const componentBottom = (
     <>
@@ -134,16 +135,6 @@ function AddAlbumToStore({ setAddAlbumMode, setNewAlbumObject }) {
               Don't see your album?
             </h5>
           )}
-          {infoSource === "audioDB" && (
-            <h5
-              onClick={() => {
-                setInfoSource("user");
-                setIsSearching(false);
-              }}
-            >
-              Still don't see your album?
-            </h5>
-          )}
           {infoSource === "albumPages" && (
             <CRCInvSearch
               setIsSearching={setIsSearching}
@@ -175,11 +166,11 @@ function AddAlbumToStore({ setAddAlbumMode, setNewAlbumObject }) {
           <div className="albumInfo">
             <h3>{masterResult.value.title}</h3>
             <h4>{masterResult.value.year}</h4>
-            {searchResult.strAlbum != "" ? (
+            {searchResult ? (
               componentBottom
             ) : (
               <PickAlbumVersion
-                setResult={setSearchResult}
+                setResult={setReleaseURL}
                 masterResult={masterResult}
               />
             )}

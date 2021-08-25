@@ -120,3 +120,18 @@ export const getMasterVersions = async (url, setResult) => {
     console.error(error);
   }
 };
+
+export const getReleaseData = async (url, setResult) => {
+  try {
+    const headers = {
+      headers: {
+        Authorization:
+          "Discogs key=LotIRXAOnZgAeppKxkLP, secret=XouTbVNJTnYQKIsQZUoXFkocIuktXLoc",
+      },
+    };
+    const response = await axios.get(url, headers);
+    setResult(response.data);
+  } catch (error) {
+    console.error(error);
+  }
+};

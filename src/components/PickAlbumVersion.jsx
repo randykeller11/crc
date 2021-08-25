@@ -13,9 +13,17 @@ function PickAlbumVersion({ setResult, masterResult }) {
       {masterVersions &&
         masterResult.searchType === 2 &&
         masterVersions.versions.map((version) => {
-          if (version.catno === masterResult.query.replace("-", " ")) {
+          if (
+            version.catno === masterResult.query.replace("-", " ") ||
+            version.catno === masterResult.query
+          ) {
             return (
-              <div className="version__option">
+              <div
+                className="version__option"
+                onClick={() => {
+                  setResult(version.resource_url);
+                }}
+              >
                 <h3>{version.title}</h3>
                 <h3>{version.label}</h3>
                 <h3>{version.released}</h3>
