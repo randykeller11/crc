@@ -9,6 +9,7 @@ function SearchBarDropDown({
   artistURL,
   setIsSearching,
   setResult,
+  fullValue,
 }) {
   const artistSearchMode = (
     <>
@@ -38,9 +39,10 @@ function SearchBarDropDown({
   );
 
   const handleAlbumClick = () => {
-    // console.log("clicked");
-    setResult(displayValue);
+    setResult(fullValue);
     setIsSearching(false);
+
+    // console.log("clicked");
   };
 
   const albumSearchMode = (

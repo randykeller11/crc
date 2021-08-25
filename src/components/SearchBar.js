@@ -7,7 +7,6 @@ import { getSearchData } from "./helperFunctions";
 function SearchBar({ setIsSearching, setResult }) {
   const [searchState, dispatch] = useReducer(SearchBarReducer, initialState);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [testData, setTestData] = useState(null);
 
   useEffect(() => {
     if (isSubmitted) {
@@ -119,6 +118,8 @@ function SearchBar({ setIsSearching, setResult }) {
                 artistURL={null}
                 setIsSearching={setIsSearching}
                 setResult={setResult}
+                componentType={0}
+                fullValue={album}
               />
             );
           })}

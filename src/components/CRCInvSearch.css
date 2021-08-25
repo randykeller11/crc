@@ -1,0 +1,26 @@
+.searchBar {
+  border: 2px solid black;
+}
+
+.searchBar__top {
+  display: flex;
+}
+
+.searchBar__top > input {
+  height: 2vh;
+  width: 98.5%;
+  outline: none;
+}
+
+.searchBar__top__option {
+  border-left: 2px solid black;
+}
+.searchBar__top__optionActive {
+  border-left: 2px solid black;
+  background-color: lightblue;
+}
+
+.albumSearch__container {
+  height: 20vh;
+  overflow-y: auto;
+}
