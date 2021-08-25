@@ -9,7 +9,6 @@ function AlbumDisplayCard({
   dbLocation,
 }) {
   let album = displayValue.albumData;
-  let hasRange = typeof displayValue.priceTarget === "object";
 
   async function handleUpdate(_updatedAlbum) {
     dbLocation
@@ -23,40 +22,23 @@ function AlbumDisplayCard({
   return (
     <div className="targetAlbum">
       <div className="targetAlbum__info">
-        <img src={album.strAlbumThumb} />
+        <img src={album.images[0].resource_url} />
         <div className="targetAlbum__info__text">
-          <h1>{album.strAlbum}</h1>
-          <h1>{album.strArtist}</h1>
-          <h1>{album.intYearReleased}</h1>
-          {album.strLabel && <h1>{album.strLabel}</h1>}
+          <h1>{album.title}</h1>
+          <h1>{album.artists_sort}</h1>
+          <h1>{album.year}</h1>
         </div>
       </div>
       <div className="targetAlbum__condition">
-        <h1>{displayValue.condition}</h1>
+        <h1>Sleeve: {displayValue.sleeveCondition}</h1>
+        <h1>Media: {displayValue.mediaCondition}</h1>
       </div>
 
-      {hasRange ? (
-        <div className="targetPrice">
-          <input
-            type="number"
-            placeholder={`low: $${displayValue.priceTarget.low}`}
-          />
-          <input
-            type="number"
-            placeholder={`high: $${displayValue.priceTarget.high}`}
-          />
-        </div>
-      ) : (
-        <input
-          className="targetPrice"
-          type="number"
-          placeholder={`$${displayValue.priceTarget}`}
-        />
-      )}
-      <div className="generalInfo">
-        <h3>Format: {displayValue.formatTags}</h3>
-        <h3>UPC: {displayValue.albumUPC}</h3>
-      </div>
+      <input
+        className="targetPrice"
+        type="number"
+        placeholder={`$${displayValue.priceTarget}`}
+      />
 
       <div
         className="delete"

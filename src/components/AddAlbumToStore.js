@@ -7,60 +7,31 @@ import PickAlbumVersion from "./PickAlbumVersion";
 import { getReleaseData } from "./helperFunctions";
 
 function AddAlbumToStore({ setAddAlbumMode, setNewAlbumObject }) {
-  const [condition, setCondition] = useState("M");
-  const [formatTags, setFormatTags] = useState(null);
+  const [sleeveCondition, setSleeveCondition] = useState("M");
+  const [mediaCondition, setMediaCondition] = useState("M");
   const [priceTarget, setPriceTarget] = useState(null);
-  const [albumUPC, setAlbumUPC] = useState(null);
   const [isSearching, setIsSearching] = useState(true);
   const [masterResult, setMasterResult] = useState(null);
   const [searchResult, setSearchResult] = useState(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [lowPrice, setLowPrice] = useState(null);
-  const [highPrice, setHighPrice] = useState(null);
   const [infoSource, setInfoSource] = useState("albumPages");
   const [albumImage, setAlbumImage] = useState(null);
   const [releaseURL, setReleaseURL] = useState(null);
 
   useEffect(() => {
     if (isSubmitted) {
-      function removeNullProperties(obj) {
-        Object.keys(obj).forEach((key) => {
-          let value = obj[key];
-          let hasProperties = value && Object.keys(value).length > 0;
-          if (value === null) {
-            delete obj[key];
-          } else if (typeof value !== "string" && hasProperties) {
-            removeNullProperties(value);
-          } else if (key === "strDescriptionEN") {
-            delete obj[key];
-          }
-        });
-        return obj;
-      }
-
-      let cleanAlbumData = removeNullProperties(searchResult);
-
-      if (infoSource === "user") {
-        cleanAlbumData.strAlbumThumb = albumImage;
-      }
-
       if (infoSource === "albumPages") {
-        cleanAlbumData = {
-          ...cleanAlbumData.albumInfo,
-          docID: cleanAlbumData.docID,
-        };
+        setSearchResult({
+          ...searchResult,
+          docID: searchResult.docID,
+        });
       }
-
-      let formattedPriceTarget = lowPrice
-        ? { high: highPrice, low: lowPrice }
-        : priceTarget;
 
       const objectToSubmit = {
-        albumData: cleanAlbumData,
-        condition: condition,
-        formatTags: formatTags,
-        priceTarget: formattedPriceTarget,
-        albumUPC: albumUPC,
+        albumData: searchResult,
+        sleeveCondition: sleeveCondition,
+        mediaCondition: mediaCondition,
+        priceTarget: priceTarget,
         infoSource: infoSource,
       };
       setNewAlbumObject(objectToSubmit);
@@ -75,11 +46,24 @@ function AddAlbumToStore({ setAddAlbumMode, setNewAlbumObject }) {
   const componentBottom = (
     <>
       <div className="conditionOptions">
-        <label>Condition: </label>
+        <label>Sleeve Condition: </label>
         <select
           id="condition"
           onChange={(e) => {
-            setCondition(e.target.value);
+            setSleeveCondition(e.target.value);
+          }}
+        >
+          <option value="M">M</option>
+          <option value="NM">NM</option>
+          <option value="VG+">VG+</option>
+          <option value="VG">VG</option>
+          <option value="G+">G+</option>
+        </select>
+        <label>Media Condition: </label>
+        <select
+          id="condition"
+          onChange={(e) => {
+            setMediaCondition(e.target.value);
           }}
         >
           <option value="M">M</option>
@@ -89,15 +73,6 @@ function AddAlbumToStore({ setAddAlbumMode, setNewAlbumObject }) {
           <option value="G+">G+</option>
         </select>
       </div>
-      <input
-        type="text"
-        placeholder="FormatTags"
-        value={formatTags}
-        onChange={(e) => {
-          e.preventDefault();
-          setFormatTags(e.target.value);
-        }}
-      />
       <div className="priceInput">
         <input
           type="number"
@@ -109,15 +84,7 @@ function AddAlbumToStore({ setAddAlbumMode, setNewAlbumObject }) {
           }}
         />
       </div>
-      <input
-        type="text"
-        placeholder="UPC"
-        value={albumUPC}
-        onChange={(e) => {
-          e.preventDefault();
-          setAlbumUPC(e.target.value);
-        }}
-      />
+
       <button onClick={() => setIsSubmitted(true)}>Submit</button>
     </>
   );
