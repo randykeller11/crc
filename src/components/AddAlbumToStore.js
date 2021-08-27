@@ -3,65 +3,35 @@ import SearchBar from "./SearchBar";
 import CRCInvSearch from "./CRCInvSearch";
 import DiscogsSearch from "./DiscogsSearch";
 import "./AddAlbumToStore.css";
+import PickAlbumVersion from "./PickAlbumVersion";
+import { getReleaseData } from "./helperFunctions";
 
 function AddAlbumToStore({ setAddAlbumMode, setNewAlbumObject }) {
-  const [condition, setCondition] = useState("M");
-  const [formatTags, setFormatTags] = useState(null);
+  const [sleeveCondition, setSleeveCondition] = useState(5);
+  const [mediaCondition, setMediaCondition] = useState(5);
   const [priceTarget, setPriceTarget] = useState(null);
-  const [albumUPC, setAlbumUPC] = useState(null);
   const [isSearching, setIsSearching] = useState(true);
-  const [searchResult, setSearchResult] = useState({
-    strAlbum: "",
-    strArtist: "",
-    intYearReleased: "",
-    strLabel: "",
-  });
+  const [masterResult, setMasterResult] = useState(null);
+  const [searchResult, setSearchResult] = useState(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [lowPrice, setLowPrice] = useState(null);
-  const [highPrice, setHighPrice] = useState(null);
   const [infoSource, setInfoSource] = useState("albumPages");
   const [albumImage, setAlbumImage] = useState(null);
+  const [releaseURL, setReleaseURL] = useState(null);
 
   useEffect(() => {
     if (isSubmitted) {
-      function removeNullProperties(obj) {
-        Object.keys(obj).forEach((key) => {
-          let value = obj[key];
-          let hasProperties = value && Object.keys(value).length > 0;
-          if (value === null) {
-            delete obj[key];
-          } else if (typeof value !== "string" && hasProperties) {
-            removeNullProperties(value);
-          } else if (key === "strDescriptionEN") {
-            delete obj[key];
-          }
-        });
-        return obj;
-      }
-
-      let cleanAlbumData = removeNullProperties(searchResult);
-
-      if (infoSource === "user") {
-        cleanAlbumData.strAlbumThumb = albumImage;
-      }
-
       if (infoSource === "albumPages") {
-        cleanAlbumData = {
-          ...cleanAlbumData.albumInfo,
-          docID: cleanAlbumData.docID,
-        };
+        setSearchResult({
+          ...searchResult,
+          docID: searchResult.docID,
+        });
       }
-
-      let formattedPriceTarget = lowPrice
-        ? { high: highPrice, low: lowPrice }
-        : priceTarget;
 
       const objectToSubmit = {
-        albumData: cleanAlbumData,
-        condition: condition,
-        formatTags: formatTags,
-        priceTarget: formattedPriceTarget,
-        albumUPC: albumUPC,
+        albumData: searchResult,
+        sleeveCondition: sleeveCondition,
+        mediaCondition: mediaCondition,
+        priceTarget: priceTarget,
         infoSource: infoSource,
       };
       setNewAlbumObject(objectToSubmit);
@@ -69,32 +39,40 @@ function AddAlbumToStore({ setAddAlbumMode, setNewAlbumObject }) {
     }
   }, [isSubmitted]);
 
+  useEffect(() => {
+    releaseURL && getReleaseData(releaseURL, setSearchResult);
+  }, [releaseURL]);
+
   const componentBottom = (
     <>
       <div className="conditionOptions">
-        <label>Condition: </label>
+        <label>Sleeve Condition: </label>
         <select
           id="condition"
           onChange={(e) => {
-            setCondition(e.target.value);
+            setSleeveCondition(e.target.value);
           }}
         >
-          <option value="M">M</option>
-          <option value="NM">NM</option>
-          <option value="VG+">VG+</option>
-          <option value="VG">VG</option>
-          <option value="G+">G+</option>
+          <option value={1}>M</option>
+          <option value={2}>NM</option>
+          <option value={3}>VG+</option>
+          <option value={4}>VG</option>
+          <option value={5}>G+</option>
+        </select>
+        <label>Media Condition: </label>
+        <select
+          id="condition"
+          onChange={(e) => {
+            setMediaCondition(e.target.value);
+          }}
+        >
+          <option value={1}>M</option>
+          <option value={2}>NM</option>
+          <option value={3}>VG+</option>
+          <option value={4}>VG</option>
+          <option value={5}>G+</option>
         </select>
       </div>
-      <input
-        type="text"
-        placeholder="FormatTags"
-        value={formatTags}
-        onChange={(e) => {
-          e.preventDefault();
-          setFormatTags(e.target.value);
-        }}
-      />
       <div className="priceInput">
         <input
           type="number"
@@ -106,15 +84,7 @@ function AddAlbumToStore({ setAddAlbumMode, setNewAlbumObject }) {
           }}
         />
       </div>
-      <input
-        type="text"
-        placeholder="UPC"
-        value={albumUPC}
-        onChange={(e) => {
-          e.preventDefault();
-          setAlbumUPC(e.target.value);
-        }}
-      />
+
       <button onClick={() => setIsSubmitted(true)}>Submit</button>
     </>
   );
@@ -132,46 +102,45 @@ function AddAlbumToStore({ setAddAlbumMode, setNewAlbumObject }) {
               Don't see your album?
             </h5>
           )}
-          {infoSource === "audioDB" && (
-            <h5
-              onClick={() => {
-                setInfoSource("user");
-                setIsSearching(false);
-              }}
-            >
-              Still don't see your album?
-            </h5>
-          )}
           {infoSource === "albumPages" && (
             <CRCInvSearch
               setIsSearching={setIsSearching}
               setResult={setSearchResult}
             />
           )}
-          {infoSource === "audioDB" && <DiscogsSearch />}
+          {infoSource === "audioDB" && (
+            <DiscogsSearch
+              setIsSearching={setIsSearching}
+              setResult={setMasterResult}
+            />
+          )}
         </>
       )}
       {!isSearching && searchResult && infoSource === "albumPages" && (
         <div className="albumCard">
-          <img src={searchResult.albumInfo.strAlbumThumb} alt="" />
+          <img src={searchResult.cover_image} alt="" />
           <div className="albumInfo">
-            <h3>{searchResult.albumInfo.strAlbum}</h3>
-            <h3>{searchResult.albumInfo.strArtist}</h3>
+            <h3>{searchResult.title}</h3>
             <h4>{searchResult.albumInfo.intYearReleased}</h4>
             <h3>{searchResult.albumInfo.strLabel}</h3>
             {componentBottom}
           </div>
         </div>
       )}
-      {!isSearching && searchResult && infoSource === "audioDB" && (
+      {!isSearching && masterResult && infoSource === "audioDB" && (
         <div className="albumCard">
-          <img src={searchResult.strAlbumThumb} alt="" />
+          <img src={masterResult.value.cover_image} alt="" />
           <div className="albumInfo">
-            <h3>{searchResult.strAlbum}</h3>
-            <h3>{searchResult.strArtist}</h3>
-            <h4>{searchResult.intYearReleased}</h4>
-            <h3>{searchResult.strLabel}</h3>
-            {componentBottom}
+            <h3>{masterResult.value.title}</h3>
+            <h4>{masterResult.value.year}</h4>
+            {searchResult ? (
+              componentBottom
+            ) : (
+              <PickAlbumVersion
+                setResult={setReleaseURL}
+                masterResult={masterResult}
+              />
+            )}
           </div>
         </div>
       )}
