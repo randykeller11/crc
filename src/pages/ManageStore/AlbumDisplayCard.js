@@ -8,7 +8,7 @@ function AlbumDisplayCard({
   setDisplayTarget,
   dbLocation,
 }) {
-  let album = displayValue.albumData;
+  let album = displayValue.dispEssentials;
   let gradeDictionary = { 5: "M", 4: "NM", 3: "VG+", 2: "VG", 1: "G" };
 
   async function handleUpdate(_updatedAlbum) {
@@ -23,22 +23,27 @@ function AlbumDisplayCard({
   return (
     <div className="targetAlbum">
       <div className="targetAlbum__info">
-        <img src={album.thumb} />
+        <img src={album.image} />
         <div className="targetAlbum__info__text">
-          <h1>{album.title}</h1>
-          <h1>{album.artists_sort}</h1>
+          <h1>{album.albumTitle}</h1>
+          <h1>{album.artist}</h1>
           <h1>{album.year}</h1>
         </div>
       </div>
       <div className="targetAlbum__condition">
-        <h1>Sleeve: {gradeDictionary[displayValue.sleeveCondition]}</h1>
-        <h1>Media: {gradeDictionary[displayValue.mediaCondition]}</h1>
+        <h1>
+          Sleeve:{" "}
+          {gradeDictionary[displayValue.priceEssentials.sleeveCondition]}
+        </h1>
+        <h1>
+          Media: {gradeDictionary[displayValue.priceEssentials.mediaCondition]}
+        </h1>
       </div>
 
       <input
         className="targetPrice"
         type="number"
-        placeholder={`$${displayValue.priceTarget}`}
+        placeholder={`$${displayValue.priceEssentials.priceTarget}`}
       />
 
       <div
