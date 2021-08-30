@@ -21,6 +21,7 @@ function AddAlbumToStore({ setAddAlbumMode, setNewAlbumObject }) {
   useEffect(() => {
     if (isSubmitted) {
       if (infoSource === "albumPages") {
+        setAlbumImage(searchResult.image);
         setSearchResult({
           ...searchResult,
           docID: searchResult.docID,
@@ -28,6 +29,7 @@ function AddAlbumToStore({ setAddAlbumMode, setNewAlbumObject }) {
       }
 
       const objectToSubmit = {
+        masterImage: albumImage,
         albumData: searchResult,
         sleeveCondition: sleeveCondition,
         mediaCondition: mediaCondition,
@@ -40,7 +42,10 @@ function AddAlbumToStore({ setAddAlbumMode, setNewAlbumObject }) {
   }, [isSubmitted]);
 
   useEffect(() => {
-    releaseURL && getReleaseData(releaseURL, setSearchResult);
+    if (releaseURL) {
+      setAlbumImage(masterResult.value.cover_image);
+      getReleaseData(releaseURL, setSearchResult);
+    }
   }, [releaseURL]);
 
   const componentBottom = (
