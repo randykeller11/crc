@@ -9,7 +9,7 @@ function AlbumDisplayCard({
   dbLocation,
 }) {
   let album = displayValue.dispEssentials;
-  let gradeDictionary = { 5: "M", 4: "NM", 3: "VG+", 2: "VG", 1: "G" };
+  let gradeDictionary = { 1: "M", 2: "NM", 3: "VG+", 4: "VG", 5: "G" };
 
   async function handleUpdate(_updatedAlbum) {
     dbLocation

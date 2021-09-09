@@ -10,7 +10,7 @@ function InventoryDisplayCard({
   let disp = album.dispEssentials;
   let hasRange = typeof album.priceTarget === "object";
   let isTarget = displayTarget === cardID;
-  let gradeDictionary = { 5: "M", 4: "NM", 3: "VG+", 2: "VG", 1: "G" };
+  let gradeDictionary = { 1: "M", 2: "NM", 3: "VG+", 4: "VG", 5: "G" };
 
   return (
     <div
