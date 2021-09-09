@@ -5,8 +5,8 @@ import PickAlbumVersion from "./PickAlbumVersion";
 import { getReleaseData } from "./helperFunctions";
 
 function AddAlbumToStore({ setAddAlbumMode, setNewAlbumObject }) {
-  const [sleeveCondition, setSleeveCondition] = useState(5);
-  const [mediaCondition, setMediaCondition] = useState(5);
+  const [sleeveCondition, setSleeveCondition] = useState(1);
+  const [mediaCondition, setMediaCondition] = useState(1);
   const [priceTarget, setPriceTarget] = useState(null);
   const [isSearching, setIsSearching] = useState(true);
   const [masterResult, setMasterResult] = useState(null);
