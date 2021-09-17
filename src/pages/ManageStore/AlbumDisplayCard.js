@@ -1,15 +1,44 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./AlbumDisplayCard.css";
 import firebase from "firebase";
+import db from "../../config/firebase";
 
 function AlbumDisplayCard({
   displayValue,
   displayTarget,
   setDisplayTarget,
   dbLocation,
+  seller,
 }) {
+  const dispPriceTarget = displayValue.priceEssentials.priceTarget;
+  const [updatePrice, setUpdatePrice] = useState(dispPriceTarget);
+  const [isEditing, setIsEditing] = useState(false);
   let album = displayValue.dispEssentials;
   let gradeDictionary = { 1: "M", 2: "NM", 3: "VG+", 4: "VG", 5: "G" };
+
+  useEffect(() => {
+    setUpdatePrice(dispPriceTarget);
+  }, [dispPriceTarget]);
+
+  useEffect(() => {
+    const sendUpdate = async () => {
+      try {
+        await db.collection("pendingInventoryUpdates").add({
+          type: "edit",
+          priceTarget: updatePrice,
+          albumPage: displayValue.albumPage,
+          seller: seller,
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    if (isEditing) {
+      console.log("this function is running");
+      sendUpdate();
+      setIsEditing(false);
+    }
+  }, [isEditing]);
 
   async function handleUpdate(_updatedAlbum) {
     dbLocation
@@ -43,8 +72,18 @@ function AlbumDisplayCard({
       <input
         className="targetPrice"
         type="number"
-        placeholder={`$${displayValue.priceEssentials.priceTarget}`}
+        placeholder={`$${dispPriceTarget}`}
+        onChange={(e) => {
+          setUpdatePrice(e.target.value);
+        }}
       />
+      <button
+        onClick={() => {
+          setIsEditing(true);
+        }}
+      >
+        Submit
+      </button>
 
       <div
         className="delete"

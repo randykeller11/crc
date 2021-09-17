@@ -100,12 +100,13 @@ function MusicInventory() {
                   displayTarget={displayTarget}
                   setDisplayTarget={setDisplayTarget}
                   dbLocation={docRef}
+                  seller={`${currentUser.uid}`}
                 />
               )}
             </div>
             <div className="mainDisplay__inventory">
               {storeData &&
-                Object.keys(storeData).map(function (key, index) {
+                Object.keys(storeData).map(function (key) {
                   return (
                     <InventoryDisplayCard
                       album={storeData[key]}
