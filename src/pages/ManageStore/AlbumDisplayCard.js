@@ -1,15 +1,44 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./AlbumDisplayCard.css";
 import firebase from "firebase";
+import db from "../../config/firebase";
 
 function AlbumDisplayCard({
   displayValue,
   displayTarget,
   setDisplayTarget,
   dbLocation,
+  seller,
 }) {
-  let album = displayValue.albumData;
-  let gradeDictionary = { 5: "M", 4: "NM", 3: "VG+", 2: "VG", 1: "G" };
+  const dispPriceTarget = displayValue.priceEssentials.priceTarget;
+  const [updatePrice, setUpdatePrice] = useState(dispPriceTarget);
+  const [isEditing, setIsEditing] = useState(false);
+  let album = displayValue.dispEssentials;
+  let gradeDictionary = { 1: "M", 2: "NM", 3: "VG+", 4: "VG", 5: "G" };
+
+  useEffect(() => {
+    setUpdatePrice(dispPriceTarget);
+  }, [dispPriceTarget]);
+
+  useEffect(() => {
+    const sendUpdate = async () => {
+      try {
+        await db.collection("pendingInventoryUpdates").add({
+          type: "edit",
+          priceTarget: updatePrice,
+          albumPage: displayValue.albumPage,
+          seller: seller,
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    if (isEditing) {
+      console.log("this function is running");
+      sendUpdate();
+      setIsEditing(false);
+    }
+  }, [isEditing]);
 
   async function handleUpdate(_updatedAlbum) {
     dbLocation
@@ -23,23 +52,38 @@ function AlbumDisplayCard({
   return (
     <div className="targetAlbum">
       <div className="targetAlbum__info">
-        <img src={album.thumb} />
+        <img src={album.image} />
         <div className="targetAlbum__info__text">
-          <h1>{album.title}</h1>
-          <h1>{album.artists_sort}</h1>
+          <h1>{album.albumTitle}</h1>
+          <h1>{album.artist}</h1>
           <h1>{album.year}</h1>
         </div>
       </div>
       <div className="targetAlbum__condition">
-        <h1>Sleeve: {gradeDictionary[displayValue.sleeveCondition]}</h1>
-        <h1>Media: {gradeDictionary[displayValue.mediaCondition]}</h1>
+        <h1>
+          Sleeve:{" "}
+          {gradeDictionary[displayValue.priceEssentials.sleeveCondition]}
+        </h1>
+        <h1>
+          Media: {gradeDictionary[displayValue.priceEssentials.mediaCondition]}
+        </h1>
       </div>
 
       <input
         className="targetPrice"
         type="number"
-        placeholder={`$${displayValue.priceTarget}`}
+        placeholder={`$${dispPriceTarget}`}
+        onChange={(e) => {
+          setUpdatePrice(e.target.value);
+        }}
       />
+      <button
+        onClick={() => {
+          setIsEditing(true);
+        }}
+      >
+        Submit
+      </button>
 
       <div
         className="delete"

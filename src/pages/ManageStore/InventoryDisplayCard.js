@@ -7,10 +7,10 @@ function InventoryDisplayCard({
   displayTarget,
   setDisplayTarget,
 }) {
-  let info = album.albumData;
+  let disp = album.dispEssentials;
   let hasRange = typeof album.priceTarget === "object";
   let isTarget = displayTarget === cardID;
-  let gradeDictionary = { 5: "M", 4: "NM", 3: "VG+", 2: "VG", 1: "G" };
+  let gradeDictionary = { 1: "M", 2: "NM", 3: "VG+", 4: "VG", 5: "G" };
 
   return (
     <div
@@ -21,17 +21,21 @@ function InventoryDisplayCard({
         setDisplayTarget(cardID);
       }}
     >
-      <img src={info.thumb} alt="" />
+      <img src={disp.image} alt="" />
       <div className="inventory__card__info">
         <div className="inventory__card__top">
-          <h4>{info.title}</h4>
-          <h5>{info.artists_sort}</h5>
-          <h5>{info.year}</h5>
+          <h4>{disp.albumTitle}</h4>
+          <h5>{disp.artist}</h5>
+          <h5>{disp.year}</h5>
         </div>
         <div className="inventory__card__bottom">
-          <h5>Sleeve: {gradeDictionary[album.sleeveCondition]}</h5>
-          <h5>Media: {gradeDictionary[album.mediaCondition]}</h5>
-          <h5>${album.priceTarget}</h5>
+          <h5>
+            Sleeve: {gradeDictionary[album.priceEssentials.sleeveCondition]}
+          </h5>
+          <h5>
+            Media: {gradeDictionary[album.priceEssentials.mediaCondition]}
+          </h5>
+          <h5>${album.priceEssentials.priceTarget}</h5>
         </div>
       </div>
     </div>
