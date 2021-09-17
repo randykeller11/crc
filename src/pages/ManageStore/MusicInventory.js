@@ -19,6 +19,7 @@ function MusicInventory() {
   const [displayValue, setDisplayValue] = useState(null);
   const [docRef, setDocRef] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isFirstRender, setIsFirstRender] = useState(true);
   //-----------------------create snapshot listener for stores collection--------------------------------------
   //-----------------------eventually refactor into paginated infinite scroll---------------------------------
 
@@ -60,7 +61,8 @@ function MusicInventory() {
     if (storeData) {
       setDocRef(db.collection("musicInventories").doc(`${currentUser.uid}`));
       let keysArray = Object.keys(storeData);
-      setDisplayTarget(keysArray[0]);
+      isFirstRender && setDisplayTarget(keysArray[0]);
+      setIsFirstRender(false);
     }
   }, [storeData]);
 

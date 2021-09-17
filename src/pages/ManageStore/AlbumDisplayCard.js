@@ -25,8 +25,14 @@ function AlbumDisplayCard({
       try {
         await db.collection("pendingInventoryUpdates").add({
           type: "edit",
-          priceTarget: updatePrice,
-          albumPage: displayValue.albumPage,
+          invItemData: {
+            ...displayValue,
+            priceEssentials: {
+              ...displayValue.priceEssentials,
+              priceTarget: updatePrice,
+            },
+          },
+          inventoryID: displayTarget,
           seller: seller,
         });
       } catch (error) {
@@ -36,6 +42,7 @@ function AlbumDisplayCard({
     if (isEditing) {
       console.log("this function is running");
       sendUpdate();
+      setUpdatePrice();
       setIsEditing(false);
     }
   }, [isEditing]);
@@ -76,6 +83,7 @@ function AlbumDisplayCard({
         onChange={(e) => {
           setUpdatePrice(e.target.value);
         }}
+        value={updatePrice}
       />
       <button
         onClick={() => {
